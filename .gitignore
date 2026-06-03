@@ -1,0 +1,12 @@
+# Agent framework runtime artifacts (not source code)
+.agent/spawn_agent_tasks/
+.hc/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# Dependencies / build (uncomment as the project's stack is set up)
+# node_modules/
+# dist/
+# build/
