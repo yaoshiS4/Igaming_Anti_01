@@ -1,0 +1,114 @@
+.tile {
+  display: flex;
+  flex-direction: column;
+  /* fill the fixed grid cell — J9 tiles are pinned by the grid, never width:100% in 1fr */
+  height: 100%;
+}
+
+/* the image box. Width fills the FIXED grid cell (not viewport-fluid). Height is
+ * driven either by `aspectRatio` (banner/landscape tiles) or by the grid cell's
+ * own fixed height (game lobby = J9's 205px li) when the tile is set to flex-fill. */
+.media {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  background: var(--tile); /* J9 game-tile bg #262833 — was --surface-2 */
+  border-radius: var(--radius-md); /* J9 tile corner = 8px */
+  overflow: hidden;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* J9: full-bleed cover, zero letterbox on landscape key-art */
+  display: block;
+}
+
+/* PLACEHOLDER SLOT — token-derived gradient (no external asset). */
+.slot {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  background:
+    radial-gradient(120% 120% at 30% 20%, var(--surface-hover), var(--tile) 60%),
+    linear-gradient(135deg, var(--tint), transparent);
+  border-bottom: 1px solid var(--brand-accent-hairline);
+}
+
+.slotLabel {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-mid);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badgeSlot {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-content);
+}
+
+/* J9 label sits OVER the bottom of the cover art on a dark scrim, so the tile is
+ * one fixed-height art cell (not art + a separate label block that breaks 205px).
+ * The scrim is a DEEP gradient (transparent → rgba(0,0,0,.85)) tall enough to
+ * carry both the 2-line name and the provider so they read cleanly over busy art,
+ * never on the raw key-art. justify-content:flex-end pins the text to the base so
+ * the label-block is anchored identically on every tile. */
+.scrim {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  /* taller, deeper scrim: most of the fade is empty, the dark base sits under text */
+  padding: var(--space-5) var(--space-3) var(--space-3);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.45) 45%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+}
+
+/* Title reserves EXACTLY 2 lines (line-clamp:2 + a 2-line fixed height) so a
+ * 1-line and a 2-line title yield the SAME label-block height — every 1×1 tile
+ * stays uniform regardless of name length. height (not min-height) pins the block
+ * at two --t-sm × --lh-tight lines even when the title is one line, so a missing
+ * caption can never shrink the block either. Bolder weight + text-shadow lift the
+ * name off busy art. */
+.name {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  line-height: var(--lh-tight);
+  color: var(--text-hi);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
+  /* reserve two lines: clamp to 2 and FIX the block to a 2-line height */
+  height: calc(var(--t-sm) * var(--lh-tight) * 2);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+/* provider line — lifted to a near-white muted tone (was --text-mid .62, faint
+ * over art) + a shadow so it stays legible against the brightest key-art. */
+.caption {
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  color: hsla(0, 0%, 100%, 0.82);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

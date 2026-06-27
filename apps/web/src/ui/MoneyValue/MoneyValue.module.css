@@ -1,0 +1,34 @@
+/* The `.money` role — composed from the type + win/loss tokens (SPEC-02 §0). */
+.money {
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  white-space: nowrap;
+}
+
+.num {
+  font-size: var(--t-num);
+}
+
+/* gold treatment is allowed on large figures only (≥18px) — never small text */
+.num-lg {
+  font-size: var(--t-num-lg);
+  font-weight: var(--weight-bold);
+}
+
+/* ---- win / loss — luminance-matched, EQUAL salience (Decree-174) -------- */
+.win {
+  color: var(--win);
+}
+.loss {
+  color: var(--loss);
+}
+
+/* ---- stale (F4) — explicitly labelled, never silently shown as live ----- */
+.stale {
+  color: var(--text-mid);
+  font-style: italic;
+  font-weight: var(--weight-reg);
+}

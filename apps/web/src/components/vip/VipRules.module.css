@@ -1,0 +1,66 @@
+/* VipRules — numbered rule cards. Tokens only. */
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  counter-reset: rule;
+}
+.item {
+  display: flex;
+}
+
+.ruleCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  width: 100%;
+}
+
+.num {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  display: grid;
+  place-items: center;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  color: var(--brand-on-accent);
+  background: var(--brand-accent-grad);
+  font-family: var(--brand-font-num);
+}
+
+.ruleBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.ruleTitle {
+  font-size: var(--t-h3);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.ruleText {
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+}
+
+.ruleIcon {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--text-dim);
+}
+
+@media (min-width: 768px) {
+  .list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}

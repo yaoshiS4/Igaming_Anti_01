@@ -1,0 +1,13 @@
+/* ============================================================================
+ * Yaobet — [data-theme] hook (SPEC-02 §0)
+ * ----------------------------------------------------------------------------
+ * Yaobet ships OLED-dark only at v1. [data-theme="obsidian"] is the reserved
+ * hook for future light/alt themes. The default (no [data-theme]) IS obsidian;
+ * this selector exists so the hook is wired and any future theme re-points
+ * GROUP-A surface/text tokens here (NOT in brands.css). Brand and theme are
+ * orthogonal axes: [data-brand] re-skins accent; [data-theme] re-skins canvas.
+ * ==========================================================================*/
+
+[data-theme="obsidian"] {
+  /* v1 OLED-dark == the :root defaults; no overrides needed yet. */
+}

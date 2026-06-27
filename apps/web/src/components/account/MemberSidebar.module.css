@@ -1,0 +1,551 @@
+/* ============================================================================
+ * MemberSidebar — LEFT member rail (J9 .user_info_box + .menu_box). Tokens only
+ * (no raw hex — lint A2; every accent through --brand-accent indirection so the
+ * brand re-skins automatically). Mobile-first @375: full-width stacked cards;
+ * desktop ≥992: fixed 304px sticky rail.
+ *
+ * Surface stack:
+ *   .hero          — PROFILE card: identity + membership progress on
+ *                    --header-card-grad + --lift + a corner --card-sheen-grad.
+ *   .walletCard    — SEPARATE wallet card: title + balance + Nạp/Rút on a cool
+ *                    --wallet-sheen-grad (distinct from the hero's gold halo).
+ *   .actionCards   — 2-up J9-style action cards (--card-sheen-grad ::sheen).
+ *   .menu          — 12-tile icon grid on raised --tile surfaces.
+ *   .logoutRow     — full-width logout, OUTSIDE the grid.
+ * ==========================================================================*/
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---- guest prompt -------------------------------------------------------- */
+.guest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--card-pad);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+.guestTitle {
+  font-size: var(--t-h3);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.guestText {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  line-height: var(--lh-body);
+}
+
+/* ============================================================================
+ * 1. HERO — fused identity + progress + wallet (one premium surface)
+ * ==========================================================================*/
+.hero {
+  position: relative;
+  isolation: isolate; /* keep the corner sheen behind content, clipped here */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--card-pad-sm);
+  background: var(--header-card-grad);
+  border: 1px solid var(--brand-accent-hairline);
+  border-radius: var(--radius-card);
+  box-shadow: var(--lift);
+}
+/* the J9 signature: a soft ice-white glow bleeding from the upper-right corner */
+.heroSheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--card-sheen-grad);
+}
+
+/* ---- top row: "Nhận huy hiệu" in the card's top-right corner (J9), on its
+ *  OWN row so it never shares the name line ------------------------------- */
+.cardTop {
+  display: flex;
+  justify-content: flex-end;
+}
+.badgeLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: calc(var(--space-1) * -1) calc(var(--space-1) * -1) 0 0;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  color: var(--brand-accent);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.badgeLink:hover,
+.badgeLink:focus-visible {
+  background: var(--brand-accent-hairline);
+  outline: none;
+}
+
+/* ---- identity: avatar (+ verified check overlay) · name·tier · plain ID --- */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.avatarWrap {
+  position: relative;
+  flex: 0 0 auto;
+}
+.avatar {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+  box-shadow: var(--glow-gold);
+}
+.avatarInitial {
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  font-family: var(--brand-font-num);
+}
+/* verified → a small green CHECK on the avatar (bottom-right), NOT a chip */
+.verifiedBadge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--green);
+  color: var(--text-hi);
+  border: 2px solid var(--surface);
+}
+.idMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+/* name + tier ribbon on ONE line (J9 username + tier tag) */
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.name {
+  min-width: 0;
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tierBadge {
+  flex: 0 0 auto;
+}
+/* ID as PLAIN TEXT + copy (J9 "九游ID: …"), NOT a chip/pill */
+.idLine {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  cursor: pointer;
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.idLine:hover {
+  color: var(--brand-accent);
+}
+.idLabel {
+  color: var(--text-dim);
+}
+.idValue {
+  font-family: var(--brand-font-num);
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+.copied {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  padding: 2px var(--space-2);
+  background: var(--shell);
+  border: 1px solid var(--brand-accent-hairline);
+  border-radius: var(--radius-sm);
+  color: var(--brand-accent);
+  white-space: nowrap;
+  font-size: var(--t-micro);
+}
+
+/* ---- progress bar (J9 header anchor) ------------------------------------- */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.progressHead {
+  display: flex;
+  align-items: center;
+}
+.progressSpacer {
+  flex: 1 1 auto;
+}
+.nextTag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--progress-tag-bg);
+  border: 1px solid var(--progress-tag-border);
+  color: var(--progress-tag-text);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+}
+.track {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--progress-track);
+}
+/* loading skeleton — a faint shimmer groove, no dot/fill */
+.trackSkeleton {
+  background: linear-gradient(
+    90deg,
+    var(--progress-track) 0%,
+    var(--surface-hover) 50%,
+    var(--progress-track) 100%
+  );
+  background-size: 200% 100%;
+}
+.fill {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  height: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--progress-fill);
+  background-image: var(--progress-fill-grad);
+}
+.dot {
+  /* `left` is set inline to the live fill % so the glow sits at the leading
+   *  edge of the progress (the current point), not the track origin. */
+  position: absolute;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--progress-dot);
+  box-shadow: var(--progress-dot-glow);
+  transform: translate(-50%, -50%);
+}
+.caption {
+  font-size: var(--t-micro);
+  line-height: var(--lh-tight);
+  color: var(--text-mid);
+}
+.captionTier {
+  color: var(--brand-accent);
+  font-weight: var(--weight-semi);
+}
+
+/* the "alive" pulse — transform/opacity only, GATED behind reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .dot {
+    animation: pulseDot 1.6s var(--ease-standard) infinite alternate;
+  }
+  @keyframes pulseDot {
+    from {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.4;
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1.1);
+      opacity: 1;
+    }
+  }
+  .trackSkeleton {
+    animation: progressShimmer var(--dur-slow) var(--ease-standard) infinite;
+  }
+  @keyframes progressShimmer {
+    from {
+      background-position: 200% 0;
+    }
+    to {
+      background-position: -200% 0;
+    }
+  }
+}
+
+/* ============================================================================
+ * 2. WALLET CARD — its OWN premium card (J9 keeps the wallet box separate from
+ * the user-info box). A cool diagonal sheen sets the near-white balance on a
+ * crafted plane, distinct from the hero's warm gold halo.
+ * ==========================================================================*/
+.walletCard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--card-pad-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--lift);
+}
+/* faint diagonal cool sheen so the near-white balance sits on a crafted plane */
+.walletSheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--wallet-sheen-grad);
+}
+.walletTitle {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.balance {
+  font-size: var(--t-balance);
+  line-height: 1.1;
+  font-weight: var(--weight-bold);
+  font-family: var(--brand-font-num);
+  color: var(--balance-text); /* near-WHITE — gold is reserved for chrome/CTA */
+}
+.walletActions {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-sm);
+  margin-top: var(--space-1);
+}
+.actBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  border-radius: var(--radius-md);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  text-decoration: none;
+  transition: filter var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+.actGold {
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+}
+.actGold:hover {
+  filter: brightness(1.05);
+}
+.actGhost {
+  background: var(--surface-3);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.actGhost:hover {
+  background: var(--surface-hover);
+  color: var(--brand-accent);
+}
+
+/* ============================================================================
+ * 3. ACTION CARDS — Cửa hàng điểm · Trung tâm nhiệm vụ
+ * ==========================================================================*/
+.actionCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-sm);
+}
+.actionCard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: var(--card-pad-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--lift);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+.actionCard:hover,
+.actionCard:focus-visible {
+  border-color: var(--brand-accent-hairline);
+  background: var(--surface-hover);
+  outline: none;
+}
+/* the J9 corner glow on each action card */
+.cardSheen {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--card-sheen-grad);
+}
+.actionHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--brand-accent);
+}
+.actionIcon {
+  color: var(--brand-accent);
+}
+.actionHelp {
+  color: var(--text-dim);
+}
+.actionTitle {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  line-height: var(--lh-tight);
+}
+.actionMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.actionMetaLabel {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+.actionMetaValue {
+  font-size: var(--t-body);
+  font-weight: var(--weight-bold);
+  font-family: var(--brand-font-num);
+  color: var(--text-hi);
+}
+
+/* ============================================================================
+ * 4. ICON GRID — 12 tiles (J9 .menu_box), raised --tile surfaces
+ * ==========================================================================*/
+.menu {
+  padding: var(--card-pad-sm);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+.menuGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tile {
+  position: relative;
+  width: 100%;
+  height: 86px; /* J9 .menu_box li 86×86 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-lg); /* J9 r12 */
+  background: var(--tile); /* raised tile surface (was transparent) */
+  border: 1px solid transparent;
+  color: var(--text);
+  font-size: var(--t-micro); /* J9 12px */
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.tile:hover,
+.tile:focus-visible {
+  color: var(--brand-accent);
+  background: var(--surface-hover);
+  outline: none;
+}
+.tileActive {
+  color: var(--brand-accent); /* J9 active gold #f3b867 */
+  background: var(--surface-hover); /* J9 active bg #292c34 */
+}
+/* persistent gold-active tile (Bảo mật when verified): an 8% gold film + the
+ * existing lit-edge inset glow, without restyling the base tile. */
+.tileActiveGold {
+  color: var(--brand-accent);
+  background: var(--wash-accent);
+  border-color: var(--brand-accent-hairline);
+  box-shadow: var(--glow-gold);
+}
+.tileIconWrap {
+  position: relative;
+  display: inline-flex;
+}
+.tileIcon {
+  width: 24px;
+  height: 24px;
+}
+/* red unread dot on Tin nhắn (--loss is PINNED-neutral; status-critical red) */
+.unreadDot {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--loss);
+  border: 1px solid var(--tile);
+}
+.tileLabel {
+  font-weight: var(--weight-semi); /* J9 .label 600 */
+  line-height: var(--lh-tight);
+}
+
+/* ============================================================================
+ * 5. LOGOUT ROW — full-width, OUTSIDE the grid
+ * ==========================================================================*/
+.logoutRow {
+  display: block;
+}
+
+/* ---- desktop: fixed 304px rail (the layout sets the grid) ---------------- */
+@media (min-width: 992px) {
+  .rail {
+    width: var(--rail-w);
+    position: sticky;
+    top: calc(var(--header-h) + var(--nav-h) + var(--space-4));
+  }
+}

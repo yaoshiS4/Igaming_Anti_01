@@ -1,0 +1,29 @@
+/* ShellChrome — content frame + optional right rail; mobile bottom-bar gap. */
+
+.frame {
+  max-width: var(--frame-w);
+  min-width: 0;
+  margin: 0 auto;
+  /* J9 frame has NO horizontal padding at full width; keep a 16px gutter only so
+   * the 1424 column never kisses the edge on a <1424 laptop. The 8px TOP padding
+   * is J9's .banner_content{padding-top:8px} — the breathing gap between the
+   * sticky header and the first content/banner (defect 1). */
+  padding: var(--space-2) var(--gutter) 0;
+  display: flex;
+  gap: var(--band-gap); /* J9 rail gutter = 16, not 24 */
+  align-items: flex-start;
+  /* clear the fixed bottom tab bar on mobile */
+  padding-bottom: calc(var(--bottombar-h) + env(safe-area-inset-bottom, 0px) + var(--space-4));
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  /* bottom bar hidden on desktop — drop the reserved gap */
+  .frame {
+    padding-bottom: var(--space-6);
+  }
+}

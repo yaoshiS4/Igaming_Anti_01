@@ -1,0 +1,182 @@
+/* ============================================================================
+ * Footer — J9-EXACT. Dimensions transcribed from J9 sources/VIP_files CSS:
+ *   .footer_wrap { background:#14161c; padding:32px 0 16px }
+ *   .footer-box  { width:1424px; margin:0 auto; display:flex }
+ *   .footer-box>div { flex:1; display:grid; gap:16px }
+ *   .title { color:#fff; font:16px/150% 600 }
+ *   .bottom-box { display:flex; height:40px; gap:24px; align-items:center }
+ *   .connect img { width:30px }
+ *   .text { color:#858ca6; font:16px/150% 600; white-space:nowrap }
+ *   .bottom (copyright) below the box.
+ * Desktop = J9 1:1; @375px the three columns stack and the partner band wraps.
+ * ==========================================================================*/
+
+.footerWrap {
+  width: 100%;
+  background: #14161c; /* J9 footer canvas — deeper than --shell, matched */
+  padding: var(--space-6) var(--gutter) var(--space-4); /* 32 / 16 / 16 */
+}
+
+.footerBox {
+  max-width: var(--frame-w); /* 1424 */
+  margin: 0 auto;
+  display: flex;
+  gap: var(--space-6);
+}
+
+/* J9 .footer-box>div — equal columns, grid gap:16px (title ↔ content) */
+.col {
+  flex: 1;
+  display: grid;
+  gap: var(--band-gap); /* 16px */
+  align-content: start;
+}
+
+/* J9 .title */
+.title {
+  color: var(--text-hi);
+  font-size: var(--t-body); /* 16 */
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-body);
+}
+
+/* J9 .bottom-box — 40px row, 24px gap */
+.bottomBox {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 40px;
+  gap: var(--space-5); /* 24px */
+  align-items: center;
+}
+
+/* col-1 partner logos — J9 height:40px lockups */
+.partner {
+  height: 36px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+  opacity: 0.92;
+  border-radius: var(--radius-sm);
+}
+
+/* J9 .connect — social row, img width:30px */
+.connect .social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  color: var(--text-mid);
+  transition: color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+.connect .social:hover {
+  color: var(--brand-accent);
+  background: var(--tint);
+}
+.connect .social:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* J9 .text — muted brand link column #858ca6 */
+.text {
+  flex-wrap: wrap;
+}
+.textLink {
+  color: var(--text-mid); /* J9 #858ca6 analog */
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-body);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.textLink:hover {
+  color: var(--text-hi);
+}
+.textLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* col-4 RG compliance — dedicated, never buried (SPEC-03 B6). Plain VN. */
+.rg .title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.rgIcon {
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+}
+.rgBody {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+}
+.ageMark {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 24px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--brand-accent-hairline);
+  border-radius: var(--radius-sm);
+  color: var(--brand-accent);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+}
+.rgList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-1);
+  color: var(--text-mid);
+  font-size: var(--t-micro);
+  line-height: var(--lh-tight);
+}
+.rgLink {
+  color: var(--text-mid);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+.rgLink:hover {
+  color: var(--text-hi);
+}
+.rgLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* J9 .bottom — copyright line */
+.copyright {
+  max-width: var(--frame-w);
+  margin: var(--space-6) auto 0;
+  color: var(--text-dim);
+  font-size: var(--t-micro);
+  line-height: var(--lh-body);
+  text-align: center;
+}
+
+/* ---------- MOBILE (<768px) — stack the three columns ---------- */
+@media (max-width: 767px) {
+  .footerWrap {
+    padding: var(--space-5) var(--gutter) var(--space-4);
+  }
+  .footerBox {
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .copyright {
+    margin-top: var(--space-5);
+    text-align: left;
+  }
+}

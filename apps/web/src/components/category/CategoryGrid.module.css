@@ -1,0 +1,99 @@
+/* CategoryGrid — tab strip + filter/sort bar + game grid. 3/4/6 responsive.
+ * Tokens only; the page never scrolls horizontally (strips scroll in Scroller). */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ---- filter / sort bar ---- */
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-3);
+  min-height: var(--tap-min);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+.search:focus-within {
+  border-color: var(--focus-ring);
+}
+.searchIcon {
+  color: var(--text-mid);
+  flex: none;
+}
+.searchInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  outline: none;
+  color: var(--text-hi);
+  font-size: var(--t-body);
+  font-family: var(--brand-font-body);
+}
+.searchInput::placeholder {
+  color: var(--text-mid);
+}
+
+.sorts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* ---- J9 FIXED-TILE game grid: pinned 205px rows, 8-up at the frame ----
+ * Mirrors the home lobby (.game-list repeat(8,1fr) gap16, li height 205px).
+ * grid-auto-rows pins the cell height so a tile is one physical size — never
+ * width:100% fluid in a 1fr grid. Ladder: 3 → 4 → 6 → 8. */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: var(--tile-h);
+  gap: var(--band-gap);
+}
+.cell {
+  min-width: 0;
+  display: flex;
+}
+.cell > * {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .search {
+    flex: 0 1 320px;
+  }
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1424px) {
+  .grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}

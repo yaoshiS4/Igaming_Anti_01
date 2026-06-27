@@ -1,0 +1,52 @@
+/* WalletBalanceHeader — balance hero + UT-1 chips. Tokens only; @375 first. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+}
+
+.balanceRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+  letter-spacing: 0.02em;
+}
+
+.balanceValue {
+  color: var(--text-hi);
+}
+
+.balanceSkel {
+  display: inline-block;
+}
+
+.errorState {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.absent {
+  font-size: var(--t-body);
+  color: var(--text-mid);
+}
+
+.guest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.guestText {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}

@@ -1,0 +1,8 @@
+/* Tài khoản / account content column. Tokens only; mobile-first @375. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--band-gap);
+  min-width: 0;
+}

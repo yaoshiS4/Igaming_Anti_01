@@ -1,0 +1,29 @@
+/* ============================================================================
+ * Yaobet — global motion + reduced-motion contract (SPEC-02 §7, SPEC-04 1.2)
+ * ----------------------------------------------------------------------------
+ * The single, app-wide prefers-reduced-motion implementation. Because all
+ * motion reads the --dur-* tokens, zeroing them here disables every
+ * token-obeying animation with NO per-component opt-in (LOCKED — not
+ * overridable per brand).
+ * ==========================================================================*/
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+    --dur-slow: 0ms;
+  }
+
+  /* Decorative motion the duration-tokens alone don't reach: confetti,
+   * odometer reels, auto-advancing carousels, count-ups → disabled; the
+   * final truthful state is shown instantly. Components additionally gate
+   * their own JS animation on this query (SPEC-03 F5). */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

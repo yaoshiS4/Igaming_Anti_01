@@ -1,0 +1,66 @@
+/* PromoChips — neutral chips row. Tokens only. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--t-h2);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+}
+
+.all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--t-sm);
+  color: var(--brand-accent);
+  text-decoration: none;
+  min-height: var(--tap-min);
+}
+
+.row {
+  display: flex;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 200px;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--brand-accent-hairline);
+  text-decoration: none;
+  scroll-snap-align: start;
+  min-height: var(--tap-min);
+}
+
+.chipCat {
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--brand-accent);
+  font-weight: var(--weight-semi);
+}
+
+.chipTitle {
+  font-size: var(--t-sm);
+  color: var(--text-hi);
+  line-height: var(--lh-tight);
+}

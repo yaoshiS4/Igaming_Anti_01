@@ -1,0 +1,72 @@
+/* [vertical] route-level UI — loading + not-found scaffolds. Tokens only. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--band-gap);
+  min-width: 0;
+}
+
+/* ---- loading: branded Skeletons in each band's reserved footprint (§F2) ---- */
+.toolbarSkel {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* J9 lobby column ladder: 3-up @375 → 4-up @768 → 6-up @992 → 8-up @1424 */
+.gridSkel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--band-gap);
+}
+.gridSkel > * {
+  height: var(--tile-h);
+}
+
+@media (min-width: 768px) {
+  .gridSkel {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 992px) {
+  .gridSkel {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (min-width: 1424px) {
+  .gridSkel {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+/* ---- not-found ---- */
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--gutter);
+  text-align: center;
+}
+.code {
+  font-size: var(--t-hero);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-family: var(--brand-font-num);
+}
+.heading {
+  font-size: var(--t-h1);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+}
+.body {
+  font-size: var(--t-body);
+  color: var(--text-mid);
+  max-width: 36ch;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: center;
+}

@@ -1,0 +1,36 @@
+/* ============================================================================
+ * Badge — small status/label marker (SPEC-03 A12). Tones map to semantic vars;
+ * `win`/`loss` stay luminance-matched (equal salience) and `danger` reads the
+ * error/CTA-accent — red is status-critical/CTA only, never an outcome reward.
+ * ==========================================================================*/
+
+import type { ReactNode } from "react";
+import styles from "./Badge.module.css";
+
+export type BadgeTone =
+  | "neutral"
+  | "gold"
+  | "info"
+  | "win"
+  | "loss"
+  | "danger";
+
+export interface BadgeProps {
+  tone?: BadgeTone;
+  /** subtle (tinted bg) | solid (filled) */
+  variant?: "subtle" | "solid";
+  children: ReactNode;
+  className?: string;
+}
+
+export function Badge({ tone = "neutral", variant = "subtle", children, className }: BadgeProps) {
+  return (
+    <span
+      className={[styles.badge, styles[tone], styles[variant], className]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {children}
+    </span>
+  );
+}

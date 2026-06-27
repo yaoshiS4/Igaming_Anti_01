@@ -1,0 +1,21 @@
+.odometer {
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+  white-space: nowrap;
+  /* gold treatment allowed — these are large hero figures (≥18px) */
+  background: var(--brand-accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.num {
+  font-size: var(--t-num);
+}
+
+.num-lg {
+  font-size: var(--t-num-lg);
+}

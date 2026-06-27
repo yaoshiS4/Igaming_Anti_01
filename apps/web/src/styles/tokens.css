@@ -1,0 +1,235 @@
+/* ============================================================================
+ * Yaobet — :root TOKEN CONTRACT (SPEC-02-DESIGN-SYSTEM.md, authored verbatim)
+ * ----------------------------------------------------------------------------
+ * Two named token groups, one base :root layer.
+ *
+ *   GROUP A  — LOCKED base. Never per-brand overridable. Authored on :root only;
+ *              FORBIDDEN inside any [data-brand] block (lint A1).
+ *   GROUP B  — Brand-overridable indirection. Splits into:
+ *                (i)  RAW RAMP source literals (--gold-*, --cta*, --font-body/-num,
+ *                     --text-on-gold) — default-brand source values; components must
+ *                     NOT read these directly (lint A2).
+ *                (ii) --brand-* INDIRECTION vars — the ONLY tokens a [data-brand]
+ *                     block re-points and the ONLY brand-tinted vars components read.
+ *
+ * PINNED-to-neutral (§0.2): --focus-ring, --win, --loss, --error are standalone
+ * LOCKED constants. They MUST NOT reference any --brand-* or RAW-RAMP token (lint A3).
+ *
+ * Components read brand/semantic/locked vars — NEVER raw ramp literals.
+ * No component hardcodes a hex / px / duration; everything is var(--…).
+ * ==========================================================================*/
+
+:root {
+  /* ======================================================================
+   * GROUP A — LOCKED BASE  (forbidden inside [data-brand])
+   * ==================================================================== */
+
+  /* §1 — Color: canvas & surfaces (verified, AA base) ------------------ */
+  --canvas:           #171a21; /* page background (the .app-main analog) — the ONE root bg */
+  --shell:            #15161b; /* deeper shell behind the canvas (J9 --deep) */
+  --surface:          #1f222e; /* dominant surface: card/panel/button-default base (J9) */
+  --surface-2:        #1c1f25; /* module card bg (J9 .list/.rule-wrap) — was #1f2229 */
+  --surface-3:        #25282f; /* raised panel / table head */
+  --tile:             #262833; /* J9 game-tile bg (.game-item/.game_bg) — fixed-tile surface */
+  --surface-hover:    #292c34; /* hover / active menu item */
+  --surface-disabled: #313440;
+  --scrim:            rgba(0, 0, 0, 0.7); /* modal scrim — SOLID, never backdrop-filter:blur */
+
+  /* §3 — Semantic: J9-EXACT win/loss + focus (PINNED neutral) ---------- */
+  --win:        #45c9a5; /* J9 win/positive amount (×161) — luminance ~matched to --loss. PINNED */
+  --loss:       #f53f55; /* J9 --Minor-Color-Red — equal-salience loss. PINNED */
+  --error:      #e42946; /* J9 red CTA/danger (validation, not outcomes). PINNED */
+  --green:      #31bc69; /* J9 --Minor-Color-Green — flat positive accent. PINNED */
+  --info:       #018fff; /* J9 blue solid */
+  --focus-ring: #6ea8ff; /* AA focus indicator — LOCKED neutral blue. PINNED; ≥3:1 vs canvas */
+
+  /* §3 — Text ladder on dark (AA-lifted) ------------------------------- */
+  --text-hi:  hsla(0, 0%, 100%, 0.92); /* primary text */
+  --text:     hsla(0, 0%, 100%, 0.82); /* strong secondary */
+  --text-mid: hsla(0, 0%, 100%, 0.62); /* muted — AA floor on --canvas (LIFTED from J9 .4) */
+  --text-dim: hsla(0, 0%, 100%, 0.45); /* DECORATIVE-ONLY hint text — never functional copy */
+  --border:   hsla(0, 0%, 100%, 0.16); /* hairline divider */
+  --tint:     hsla(0, 0%, 100%, 0.05); /* subtle surface tint */
+
+  /* §4 — Typography: scale (px — J9's 12-dense rhythm) ----------------- */
+  --t-micro:   12px; /* dense caption */
+  --t-sm:      14px;
+  --t-body:    16px; /* body base */
+  --t-h3:      18px;
+  --t-h2:      20px;
+  --t-h1:      24px; /* section heading */
+  --t-display: 32px;
+  --t-hero:    40px; /* hero counters */
+  --t-num:     16px; /* inline tabular money */
+  --t-num-lg:  32px; /* hero tabular money */
+  --lh-body:   1.5;
+  --lh-tight:  1.3; /* MIN line-height for VN text ≤14px (diacritics need headroom) */
+  --weight-reg:  400;
+  --weight-semi: 600;
+  --weight-bold: 700;
+
+  /* §5 — Spacing (clean 8px base) -------------------------------------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+  --gutter:  16px; /* the single horizontal gutter — replaces J9's 15/16 split */
+  --field-rhythm: 24px; /* .input-item margin-bottom analog */
+
+  /* §6 — Radii (no 4.8px artifact) ------------------------------------- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+
+  /* §6 — Elevation: glow-not-shadow ------------------------------------ */
+  --glow-gold: inset 0 0 16px rgba(243, 184, 103, 0.28); /* lit/active gold edge (J9 #f3b867 inset glow) */
+  --halo:      0 0 40px rgba(0, 0, 0, 0.35);            /* soft ambient for modals/hero only */
+  --lift:      0 2px 12px rgba(0, 0, 0, 0.18);          /* sparse card lift */
+
+  /* §6 — Z-index: named ladder ----------------------------------------- */
+  --z-content:  1;
+  --z-sticky:   100;
+  --z-dropdown: 1000;
+  --z-modal:    2000;
+  --z-toast:    3000;
+
+  /* §6 — Layout / chrome (J9 FIXED-TILE system — 02-J9-MEASUREMENTS §9) ----- */
+  --header-h:    72px;   /* tier-1 logo/identity (J9 120px = 72 + 48 nav) */
+  --nav-h:       48px;   /* tier-2 category row (J9 .routers-list 48px) */
+  --logo-h:      44px;   /* J9 main logo height inside a 170×60 lockup box */
+  --header-bg:   #171a21;/* sticky header — OPAQUE J9 canvas (per RULES §; NOT the .8 blur) */
+  --rail-w:      304px;  /* member left rail */
+  --frame-w:     1424px; /* J9 fixed content frame (.home_wrapper 1424px) */
+  --frame-min:   1150px; /* J9 min-width clamp (.routers-list min-width) */
+  --bottombar-h: 56px;   /* + safe-area-inset-bottom */
+
+  /* §6b — J9 grid / tile / spacing system (the dead-space fix) --------- */
+  --band-gap:    16px;   /* between every band; module top-margin (J9's 16, ×187) */
+  --gap:         16px;   /* THE grid/rail gap (alias of --gutter; J9 cheat-sheet name) */
+  --gap-sm:      8px;    /* dense tile clusters, chip rows (J9 ×35) */
+  --gap-xs:      4px;    /* label/icon pairs (J9 ×10) */
+  --feature-w:   418px;  /* home feature-rail fixed column (J9 .img-list 418px auto) */
+  --tile-h:      205px;  /* canonical game-tile height (J9 .game-list li 205px) */
+  --provider-w:  128px;  /* provider chip fixed cell (J9 repeat(auto-fill,128px)) */
+  --provider-h:  48px;   /* provider chip height (J9 .provider-btn 48px) */
+  --card-pad:    24px;   /* spacious module card padding (J9 ×37) */
+  --card-pad-sm: 16px;   /* standard card padding (J9 ×16) */
+  --banner-mb:   22px;   /* hero/banner block bottom margin (J9 .banner_content) */
+
+  /* §7 — Motion (J9 timings — 02-J9-MEASUREMENTS §6) ------------------- */
+  --dur-fast:   200ms; /* .2s = J9 hover micro-interactions */
+  --dur-base:   250ms; /* .25s = J9 nav active-underline */
+  --dur-slow:   350ms; /* .35s = J9's default workhorse (×483) */
+  --dur-header: 500ms; /* .5s = J9 header height collapse/expand */
+  --ease-standard: cubic-bezier(0.645, 0.045, 0.355, 1); /* J9 ease-in-out-quad */
+  --ease-entrance: cubic-bezier(0.23, 1, 0.32, 1);       /* J9 ease-out-quint */
+
+  /* §8 — Compliance tap targets ---------------------------------------- */
+  --tap-min: 44px; /* every interactive primitive */
+  --tap-bar: 48px; /* bottom bar */
+
+  /* §9 — MEMBER-HUB PREMIUM LAYER (additive GROUP-A base; brand-following) ----
+   * Surface/effect/progress/typography tokens for the member-hub rebuild.
+   * Re-expresses J9's per-tier raster art (bgN.png / bg_wallet.png) as pure-CSS
+   * blooms over the LOCKED --canvas / --surface. Every accent-tinted stop runs
+   * through color-mix(… var(--brand-accent) …) so the emerald brand re-skins
+   * them from a single :root definition — they intentionally do NOT appear in
+   * any [data-brand] block (A1/A3 invariant preserved). --progress-dot stays a
+   * locked neutral white (the dot is brand-agnostic, like a comet head). */
+
+  /* Ambient page backdrop — faint gold bloom (top) + cool blue lift (bottom)
+   * over the locked canvas. Layered OVER var(--canvas) so a browser without
+   * color-mix degrades to the flat canvas, never to transparent/black. */
+  --page-bloom:
+    radial-gradient(120% 80% at 50% -10%, color-mix(in srgb, var(--brand-accent) 6%, transparent) 0%, rgba(23, 26, 33, 0) 46%),
+    radial-gradient(140% 120% at 50% 120%, rgba(2, 143, 255, 0.05) 0%, rgba(23, 26, 33, 0) 55%),
+    var(--canvas);
+  /* Member content column stays flat matte so lifted cards read as raised. */
+  --member-canvas: var(--canvas);
+
+  /* Fused hero card — warm brand-accent halo behind the avatar into --surface. */
+  --header-card-grad:
+    radial-gradient(120% 140% at 14% 30%, color-mix(in srgb, var(--brand-accent) 14%, transparent) 0%, rgba(31, 34, 46, 0) 52%),
+    var(--surface);
+  /* Faint diagonal cool sheen on the wallet block (re-expresses bg_wallet.png). */
+  --wallet-sheen-grad:
+    linear-gradient(118deg, rgba(204, 220, 255, 0.06) -10%, rgba(204, 220, 255, 0.015) 60%, transparent 100%);
+  /* The signature J9 corner glow — soft ice-white bleed from the upper-right. */
+  --card-sheen-grad:
+    radial-gradient(circle at 78% 26%, rgba(204, 220, 255, 0.05) 0%, rgba(204, 220, 255, 0.01) 57%, transparent 72%);
+
+  /* Balance renders near-WHITE (not gold — gold is chrome/CTA only). */
+  --balance-text: var(--text-hi);
+  --t-balance: 28px; /* hero balance size — between --t-h1 24 and --t-display 32 */
+
+  /* Membership progress track. The empty groove is a 12% white hairline (J9's
+   * dark rgba(0,0,0,.1) vanishes on our OLED #1f222e — re-expressed lighter). */
+  --progress-track: hsla(0, 0%, 100%, 0.12);
+  --progress-fill: var(--brand-accent); /* filled portion keyed to the brand */
+  --progress-fill-grad: var(--brand-accent-grad); /* optional richer lit fill */
+  --progress-dot: #ffffff; /* locked neutral white comet head */
+  --progress-dot-glow:
+    0 0 4px rgba(217, 230, 255, 0.9), 0 0 8px rgba(217, 230, 255, 0.7),
+    0 0 12px rgba(255, 255, 255, 0.6), 0 0 18px rgba(255, 255, 255, 0.35);
+  --progress-tag-bg: var(--surface-3); /* right-pinned next-tier pill bg */
+  --progress-tag-text: var(--brand-accent); /* next-tier pill label + chevron */
+  --progress-tag-border: color-mix(in srgb, var(--brand-accent) 32%, transparent);
+
+  /* Activation status chip (the not-activated shield pill on the hero). --green
+   * is already PINNED neutral; the verified state prefers Badge tone="info". */
+  --status-locked-bg: color-mix(in srgb, var(--green) 12%, transparent);
+  --status-locked-text: var(--green);
+
+  /* An 8% brand-gold film laid over a surface to signal lit/active WITHOUT
+   * changing the base — the persistent background of the active Bảo mật tile. */
+  --wash-accent:
+    linear-gradient(0deg, color-mix(in srgb, var(--brand-accent) 8%, transparent), color-mix(in srgb, var(--brand-accent) 8%, transparent)),
+    var(--surface);
+
+  /* ======================================================================
+   * GROUP B — RAW RAMP (default-brand source literals)
+   * Components must NOT read these directly — only the --brand-* aliases below.
+   * An alternate [data-brand] block bypasses these entirely by re-pointing
+   * the --brand-* aliases to its own hex.
+   * ==================================================================== */
+
+  /* §2 — Gold accent (J9-EXACT extracted palette — per rebuild RULES §1) */
+  --gold-500:      #f3b867; /* J9 --Main-Color-Gold — primary accent (VIP, prices, active tabs) */
+  --gold-600:      #e2b271; /* J9 gradient warm stop — pressed/darker step */
+  --gold-grad:     linear-gradient(90deg, #e2b271, #f6d99d); /* J9 primary-button gradient */
+  --gold-hairline: rgba(243, 184, 103, 0.32); /* thin gold border on cards (J9 #f3b867 hairline) */
+  --text-on-gold:  #633100; /* J9 gold-button text (--font-text / --Minor-Color-Brown) */
+
+  /* §3 — CTA / blue (J9-EXACT — links / login / "font-linear") ---------- */
+  --cta:        #018fff; /* J9 blue solid (×180) — primary CTA / links */
+  --cta-grad:   linear-gradient(90deg, #02c2ff, #018fff); /* J9 blue gradient (.font-linear) */
+  --cta-accent: #f53f55; /* J9 --Minor-Color-Red — register/scarce accent */
+  --blue-soft:  #7cacff; /* J9 silver-blue — nav text / soft links */
+
+  /* §4 — Font stack (Vietnamese-first — NOT PingFang) ------------------ */
+  /* Self-hosted/system fallback stack — builds offline. VN-diacritic complete. */
+  --font-body: "Be Vietnam Pro", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-num:  "Be Vietnam Pro", ui-monospace, "DIN Alternate", "Segoe UI", sans-serif;
+
+  /* ======================================================================
+   * GROUP B — BRAND INDIRECTION  (the ONLY vars a [data-brand] re-points;
+   * the ONLY brand-tinted vars components consume). ALIAS MAP → RAW RAMP.
+   * ==================================================================== */
+  --brand-accent:          var(--gold-500);      /* → --gold-500    flat accent — VIP, prices, active tabs */
+  --brand-accent-2:        var(--gold-600);      /* → --gold-600    pressed/darker accent step */
+  --brand-accent-grad:     var(--gold-grad);     /* → --gold-grad   the brand fill gradient */
+  --brand-accent-hairline: var(--gold-hairline); /* → --gold-hairline  card hairline in brand accent */
+  --brand-on-accent:       var(--text-on-gold);  /* → --text-on-gold   on-accent text (≥4.5:1 on --brand-accent) */
+  --brand-cta:             var(--cta);           /* → --cta         primary CTA */
+  --brand-cta-grad:        var(--cta-grad);      /* → --cta-grad    primary CTA fill */
+  --brand-cta-accent:      var(--cta-accent);    /* → --cta-accent  scarce/register accent */
+  --brand-font-body:       var(--font-body);     /* → --font-body   brand body face (VN-diacritic complete) */
+  --brand-font-num:        var(--font-num);      /* → --font-num    brand tabular-numeral face */
+  --brand-logo:            url("/assets/brand/logo.svg"); /* logo lockup slot (literal URL, no raw-ramp source) */
+}

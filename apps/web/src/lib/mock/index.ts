@@ -1,0 +1,66 @@
+/* ============================================================================
+ * Yaobet — mock data layer barrel (SPEC-04 §4.1)
+ * ----------------------------------------------------------------------------
+ * All `getX()` async accessors mimic server fetches. Downstream agents import
+ * from "@/lib/mock". The real-API migration replaces these bodies, not the
+ * call sites. Types come from "@/lib/types" (re-exported via ./types).
+ * ==========================================================================*/
+
+export * from "./types";
+export { DEMO_EMPTY } from "./helpers";
+
+// lobby / home dynamic surfaces
+export {
+  getVerticals,
+  getJackpot,
+  getMemberDayCountdown,
+  getLeaderboard,
+  getLiveMatch,
+  getSportsMatches,
+} from "./lobby";
+
+// games / providers (+ the live-dealer feature-tile art for the 418px slot)
+export { getGames, getProviders, FEATURE_GAME_ART } from "./games";
+
+// vip / club
+export {
+  getVipTiers,
+  getClubTiers,
+  getPerks,
+  getVipProgress,
+} from "./vip";
+
+// wallet
+export { getWallet, getBalance } from "./wallet";
+
+// promos
+export { getPromos } from "./promos";
+
+// store
+export { getProducts, getPointsBalance } from "./store";
+
+// referral
+export { getReferral, getReferralKpi, getCommissions } from "./referral";
+
+// cashback (core 1%)
+export { getCashback } from "./cashback";
+
+// records / messages / notifications
+export { getRecords } from "./records";
+export { getMessages } from "./messages";
+export { getNotifications } from "./notifications";
+
+// profile / security / linked accounts
+export {
+  getSecurityIndex,
+  getVerification,
+  getAccountSummary,
+  getBankCards,
+  getCryptoAddresses,
+} from "./profile";
+
+// deposit
+export { getDepositOffer, getBankTransferMemo } from "./deposit";
+
+// medals
+export { getMedals } from "./medals";

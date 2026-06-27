@@ -1,0 +1,82 @@
+/* PromoHero — featured promo band. Tokens only; mobile-first @375. */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background:
+    radial-gradient(120% 100% at 80% 0%, var(--brand-accent-hairline), transparent 60%),
+    linear-gradient(135deg, var(--surface-3), var(--surface));
+  border-bottom: 1px solid var(--brand-accent-hairline);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.title {
+  font-size: var(--t-h1);
+  line-height: var(--lh-tight);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--t-sm);
+  color: var(--text-hi);
+}
+
+.timerLabel {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+
+.evergreen {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+  font-weight: var(--weight-semi);
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .media {
+    width: 48%;
+    aspect-ratio: auto;
+    border-bottom: 0;
+    border-right: 1px solid var(--brand-accent-hairline);
+  }
+  .body {
+    flex: 1;
+    justify-content: center;
+    padding: var(--space-6);
+  }
+}

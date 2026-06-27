@@ -1,0 +1,55 @@
+/* TileSkeleton — pinned to the J9 game-tile footprint (--tile-h 205px, radius 8,
+ * tile bg #262833) so it occupies a grid cell identically to a real <Tile fill>.
+ * In a grid with grid-auto-rows:var(--tile-h) the height is the row; height:100%
+ * also keeps it exact when used standalone. */
+.tile {
+  height: 100%;
+  min-height: var(--tile-h);
+  width: 100%;
+  border-radius: var(--radius-md); /* J9 tile corner = 8px */
+  background: var(--tile); /* J9 game-tile bg #262833 */
+}
+
+/* loading — branded gradient sweep (NEVER generic gray) */
+.loading {
+  background: linear-gradient(
+    100deg,
+    var(--tile) 30%,
+    var(--surface-hover) 50%,
+    var(--tile) 70%
+  );
+  background-size: 200% 100%;
+  animation: tileSweep 1400ms linear infinite;
+}
+
+/* filler — a quiet, inert pad-tile (no sweep). A hairline + faint diagonal tint
+ * reads as "empty slot" without pretending to be a game. */
+.filler {
+  border: 1px solid var(--brand-accent-hairline);
+  background:
+    repeating-linear-gradient(
+      135deg,
+      var(--tint) 0,
+      var(--tint) 1px,
+      transparent 1px,
+      transparent 12px
+    ),
+    var(--tile);
+  opacity: 0.5;
+}
+
+@keyframes tileSweep {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading {
+    animation: none;
+    background: var(--tile);
+  }
+}

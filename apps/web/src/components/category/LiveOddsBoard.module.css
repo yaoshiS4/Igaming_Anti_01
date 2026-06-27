@@ -1,0 +1,105 @@
+/* LiveOddsBoard — inline truthful live-odds board. Tokens only. */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--t-h2);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.liveTag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+  color: var(--text-hi);
+}
+.liveDot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  /* loss hue = a luminance-matched semantic color; the "TRỰC TIẾP" TEXT label
+   * carries the meaning, the dot is a non-load-bearing accent. */
+  background: var(--loss);
+}
+.preTag {
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  letter-spacing: 0.04em;
+  color: var(--text-mid);
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+  min-height: var(--tap-min);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.team {
+  font-size: var(--t-body);
+  color: var(--text);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.oddsVal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  font-weight: var(--weight-semi);
+}
+/* equal-salience: win/loss are luminance-matched; the GLYPH (not just color)
+ * encodes direction so it reads without color perception. */
+.up {
+  color: var(--win);
+  transform: rotate(-90deg);
+}
+.down {
+  color: var(--loss);
+}
+.stale {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.skelRow {
+  display: block;
+}

@@ -1,0 +1,64 @@
+/* CategorySheet — round-icon vertical grid in the bottom sheet. */
+
+.body {
+  padding: 0 var(--gutter) var(--space-2);
+}
+
+.title {
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  margin: var(--space-2) 0 var(--space-4);
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4) var(--space-2);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  min-height: var(--tap-min);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.tile:active {
+  transform: scale(0.98);
+}
+.tile:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.iconCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+  color: var(--brand-accent);
+}
+
+.label {
+  font-size: var(--t-micro);
+  color: var(--text);
+  text-align: center;
+  line-height: var(--lh-tight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+}

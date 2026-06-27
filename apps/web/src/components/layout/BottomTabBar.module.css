@@ -1,0 +1,92 @@
+/* BottomTabBar — mobile only; opaque; center-raised NẠP; safe-area aware. */
+
+.bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  height: calc(var(--bottombar-h) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--surface); /* opaque */
+  border-top: 1px solid var(--border);
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: var(--tap-bar);
+  color: var(--text-mid);
+  text-decoration: none;
+  font: inherit;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.tab:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.label {
+  font-size: var(--t-micro);
+  line-height: 1;
+}
+
+.active {
+  color: var(--brand-accent);
+}
+
+/* center raised NẠP */
+.deposit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  min-height: var(--tap-bar);
+  border: 0;
+  background: transparent;
+  color: var(--text-hi);
+  cursor: pointer;
+  position: relative;
+}
+.deposit:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.depositCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-top: -22px; /* raise above the bar */
+  border-radius: var(--radius-pill);
+  background: var(--brand-cta-accent); /* scarce/register accent — CTA, never an outcome */
+  color: #fff;
+  box-shadow: var(--lift);
+  border: 3px solid var(--surface);
+}
+
+.depositLabel {
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  line-height: 1;
+}
+
+/* hidden on desktop (≥768px) — Tier-2 + MemberMenu take over */
+@media (min-width: 768px) {
+  .bar {
+    display: none;
+  }
+}

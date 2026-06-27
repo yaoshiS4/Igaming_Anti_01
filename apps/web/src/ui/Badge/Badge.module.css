@@ -1,0 +1,63 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+  white-space: nowrap;
+}
+
+/* ---- subtle (tinted) ---------------------------------------------------- */
+.subtle.neutral {
+  background: var(--surface-3);
+  color: var(--text);
+}
+.subtle.gold {
+  background: var(--brand-accent-hairline);
+  color: var(--brand-accent);
+}
+.subtle.info {
+  background: var(--tint);
+  color: var(--info);
+}
+.subtle.win {
+  background: var(--tint);
+  color: var(--win);
+}
+.subtle.loss {
+  background: var(--tint);
+  color: var(--loss);
+}
+.subtle.danger {
+  background: var(--tint);
+  color: var(--error);
+}
+
+/* ---- solid -------------------------------------------------------------- */
+.solid.neutral {
+  background: var(--surface-3);
+  color: var(--text-hi);
+}
+.solid.gold {
+  background: var(--brand-accent);
+  color: var(--brand-on-accent);
+}
+.solid.info {
+  background: var(--info);
+  color: var(--text-hi);
+}
+.solid.win {
+  background: var(--win);
+  color: var(--canvas);
+}
+.solid.loss {
+  background: var(--loss);
+  color: var(--canvas);
+}
+.solid.danger {
+  background: var(--error);
+  color: var(--canvas);
+}

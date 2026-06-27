@@ -1,0 +1,78 @@
+/* WalletTabs — /vi-tien tabbed layout. Tokens only; mobile-first @375.
+ * Strip mirrors J9 el-tabs--card: card-bg tabs, gold-active, 8px radius. */
+
+.surface {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/* card-style tab strip */
+.strip {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.strip::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex: 1 1 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-mid);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+.tab:hover:not(.active) {
+  color: var(--text-hi);
+  background: var(--surface-hover);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.active {
+  color: var(--text-on-gold);
+  background: var(--gold-grad);
+}
+
+.tabLabel {
+  /* @375 the four labels can crowd — let the icon carry while keeping the word */
+  min-width: 0;
+}
+
+.panel {
+  min-width: 0;
+}
+
+@media (max-width: 420px) {
+  .tab {
+    padding: 0 var(--space-2);
+    font-size: var(--t-sm);
+  }
+}

@@ -1,0 +1,42 @@
+/* Countdown — tabular, equal-salience neutral. */
+
+.clock {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.unit {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.seg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.4ch;
+  padding: 2px var(--space-1);
+  background: var(--surface-3);
+  border-radius: var(--radius-sm);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+  font-size: var(--t-h3);
+}
+
+.unitLabel {
+  font-family: var(--brand-font-body);
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  letter-spacing: 0.02em;
+}
+
+.ended {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+}

@@ -1,0 +1,266 @@
+/* ============================================================================
+ * Header — J9-EXACT two-tier desktop / slim mobile. Both tiers opaque + sticky.
+ * Dimensions transcribed from J9 sources/VIP_files CSS:
+ *   .app-header  height:72px;  .right_nav gap:9px li 48×56 iconfont 32 label 16
+ *   .routers-list height:48px width:1424; li width:152 active gold-grad text
+ *   .go_pay 70×40 gold gradient pill; .aa-line 3px active underline.
+ * ==========================================================================*/
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background: var(--header-bg); /* OPAQUE J9 canvas — not the .8 blur */
+}
+
+/* ---------- TIER 1 (J9 .app-header — 72px) ---------- */
+.tier1 {
+  height: var(--header-h);
+  border-bottom: 1px solid var(--border);
+  background: var(--header-bg);
+}
+
+.tier1Inner {
+  position: relative;
+  height: 100%;
+  max-width: var(--frame-w);
+  min-width: 0;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* mobile category launcher — hidden on desktop */
+.menuBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  border: 0;
+  background: transparent;
+  color: var(--text-hi);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.menuBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* J9 .logo-box — main logo height:44px (--logo-h) */
+.logo {
+  display: inline-flex;
+  align-items: center;
+  height: var(--logo-h);
+  text-decoration: none;
+  white-space: nowrap;
+  flex: none;
+}
+.logoImg {
+  height: var(--logo-h);
+  width: auto;
+  display: block;
+}
+
+/* ---------- J9 ul.right_nav — 5 icon-over-label utility cells ----------
+ * margin-left:auto pushes the cluster (+ identity) to the right edge;
+ * gap:9px; each li 48×56 column, color #c5ddf0 (--blue-soft analog). */
+.rightNav {
+  display: none; /* desktop-only; revealed ≥768 */
+  list-style: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+  gap: 9px; /* J9 .right_nav gap:9px */
+  text-align: center;
+}
+.rightNav li {
+  display: flex;
+}
+/* J9 cell is 48px for 2-char CJK; VN labels need more room, so the cell sizes
+ * to its label (min 48px, no overflow), keeping the icon-over-label rhythm. */
+.rightNavLink {
+  min-width: 48px;
+  height: 56px;
+  padding: 0 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--gap-xs);
+  cursor: pointer;
+  color: var(--blue-soft);
+  text-decoration: none;
+  font-size: var(--t-micro); /* 12px */
+  font-weight: var(--weight-reg);
+  line-height: 1.2;
+  border-radius: var(--radius-md);
+  transition: color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+.rightNavLink:hover {
+  color: var(--text-hi);
+  background: var(--tint);
+}
+.rightNavLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+/* J9 .right_nav li.VIP — gold-tinted highlight cell */
+.rightNavVip .rightNavLink {
+  background: rgba(243, 184, 103, 0.15);
+  color: var(--brand-accent);
+}
+.rightNavVip .rightNavLink:hover {
+  background: rgba(243, 184, 103, 0.24);
+  color: var(--brand-accent);
+}
+.rightNavIcon {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.rightNavLabel {
+  height: 16px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* ---------- J9 .user_info_box — identity cluster ---------- */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: var(--space-3); /* J9 24px sits the cluster off the nav */
+}
+
+/* member wallet: balance chip fused to the NẠP gold pill (J9 wallet+go_pay) */
+.walletGroup {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+}
+.balanceChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 40px;
+  padding: 0 var(--space-3);
+  color: var(--text-hi);
+  text-decoration: none;
+}
+.balanceChip:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-pill);
+}
+.chipIcon {
+  color: var(--brand-accent);
+  flex: none;
+}
+.chipMuted {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+}
+
+/* J9 .go_pay — gold gradient pill, fused to the chip's right edge */
+.goPay {
+  height: 40px;
+  padding: 0 var(--space-4);
+  border: 0;
+  border-top-right-radius: var(--radius-pill);
+  border-bottom-right-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+  flex: none;
+}
+.goPay:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* NOTE: the header "Rút" link (.withdrawLink) was REMOVED — replaced by the
+ * NotificationBell (deposit-first header; Rút lives in the wallet/profile). */
+
+/* ---------- TIER 2 (J9 .routers-list — 48px, 1424px frame) ---------- */
+.tier2 {
+  display: none;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+}
+.tier2Inner {
+  max-width: var(--frame-w);
+  height: var(--nav-h);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* J9 .aa-line active underline: height:3px transition all .25s linear */
+.aaLine {
+  display: block;
+  height: 3px;
+  width: 50px;
+  margin-top: -3px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  transition: all var(--dur-base) linear;
+}
+
+/* category dropdown panel list (J9 sub-game grid stand-in) */
+.megaList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.megaItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-2);
+  color: var(--text);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  font-size: var(--t-sm);
+}
+.megaItem:hover {
+  background: var(--surface-hover);
+  color: var(--text-hi);
+}
+.megaItem:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+/* ---------- RESPONSIVE: reveal desktop chrome ≥768 ---------- */
+@media (min-width: 768px) {
+  .menuBtn {
+    display: none;
+  }
+  .rightNav {
+    display: flex;
+  }
+  .tier2 {
+    display: block;
+  }
+}

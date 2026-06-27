@@ -1,0 +1,149 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-5);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    box-shadow var(--dur-fast) var(--ease-standard),
+    filter var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.label {
+  display: inline-block;
+}
+
+.icon {
+  font-size: 1.25em;
+}
+
+/* ---- sizes -------------------------------------------------------------- */
+.sm {
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  font-size: var(--t-sm);
+}
+.md {
+  min-height: var(--tap-min);
+}
+.lg {
+  min-height: 52px;
+  padding: 0 var(--space-6);
+  font-size: var(--t-h3);
+}
+.bar {
+  min-height: var(--tap-bar);
+}
+
+.full {
+  width: 100%;
+}
+
+/* ---- variant: gold (premium / claim / VIP CTA) -------------------------- */
+.gold {
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+}
+.gold:hover:not(:disabled) {
+  box-shadow: var(--glow-gold);
+}
+.gold:active:not(:disabled) {
+  transform: scale(0.98);
+  background: var(--brand-accent-2);
+}
+
+/* ---- variant: primary (CTA blue — login/submit) ------------------------- */
+.primary {
+  background: var(--brand-cta-grad);
+  color: var(--text-hi);
+}
+.primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+.primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* ---- variant: danger (register/scarce accent; red = CTA only) ----------- */
+.danger {
+  background: var(--brand-cta-accent);
+  color: var(--text-hi);
+}
+.danger:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+.danger:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* ---- variant: ghost ----------------------------------------------------- */
+.ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-hi);
+}
+.ghost:hover:not(:disabled) {
+  background: var(--surface-hover);
+  border-color: var(--brand-accent-hairline);
+}
+.ghost:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+/* ---- disabled ----------------------------------------------------------- */
+.btn:disabled {
+  background: var(--surface-disabled);
+  color: var(--text-dim);
+  border-color: transparent;
+  cursor: not-allowed;
+  filter: none;
+  box-shadow: none;
+}
+.btn[data-loading] {
+  cursor: progress;
+}
+
+/* ---- loading spinner ---------------------------------------------------- */
+.spinner {
+  width: 1.1em;
+  height: 1.1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-pill);
+  animation: spin 700ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+  .btn:active:not(:disabled) {
+    transform: none;
+  }
+  .spinner {
+    animation-duration: 1400ms;
+  }
+}

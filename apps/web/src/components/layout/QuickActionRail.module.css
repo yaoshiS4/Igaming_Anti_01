@@ -1,0 +1,221 @@
+/* ============================================================================
+ * QuickActionRail — fixed right-edge floating column. J9-exact gold-on-dark.
+ * COMPACT: a narrow icon-width column (~60px) with small promo cards — NOT a
+ * wide marketing panel. z below --z-modal (2000) so dialogs/sheets always
+ * cover it. Opaque surfaces. Reduced-motion handled globally (motion.css) +
+ * scrollTo behavior in TSX.
+ * ==========================================================================*/
+
+.rail {
+  position: fixed;
+  right: var(--space-2); /* 8px off the edge — J9 suspended gutter */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: calc(var(--z-modal) - 1); /* 1999 — under modals, over content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 60px; /* one icon button wide — J9-compact */
+  pointer-events: none; /* re-enabled per interactive child below */
+}
+.rail > * {
+  pointer-events: auto;
+  width: 100%;
+}
+
+/* ---------- 1 · World-Cup promo thumbnail (compact, dismissable) ---------- */
+.promoThumb {
+  position: relative;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 1px solid var(--gold-hairline);
+  background: var(--surface);
+  box-shadow: var(--shadow-2, 0 4px 16px rgba(0, 0, 0, 0.45));
+}
+.promoLink {
+  display: block;
+  position: relative;
+  text-decoration: none;
+}
+.promoImg {
+  display: block;
+  width: 100%;
+  height: 48px;
+  object-fit: cover;
+}
+.promoTag {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  padding: 1px 2px;
+  font-size: 9px;
+  font-weight: var(--weight-semi);
+  color: var(--text-on-gold);
+  background: var(--gold-grad);
+  text-align: center;
+}
+
+/* shared corner close (×) on dismissable cards */
+.promoClose {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  z-index: 2;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--text-hi);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+}
+.promoClose:hover {
+  background: rgba(0, 0, 0, 0.78);
+}
+
+/* ---------- 2 · Super-jackpot card (compact, dismissable) ---------- */
+.jackpotCard {
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--gold-hairline);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-1) var(--space-1);
+  text-align: center;
+}
+.jackpotKicker {
+  margin: 0 0 2px;
+  font-size: 9px;
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+}
+.jackpotFigure {
+  margin: 0 0 var(--space-1);
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-micro); /* 12px — fits the 60px column */
+  font-weight: var(--weight-bold);
+  color: var(--gold-500);
+  line-height: 1.15;
+  word-break: break-word;
+}
+.jackpotCta {
+  display: block;
+  padding: var(--space-1) 0;
+  border-radius: var(--radius-pill);
+  background: var(--gold-grad);
+  color: var(--text-on-gold);
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  text-align: center;
+}
+.jackpotCta:hover {
+  filter: brightness(1.05);
+}
+
+/* ---------- 3 · Icon stack ---------- */
+.iconStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  align-items: center;
+  width: 100%;
+}
+.iconGroup {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.iconBtn {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-mid);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color var(--dur-fast, 120ms) ease, border-color var(--dur-fast, 120ms) ease,
+    background var(--dur-fast, 120ms) ease;
+}
+.iconBtn:hover,
+.iconBtn[aria-expanded="true"] {
+  color: var(--gold-500);
+  border-color: var(--gold-hairline);
+  background: var(--surface-hover);
+}
+.iconLabel {
+  font-size: 9px;
+  line-height: 1;
+}
+
+/* ---------- popovers (QR / CSKH) ---------- */
+.popover {
+  position: absolute;
+  right: calc(100% + var(--space-2));
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  min-width: 132px;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-3);
+  border: 1px solid var(--gold-hairline);
+  box-shadow: var(--shadow-2, 0 8px 24px rgba(0, 0, 0, 0.5));
+  text-align: center;
+}
+.qrBox {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-2);
+}
+.qrBox svg {
+  border-radius: var(--radius-sm);
+}
+.popoverHead {
+  margin: 0 0 var(--space-1);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  color: var(--gold-500);
+}
+.popoverText {
+  margin: 0;
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  line-height: 1.4;
+}
+
+/* ---------- responsive ---------- *
+ * Desktop (≥1024px): full rail with promo cards + icon stack.
+ * Mobile (<1024px): drop the promo cards entirely (they'd crowd a 375px
+ * screen + collide with the BottomTabBar); keep only the compact icon stack,
+ * floated low-right above the tab bar.                                        */
+@media (max-width: 1023px) {
+  .rail {
+    top: auto;
+    bottom: calc(var(--bottombar-h, 56px) + var(--space-3));
+    transform: none;
+    width: 48px;
+  }
+  .promoThumb,
+  .jackpotCard {
+    display: none;
+  }
+  .iconLabel {
+    display: none;
+  }
+}

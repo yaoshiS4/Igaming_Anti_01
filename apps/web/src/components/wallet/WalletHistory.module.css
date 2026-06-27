@@ -1,0 +1,88 @@
+/* WalletHistory — transaction rows, equal win/loss salience. Tokens only. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.guest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.guestText {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+  min-height: var(--tap-min);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.type {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-body);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+/* arrow carries the in/out direction WITHOUT relying on hue (RG) */
+.arrow {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-weight: var(--weight-bold);
+}
+
+.when {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  font-family: var(--brand-font-num);
+}
+
+.amount {
+  flex-shrink: 0;
+}

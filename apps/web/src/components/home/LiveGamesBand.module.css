@@ -1,0 +1,35 @@
+/* ============================================================================
+ * LiveGamesBand — J9 feature rail (02-J9-MEASUREMENTS §1 "The rail split").
+ * J9: `.img-list{grid-template-columns:418px auto;gap:16px}` — a FIXED 418px
+ * feature column + the fluid remainder. Stacks @375; the 418px feature column
+ * engages at the desktop frame. Tokens only.
+ * ==========================================================================*/
+
+.band {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--band-gap);
+}
+
+.jackpotCell {
+  display: flex;
+  align-items: center;
+  padding: var(--card-pad-sm);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--brand-accent-hairline);
+  background:
+    radial-gradient(120% 120% at 90% 10%, var(--brand-accent-hairline), transparent 60%),
+    var(--surface);
+}
+
+.matchCell {
+  min-width: 0;
+}
+
+/* J9 418px feature column + auto remainder — the content-side big-feature rail */
+@media (min-width: 768px) {
+  .band {
+    grid-template-columns: var(--feature-w) auto;
+    align-items: stretch;
+  }
+}

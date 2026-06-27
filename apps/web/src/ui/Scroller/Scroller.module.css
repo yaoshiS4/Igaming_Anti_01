@@ -1,0 +1,68 @@
+.outer {
+  position: relative;
+  width: 100%;
+}
+
+.rail {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain; /* no scroll-hijack onto the page */
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+.rail:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* 16px peek of the next item via end padding (--gutter). */
+.peek {
+  padding-right: var(--gutter);
+  scroll-padding-left: var(--gutter);
+}
+
+.snap {
+  scroll-snap-type: x mandatory;
+}
+.snap > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
+}
+
+/* Matrix mode: pin the first child column. Children should be rows/columns
+ * laid out so the first cell stays put while the rest scrolls. */
+.freeze {
+  scroll-snap-type: none;
+}
+.freeze > :first-child {
+  position: sticky;
+  left: 0;
+  z-index: var(--z-content);
+  background: var(--surface-3);
+}
+
+/* Edge fades — affordance that more content exists either side. */
+.fadeStart::before,
+.fadeEnd::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--space-6);
+  pointer-events: none;
+  z-index: var(--z-content);
+}
+.fadeStart::before {
+  left: 0;
+  background: linear-gradient(90deg, var(--canvas), transparent);
+}
+.fadeEnd::after {
+  right: 0;
+  background: linear-gradient(270deg, var(--canvas), transparent);
+}

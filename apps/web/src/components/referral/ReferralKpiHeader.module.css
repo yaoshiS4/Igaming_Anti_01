@@ -1,0 +1,47 @@
+/* ReferralKpiHeader — KPI strip. Tokens only; mobile-first @375. */
+
+.card {
+  padding: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.value {
+  color: var(--text-hi);
+}
+
+.divider {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .row {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .stat {
+    flex: 1;
+  }
+  .divider {
+    display: block;
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+  }
+}

@@ -1,0 +1,181 @@
+/* SportsMatchCard — COMPACT J9 match card. Tokens only (gold-on-dark, 16px gap). */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  border: 1px solid var(--brand-accent-hairline);
+  /* EQUAL HEIGHT: every card is pinned to the same height so all 4 align in
+   * the row regardless of content (live score vs VS, league length). The
+   * fixture/center rows below reserve fixed space so nothing reflows. */
+  height: 100%;
+  min-height: 168px;
+  box-sizing: border-box;
+}
+
+/* league kicker */
+.league {
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: var(--weight-semi);
+  color: var(--brand-accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* fixture row: Team A · centre · Team B */
+.fixture {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-1);
+}
+.team {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.team[data-side="away"] {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.flag {
+  font-size: 16px;
+  line-height: 1;
+  flex: none;
+}
+.teamName {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  line-height: var(--lh-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* centre status block — VS (pre) or Live + score */
+.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 48px;
+  /* Reserve fixed height: a live "TRỰC TIẾP" + score (2 rows) and a "VS"
+   * (1 row) occupy the SAME vertical space → uniform card height. */
+  height: 38px;
+}
+.vs {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+  color: var(--text-mid);
+}
+.liveTag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.03em;
+  color: var(--text-hi);
+}
+.liveDot {
+  width: var(--space-1);
+  height: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--loss);
+}
+.score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
+}
+.scoreSep {
+  color: var(--text-mid);
+}
+
+/* a betting market = tiny heading + 3 tight cells */
+.market {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.marketName {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+}
+.cells {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-1);
+}
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  border: 1px solid transparent;
+  min-height: 34px;
+}
+.cell[data-suspended] {
+  opacity: 0.6;
+}
+.cellLabel {
+  font-size: 10px;
+  color: var(--text-mid);
+  line-height: var(--lh-tight);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.cellPrice {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* small gold CTA — full-width, compact */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  /* push the CTA to the bottom so it bottom-aligns across all 4 cards when a
+   * card grows to the shared height */
+  margin-top: auto;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: filter var(--dur-fast) ease;
+}
+.cta:hover {
+  filter: brightness(1.05);
+}
+.cta:active {
+  filter: brightness(0.96);
+}

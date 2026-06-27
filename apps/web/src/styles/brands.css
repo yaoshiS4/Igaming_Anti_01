@@ -1,0 +1,47 @@
+/* ============================================================================
+ * Yaobet — [data-brand] OVERRIDES (SPEC-02 §2.1)
+ * ----------------------------------------------------------------------------
+ * A [data-brand="x"] block re-points ONLY the GROUP-B --brand-* indirection
+ * vars. It MUST NOT touch any GROUP-A LOCKED token (lint A1) and MUST NOT
+ * redeclare a RAW-RAMP literal (--gold-*, --cta*, --font-body/-num,
+ * --text-on-gold) — it overrides by re-pointing the --brand-* alias.
+ *
+ * --win / --loss / --error / --focus-ring are ABSENT from every block —
+ * equal-salience + AA focus are LOCKED across all brands (lint A3). So are
+ * canvas, contrast floor, spacing, radii, z-index and motion. This is the
+ * falsifiable byte-identical property Wave 1.4 verifies / Wave 1.3 lints.
+ * ==========================================================================*/
+
+/* Default brand — Yaobet. The --brand-* aliases already resolve to the Yaobet
+ * gold/CTA ramps on :root (tokens.css). This block is the explicit default
+ * anchor so [data-brand="yaobet"] is a defined selector and the override
+ * mechanism is symmetric with the alternate brand below. */
+[data-brand="yaobet"] {
+  --brand-accent:          var(--gold-500);
+  --brand-accent-2:        var(--gold-600);
+  --brand-accent-grad:     var(--gold-grad);
+  --brand-accent-hairline: var(--gold-hairline);
+  --brand-on-accent:       var(--text-on-gold);
+  --brand-cta:             var(--cta);
+  --brand-cta-grad:        var(--cta-grad);
+  --brand-cta-accent:      var(--cta-accent);
+  --brand-font-body:       var(--font-body);
+  --brand-font-num:        var(--font-num);
+  --brand-logo:            url("/assets/brand/logo.svg");
+}
+
+/* Regression brand — proves the override re-skins accent/CTA/logo/font while
+ * canvas / win-loss / contrast / spacing / motion stay byte-identical. */
+[data-brand="emerald"] {
+  --brand-accent:          #1fbf73;
+  --brand-accent-2:        #169a5b;
+  --brand-accent-grad:     linear-gradient(90deg, #1fbf73, #7ff0bf);
+  --brand-accent-hairline: rgba(31, 191, 115, 0.32);
+  --brand-on-accent:       #04140c; /* ≥4.5:1 on --brand-accent — verified */
+  --brand-cta:             #2f6bff;
+  --brand-cta-grad:        linear-gradient(90deg, #3b7bff, #2f6bff);
+  --brand-cta-accent:      #ff3d57;
+  --brand-font-body:       "Be Vietnam Pro", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --brand-font-num:        "Be Vietnam Pro", ui-monospace, "DIN Alternate", sans-serif;
+  --brand-logo:            url("/assets/brand/emerald-logo.svg");
+}

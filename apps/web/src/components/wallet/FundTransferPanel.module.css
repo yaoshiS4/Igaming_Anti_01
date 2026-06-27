@@ -1,0 +1,218 @@
+/* FundTransferPanel — "Chuyển quỹ" tab. Tokens only; mobile-first @375. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+}
+
+.title {
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.guest {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.guestText {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+/* from / swap / to */
+.route {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+}
+
+.select {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body);
+  color: var(--text-hi);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  appearance: none;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-color: var(--focus-ring);
+}
+
+.swap {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  color: var(--brand-accent);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+
+.swap:hover {
+  background: var(--surface-hover);
+}
+
+.swap:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.amountInput {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--brand-font-num);
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.amountInput::placeholder {
+  color: var(--text-dim);
+}
+
+.amountInput:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-color: var(--focus-ring);
+}
+
+.amountInput[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.errorMsg {
+  font-size: var(--t-micro);
+  color: var(--error);
+}
+
+/* per-product balance reference */
+.balances {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.balancesHead {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+  min-height: var(--tap-min);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.name {
+  font-size: var(--t-body);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.balance {
+  color: var(--text);
+}
+
+/* PENDING — honest awaiting-processing; never a client "success" */
+.pending {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-3);
+}
+
+.pendingIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.pendingTitle {
+  font-size: var(--t-h2);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.pendingBody {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  line-height: var(--lh-body);
+  max-width: 36ch;
+}
+
+/* desktop: from/to side by side with swap between */
+@media (min-width: 768px) {
+  .route {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .route .field {
+    flex: 1 1 0;
+  }
+
+  .swap {
+    margin-bottom: var(--space-2);
+  }
+}

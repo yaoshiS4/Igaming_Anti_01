@@ -1,0 +1,286 @@
+/* ============================================================================
+ * SecurityCenter — "Trung tâm an toàn" right-column panel. Tokens only.
+ * Mobile-first @375 (rows stack); desktop fills the content column.
+ * ==========================================================================*/
+
+.wrap {
+  min-width: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--card-pad); /* J9 spacious card 24px */
+}
+
+/* ---- header + score bar -------------------------------------------------- */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+.titleIcon {
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+.titleText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.title {
+  font-size: var(--t-h1); /* J9 section title 24/600 */
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.subtitle {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--card-pad-sm);
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+}
+.scoreTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.scoreLabel {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+.scoreMeta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+.scoreNum {
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  font-family: var(--brand-font-num);
+  color: var(--brand-accent);
+}
+.scoreMax {
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+}
+.bar {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--tint);
+  overflow: hidden;
+}
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  transition: width var(--dur-slow) var(--ease-entrance);
+}
+
+/* ---- security controls (collapsible) ------------------------------------ */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.control {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.controlHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-3) var(--card-pad-sm);
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text-hi);
+}
+.controlHead:hover {
+  background: var(--tint);
+}
+.controlIcon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--tint);
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+}
+.controlText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.controlTitle {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.controlSub {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+.controlAction {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 0 0 auto;
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  color: var(--brand-accent);
+}
+.chevOpen {
+  transform: rotate(180deg);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.controlBody {
+  padding: var(--card-pad-sm);
+  border-top: 1px solid var(--border);
+}
+
+/* ---- rows ---------------------------------------------------------------- */
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.groupLabel {
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  color: var(--text-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.rowLabel {
+  font-size: var(--t-sm);
+  color: var(--text-hi);
+}
+.rowValue {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-family: var(--brand-font-num);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowEmpty {
+  color: var(--text-dim);
+}
+.rowEnd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 0 0 auto;
+}
+
+/* ---- change-password form ------------------------------------------------ */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.fieldLabel {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+.input {
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--text-hi);
+  font-size: var(--t-sm);
+  font-family: var(--brand-font-body);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.input::placeholder {
+  color: var(--text-dim);
+}
+.input:focus-visible {
+  outline: none;
+  border-color: var(--brand-accent);
+}
+.reveal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  align-self: flex-start;
+  padding: var(--space-1) 0;
+  background: transparent;
+  border: 0;
+  color: var(--text-mid);
+  font-size: var(--t-micro);
+  cursor: pointer;
+}
+.reveal:hover {
+  color: var(--brand-accent);
+}
+.notice {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--tint);
+  border: 1px solid var(--border);
+}

@@ -1,0 +1,63 @@
+/* ============================================================================
+ * ProviderGameGrid — J9 FIXED-TILE game lobby (02-J9-MEASUREMENTS §2).
+ * J9: `.game-list{grid-template-columns:repeat(8,1fr);gap:16px}` with each `li`
+ * a FIXED height of 205px, radius 8, bg #262833, art object-fit:cover. Feature
+ * tiles span 2×2 (.iSlot) or 2-wide (.fishing). The grid pins every cell so a
+ * tile is ONE physical size — never viewport÷column-count fluid.
+ * Column ladder: 3-up @375 → 4-up @768 → 6-up @992 → 8-up @1424.
+ * ==========================================================================*/
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--band-gap);
+}
+
+/* J9 lobby grid — fixed-height rows (each row = one --tile-h). grid-auto-rows
+ * pins the row height so 1fr columns give ~164px width at the 1424 frame, and
+ * 2×2 feature tiles span exactly two rows of the same fixed height. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: var(--tile-h);
+  gap: var(--band-gap);
+  /* dense backfill: with a 2×2 row-spanning hero (.featureBig) under default
+   * auto-flow:row the renderer leaves a hole beside the hero, so the trailing
+   * filler count maps to a non-rectangular layout and the LAST ROW still shows
+   * ragged empty space. `dense` backfills those holes, so the (already correct)
+   * cell-count fill lands every breakpoint on complete J9 rows (defect 4). */
+  grid-auto-flow: row dense;
+}
+
+/* the cell — a tile fills its fixed-height row edge to edge (no width:100% fluid) */
+.cell {
+  min-width: 0;
+}
+
+/* J9 feature tiles: 2×2 hero (.iSlot) + 2-wide strip (.fishing). On the narrow
+ * 3-up ladder a 2×2 would overflow, so spans only engage from 4-up upward. */
+.featureBig,
+.featureWide {
+  grid-column: span 2;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .featureBig {
+    grid-row: span 2; /* J9 .iSlot 2×2 */
+  }
+}
+
+@media (min-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (min-width: 1424px) {
+  .grid {
+    grid-template-columns: repeat(8, 1fr); /* J9 .game-list — the 8-up lobby */
+  }
+}

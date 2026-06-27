@@ -1,0 +1,103 @@
+/* Overlay (shell-local) — scrim + panel. SOLID scrim, NEVER backdrop blur. */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  background: var(--scrim); /* SOLID rgba — no backdrop-filter (lint) */
+  display: flex;
+  /* default: bottom-pinned (sheet). Dialog/auto ≥640 re-centre below. */
+  align-items: flex-end;
+  justify-content: center;
+  animation: scrim-in var(--dur-fast) var(--ease-standard);
+}
+
+.panel {
+  position: relative;
+  background: var(--surface);
+  color: var(--text-hi);
+  box-shadow: var(--halo);
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* grab handle for the sheet presentation */
+.grab {
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+  margin: var(--space-2) auto var(--space-1);
+}
+
+/* ---- SHEET presentation (mobile, bottom-pinned) ---- */
+.sheet,
+.auto {
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  padding-bottom: calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+  animation: sheet-up var(--dur-base) var(--ease-entrance);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+/* ---- DIALOG presentation (always centred) ---- */
+.dialog {
+  border-radius: var(--radius-card);
+  max-width: var(--overlay-desktop-max, 420px);
+  margin: 0 var(--gutter);
+  animation: dialog-in var(--dur-base) var(--ease-entrance);
+}
+.dialog .grab {
+  display: none;
+}
+
+/* AUTO: sheet <640, centred dialog ≥640 (the SPEC-03 A5 rule). */
+@media (min-width: 640px) {
+  .scrim {
+    align-items: center;
+  }
+  .auto {
+    border-radius: var(--radius-card);
+    max-width: var(--overlay-desktop-max, 420px);
+    margin: 0 var(--gutter);
+    /* DESKTOP dialog: no extra panel padding-bottom. The sheet needs it for the
+     *  safe-area; the centred dialog's inner zones own their own padding, so the
+     *  bottom edge stays symmetric with the top (no dead band under the layout). */
+    padding-bottom: 0;
+    animation: dialog-in var(--dur-base) var(--ease-entrance);
+  }
+  .auto .grab {
+    display: none;
+  }
+}
+
+@keyframes scrim-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes dialog-in {
+  from {
+    transform: translateY(8px) scale(0.98);
+    opacity: 0;
+  }
+}
+
+/* reduced-motion: instant mount, no slide (also covered by motion.css zeroing
+ * --dur-*; explicit here so the keyframes don't run). */
+@media (prefers-reduced-motion: reduce) {
+  .scrim,
+  .sheet,
+  .auto,
+  .dialog {
+    animation: none;
+    transition: none;
+  }
+}

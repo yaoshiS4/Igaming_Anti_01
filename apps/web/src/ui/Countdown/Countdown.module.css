@@ -1,0 +1,26 @@
+.countdown {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-weight: var(--weight-semi);
+  font-size: var(--t-num);
+  color: var(--text-hi);
+}
+
+.seg {
+  display: inline-block;
+  min-width: 2ch;
+  text-align: center;
+}
+
+.colon {
+  color: var(--text-mid);
+}
+
+.ended {
+  color: var(--text-mid);
+  font-weight: var(--weight-reg);
+}

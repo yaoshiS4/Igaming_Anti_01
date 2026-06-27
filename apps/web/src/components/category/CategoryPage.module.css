@@ -1,0 +1,11 @@
+/* CategoryPage — vertical-landing content column. Mobile-first @375 stack.
+ * Tokens only; the page body never scrolls horizontally (strips use Scroller). */
+
+/* J9 band beat = 16px (the dominant gap), not 32px — the flex gap owns all
+ * vertical band rhythm so an omitted band collapses rather than leaving a hole. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--band-gap);
+  min-width: 0;
+}
