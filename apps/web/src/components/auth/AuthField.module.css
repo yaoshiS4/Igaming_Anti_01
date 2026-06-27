@@ -1,0 +1,89 @@
+/* AuthField — TextField analog for the auth modal. */
+
+.field {
+  margin-bottom: var(--space-2);
+}
+
+.label {
+  display: block;
+  font-size: var(--t-sm);
+  color: var(--text);
+  margin-bottom: var(--space-1);
+  line-height: var(--lh-tight);
+}
+
+.star {
+  color: var(--brand-accent);
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.box:focus-within {
+  border-color: var(--brand-cta);
+}
+
+.boxError {
+  border-color: var(--error);
+}
+.boxError:focus-within {
+  border-color: var(--error);
+}
+
+.prefix {
+  color: var(--text-mid);
+  flex: none;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-hi);
+  font: inherit;
+  font-size: var(--t-body);
+  outline: none;
+  height: var(--tap-min);
+}
+.input::placeholder {
+  color: var(--text-dim);
+}
+
+.eye {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  margin-right: calc(var(--space-3) * -1);
+  border: 0;
+  background: transparent;
+  color: var(--text-mid);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+}
+.eye:hover {
+  color: var(--text-hi);
+}
+.eye:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+/* reserved error row — always present so no layout shift on error appearance */
+.errorRow {
+  min-height: var(--t-micro);
+  margin: var(--space-1) 0 0;
+  font-size: var(--t-micro);
+  line-height: var(--lh-tight);
+  color: var(--error);
+}

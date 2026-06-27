@@ -1,0 +1,88 @@
+.card {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--brand-accent-hairline);
+  border-radius: var(--radius-card);
+  color: var(--text-hi);
+  text-align: left;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+/* button reset when card renders as <button> */
+button.card {
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ---- variants: padding / aspect cues ------------------------------------ */
+.default {
+  padding: var(--space-4);
+}
+.rail {
+  padding: var(--space-3);
+}
+.promo {
+  padding: 0;
+}
+.product {
+  padding: 0;
+}
+.vip {
+  padding: var(--space-5);
+}
+.tile {
+  padding: 0;
+  border-radius: var(--radius-md); /* J9 game-tile corner = 8px (not 12) */
+}
+
+/* ---- interactive -------------------------------------------------------- */
+.interactive {
+  cursor: pointer;
+  transition:
+    transform var(--dur-base) var(--ease-standard),
+    box-shadow var(--dur-base) var(--ease-standard),
+    border-color var(--dur-base) var(--ease-standard);
+}
+
+/* pointer (mouse) → glow + subtle lift */
+@media (hover: hover) and (pointer: fine) {
+  .interactive:hover {
+    border-color: var(--brand-accent);
+    box-shadow: var(--glow-gold);
+    transform: translateY(-2px);
+  }
+}
+
+/* touch → press scale, no hover lift */
+@media (hover: none) {
+  .interactive:active {
+    transform: scale(0.98);
+  }
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* lit/active state */
+.active {
+  border-color: var(--brand-accent);
+  box-shadow: var(--glow-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition: box-shadow var(--dur-base) var(--ease-standard);
+  }
+  .interactive:hover {
+    transform: none;
+  }
+  .interactive:active {
+    transform: none;
+  }
+}

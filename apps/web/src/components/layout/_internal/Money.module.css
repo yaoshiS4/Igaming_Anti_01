@@ -1,0 +1,31 @@
+/* Money (shell-local) — tabular numerals; equal win/loss salience. */
+
+.money {
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  font-weight: var(--weight-semi);
+  white-space: nowrap;
+}
+
+.num {
+  font-size: var(--t-num);
+}
+
+.num-lg {
+  font-size: var(--t-num-lg);
+  font-weight: var(--weight-bold);
+}
+
+/* equal-salience pair — same weight, luminance-matched hues from tokens */
+.win {
+  color: var(--win);
+}
+
+.loss {
+  color: var(--loss);
+}
+
+.neutral {
+  color: var(--text-hi);
+}

@@ -1,0 +1,111 @@
+/* ============================================================================
+ * HOME / LOBBY — page layout (SPEC-03 §home; SPEC-05 §3.1 order).
+ * Mobile-first @375: a single vertical stack of bands. ≥1240 (--frame-w): the
+ * desktop right rail (RightRail surfaces) sits beside the main column; below
+ * 1240 those figures fold inline at their authored band positions (so the rail
+ * is simply not rendered on mobile — see SPEC-03 §home RightRail).
+ *
+ * Tokens only — no raw hex/px/duration. The page body never scrolls
+ * horizontally (globals.css); wide strips scroll inside their own Scroller.
+ * ==========================================================================*/
+
+.page {
+  display: block;
+}
+
+/* main column: the authored band stack — J9 band beat = 16px (the dominant gap,
+ * NOT 32px). The flex gap owns ALL vertical band rhythm; bands set no own margin,
+ * so an omitted band (Decree-174) collapses the gap rather than leaving a hole. */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--band-gap);
+  min-width: 0;
+}
+
+/* footer wrapper — must span the FULL 1424 frame (J9 .footer-box{width:1424px}),
+ * so on the desktop grid it stretches across BOTH the main column and the rail.
+ * On mobile (.page is display:block) it is naturally full width. The top gap to
+ * the last band is the standard J9 16px band beat. */
+.footerFull {
+  margin-top: var(--band-gap);
+}
+
+/* desktop two-column: main + right rail at the J9 fixed frame (1424). Rail gutter
+ * = the J9 16px gap, not 24px. The footer row spans both columns. */
+@media (min-width: 1424px) {
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--rail-w);
+    gap: var(--band-gap);
+    align-items: start;
+  }
+  .footerFull {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---- generic section scaffold reused by bands ---- */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* J9 section title = 24px / 600 / 150% / white .9 (the dominant heading) */
+.sectionTitle {
+  font-size: var(--t-h1);
+  line-height: 1.5;
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.sectionLink {
+  font-size: var(--t-sm);
+  color: var(--brand-accent);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  text-decoration: none;
+}
+
+/* ---- skeleton scaffolds (loading.tsx) ---- */
+.skelRow {
+  display: flex;
+  gap: var(--space-3);
+  overflow: hidden;
+}
+
+/* skeleton mirrors the J9 lobby column ladder: 3-up @375 → 4-up → 6-up → 8-up */
+.skelGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--band-gap);
+}
+.skelGrid > * {
+  height: var(--tile-h);
+}
+
+@media (min-width: 768px) {
+  .skelGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (min-width: 992px) {
+  .skelGrid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+@media (min-width: 1424px) {
+  .skelGrid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}

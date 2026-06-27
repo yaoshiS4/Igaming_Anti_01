@@ -1,0 +1,102 @@
+/* ============================================================================
+ * NavDropdown — J9-EXACT tier-2 category cell + mega panel.
+ *   J9 .routers-list ul li { width:152px; height:48px; gap:8px; color:#c5ddf0;
+ *                            font:16px/400; transition all .25s linear }
+ *   J9 active/hover         { font:20px/600; gold-gradient text-clip }
+ * ==========================================================================*/
+
+.wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  width: 152px;
+  height: var(--nav-h); /* 48px */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2); /* J9 8px icon↔label */
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--blue-soft); /* J9 #c5ddf0 silver-blue */
+  font: inherit;
+  font-size: var(--t-body); /* 16px rest */
+  font-weight: var(--weight-reg);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--dur-base) linear; /* J9 .25s linear */
+}
+
+/* J9 hover/active: 20px 600 weight + gold-gradient text fill */
+.trigger:hover,
+.active {
+  font-size: var(--t-h2); /* 20px */
+  font-weight: var(--weight-semi);
+  background: linear-gradient(180deg, #fff9f0, var(--brand-accent) 101.67%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+  border-radius: var(--radius-md);
+}
+
+/* leading per-vertical glyph — J9 .iconfont 24×24, keeps its own color */
+.navIcon {
+  flex: 0 0 auto;
+  color: var(--blue-soft);
+  -webkit-text-fill-color: currentColor; /* glyph stays solid under text-clip */
+  opacity: 0.9;
+}
+
+.trigger:hover .navIcon,
+.active .navIcon {
+  color: var(--brand-accent);
+  opacity: 1;
+}
+
+.caret {
+  flex: 0 0 auto;
+  color: var(--blue-soft);
+  -webkit-text-fill-color: currentColor;
+  opacity: 0.7;
+}
+.trigger:hover .caret,
+.active .caret {
+  color: var(--brand-accent);
+}
+
+.panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: var(--space-1);
+  min-width: 220px;
+  background: var(--surface); /* opaque */
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--lift);
+  padding: var(--space-2);
+  z-index: var(--z-dropdown);
+  animation: panel-in var(--dur-fast) var(--ease-entrance);
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

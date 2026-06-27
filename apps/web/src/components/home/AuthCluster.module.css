@@ -1,0 +1,80 @@
+/* AuthCluster — guest auth pair / member balance chip + deposit. Tokens only. */
+
+.cluster {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  border: 1px solid var(--brand-accent-hairline);
+}
+
+.greet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.welcome {
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+}
+.sub {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.actions > * {
+  flex: 1 1 auto;
+}
+
+/* member balance chip — a real link, ≥44px */
+.balanceChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  align-self: flex-start;
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+  text-decoration: none;
+  color: var(--text);
+}
+.chipIcon {
+  color: var(--brand-accent);
+}
+.chipLabel {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+.chipMoney {
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+.chipChevron {
+  color: var(--text-mid);
+}
+
+@media (min-width: 768px) {
+  .cluster {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .actions {
+    flex: 0 0 auto;
+  }
+  .actions > * {
+    flex: 0 0 auto;
+  }
+}

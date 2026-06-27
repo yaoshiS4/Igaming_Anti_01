@@ -1,0 +1,158 @@
+/* CurrentTierCard — current-tier identity + §F-gated progress. Tokens only. */
+
+.guestCard,
+.memberCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5);
+}
+
+/* ---- shared badge SLOT (token-gradient disc, awaits licensed tier art) ---- */
+.badge {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  display: grid;
+  place-items: center;
+  color: var(--brand-accent);
+  background:
+    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.22), transparent 70%),
+    var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+}
+
+/* ---- guest ---- */
+.guestCard {
+  align-items: center;
+  text-align: center;
+}
+.guestBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: center;
+}
+.guestTitle {
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+}
+.guestCopy {
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+  max-width: 38ch;
+}
+
+/* ---- member identity ---- */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+.tierEyebrow {
+  font-size: var(--t-micro);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+.tierName {
+  font-size: var(--t-h1);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  line-height: var(--lh-tight);
+}
+
+/* ---- progress zone (reserved footprint so loading→live = no shift) ---- */
+.progressZone {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.skelBar {
+  display: block;
+  border-radius: var(--radius-pill);
+}
+.progressHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.progressLabel {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+.progressPct {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-disabled);
+  overflow: hidden;
+}
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  /* truthful static width; decorative-only transition zeroed under reduced-motion */
+  transition: width var(--dur-base) var(--ease-standard);
+}
+
+.remain {
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text);
+}
+.remain strong {
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.maxedCopy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-body);
+  color: var(--text);
+}
+.maxedIcon {
+  color: var(--brand-accent);
+}
+
+@media (min-width: 768px) {
+  .guestCard {
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+  }
+  .guestBody {
+    align-items: flex-start;
+    flex: 1;
+  }
+  .guestCard :global(button) {
+    width: auto;
+    flex: 0 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}

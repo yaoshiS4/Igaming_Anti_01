@@ -1,0 +1,409 @@
+/* HeroBand — J9-EXACT banner-box swiper + progress-line + promo/news ticker.
+ * Tokens only (no raw hex/px/durations); J9 source values noted inline. */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  /* defect-3: banner + progress-line + promo row read as ONE snug block —
+   *  a hairline gap, not the prior large step. The progress/ticker rows trim
+   *  their own vertical padding to keep the stack tight. */
+  gap: var(--space-1);
+}
+
+/* J9 .banner-box{border-radius:8px;overflow:hidden} — the swiper viewport. */
+.viewport {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--brand-accent-hairline);
+  touch-action: pan-y; /* let vertical page-scroll through; we own horizontal drag */
+  cursor: grab;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.viewport:active {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: transform var(--dur-slow) var(--ease-standard);
+  will-change: transform;
+}
+
+.cell {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.slide {
+  position: relative;
+  display: block;
+  /* J9 banner native ratio = 1556/620 ≈ 2.5:1. Mobile keeps it a touch taller
+   * (5/2); desktop uses the native crop (§3.2). The slide is JUST the banner
+   * image now — no overlay text — so no padding/inner layout (defect-2). */
+  aspect-ratio: 5 / 2;
+  text-decoration: none;
+  color: var(--text-hi);
+  overflow: hidden;
+}
+
+/* full-bleed banner art — J9 object-fit:cover, fills the cell edge-to-edge */
+.slideImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+}
+
+/* image SLOT — token-derived gradient, the honest fallback when no banner art
+ *  (only the empty-state branch uses this now; banner slides are image-only). */
+.slot,
+.slotEmpty {
+  background:
+    radial-gradient(120% 120% at 85% 15%, rgba(243, 184, 103, 0.18), transparent 60%),
+    linear-gradient(135deg, var(--surface) 0%, var(--surface-3) 100%);
+}
+
+.slotEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slotLabel {
+  font-size: var(--t-display);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .slide {
+    /* J9 native banner ratio 1556×620 ≈ 2.5:1 — full art, no letterbox */
+    aspect-ratio: 1556 / 620;
+  }
+}
+
+/* ===========================================================================
+ * (a) ANIMATED PROGRESS-LINE INDICATOR  (J9-EXACT)
+ * A thin FULL-WIDTH track with one node dot per slide; the ACTIVE node is a
+ * larger filled BLUE dot, and a BLUE SEGMENT advances rightward over the
+ * autoplay dwell from the active node toward the next node. Nodes double as
+ * the clickable navigation (defect-2: arrows removed).
+ * J9 swiper theme = #007aff → our --info (#018fff). Inactive nodes = muted
+ * grey; the base rail is a hairline. Static under reduced-motion.
+ * ======================================================================== */
+.progress {
+  position: relative;
+  /* MOBILE base: nodes distribute edge-to-edge (the nav row scrolls
+   *  independently here, so node-over-thumb sync isn't attempted). DESKTOP
+   *  (≥768) overrides this to the SAME N-column grid as .nav so each node sits
+   *  directly above its item's thumbnail (FIX 2). */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  /* node radius (5px) of horizontal inset so the end dots aren't clipped.
+   *  defect-3: no extra vertical padding — the node's own tap-area defines the
+   *  row height, keeping the progress-line snug under the banner. */
+  padding: 0 5px;
+  /* --seg-frac = active node center as a fraction of the rail span. MOBILE
+   *  (edge-distributed): index/(n-1). DESKTOP grid recomputes this below. */
+  --seg-frac: calc(var(--seg-i) / (var(--n) - 1));
+  --seg-frac-next: calc((var(--seg-i) + 1) / (var(--n) - 1));
+}
+
+/* continuous hairline rail behind the nodes (centered between the end dots) */
+.rail {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16); /* hairline on dark */
+  pointer-events: none;
+}
+
+/* the advancing BLUE segment. It starts at the rail's left and grows to the
+ * active node's center (--seg-frac), then advances one inter-node span across
+ * the dwell (--seg-dur). --seg-frac/-next are resolved per breakpoint so the
+ * fill always lands under the active node (FIX 2). */
+.railFill {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  border-radius: var(--radius-pill);
+  background: var(--info); /* J9 swiper blue #007aff ≈ --info #018fff */
+  pointer-events: none;
+  width: calc((100% - 10px) * var(--seg-frac));
+  /* never overshoot the rail (last slide: --seg-frac=1, no further node) */
+  max-width: calc(100% - 10px);
+  animation: heroSeg var(--seg-dur) linear forwards;
+}
+@keyframes heroSeg {
+  from {
+    width: calc((100% - 10px) * var(--seg-frac));
+  }
+  to {
+    width: calc((100% - 10px) * var(--seg-frac-next));
+  }
+}
+/* reduced motion / single-frame: fill only up to the active node (no advance) */
+.railFillStatic {
+  animation: none;
+  width: calc((100% - 10px) * var(--seg-frac));
+}
+
+/* clickable node — comfy tap target around the visible dot */
+.node {
+  position: relative;
+  z-index: var(--z-content);
+  flex: 0 0 auto;
+  width: var(--tap-min); /* 44px horizontal hit area (full tap width kept) */
+  /* defect-3: short row so the progress-line is a thin band hugging the banner,
+   *  not a tall 44px gap — the 44px WIDTH preserves a comfortable tap target. */
+  height: var(--space-5);
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* the visible dot — small muted grey by default */
+.dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.32);
+  transition: transform var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+/* reached/active nodes → larger filled BLUE dot (active reads as the playhead) */
+.nodeOn .dot {
+  background: var(--info);
+  transform: scale(1.4);
+}
+
+.node:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 0;
+  border-radius: var(--radius-pill);
+}
+
+/* ===========================================================================
+ * (c) PROMO NAVIGATOR ROW — the under-hero items ARE the hero slides (1:1).
+ * J9-style: a de-carded thumb + short title in a horizontal row on the track —
+ * NO card border / box / background. Tapping item i navigates the hero to
+ * slide i; the active item is highlighted (synced with the current slide +
+ * progress node). Horizontally scrollable on narrow viewports so the page body
+ * never scrolls sideways.
+ * ======================================================================== */
+.nav {
+  display: flex;
+  gap: var(--gap-sm);
+  list-style: none;
+  margin: 0;
+  /* defect-3 + defect-4: zero horizontal inset so the row's left/right edges
+   *  line up exactly with the hero banner; zero vertical padding keeps it snug
+   *  under the progress-line. */
+  padding: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.navCell {
+  flex: 0 0 auto;
+  /* on mobile show ~2.2 items; desktop the row distributes across the band */
+  width: 168px;
+}
+
+/* DE-CARDED item — J9 navigator: just a thumb + title in a row, no box.
+ * FIX 3: TOP-aligned (align-items:flex-start) so the title's first line sits at
+ * the TOP of the thumbnail (J9), not vertically centered. */
+.navItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  height: 100%;
+  /* small inner padding for the tap target only — NO border/background/box */
+  padding: var(--space-1) 0;
+  border: none;
+  background: transparent;
+  text-align: left;
+  text-decoration: none;
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0.62; /* inactive items recede; the active one reads as selected */
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+.navItem:hover {
+  opacity: 0.85;
+}
+
+/* active item (synced with the current slide + progress node) */
+.navItemOn {
+  opacity: 1;
+}
+.navItemOn .navTitle {
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.navItem:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* small thumb cut from the slide's own banner art (the only rounded element) */
+.navThumb {
+  flex: 0 0 auto;
+  width: 44px; /* J9 below-hero promo thumbnail ≈ 44px square */
+  height: 44px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--tile);
+}
+.navThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* short title — the slide's own promo title, clamped to 2 lines */
+.navTitle {
+  font-size: var(--t-micro);
+  line-height: var(--lh-tight);
+  font-weight: var(--weight-reg);
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+@media (min-width: 768px) {
+  /* FIX 2 — node row + item row share ONE N-equal-column grid so each node's
+   *  center sits directly above its item's THUMBNAIL center. Both .progress and
+   *  .nav use the identical track (repeat(--n, minmax(0,1fr)) + the same
+   *  --gap-sm gutter), so column i occupies the exact same x-range in both
+   *  rows. Within a nav column the 44px thumb sits at the LEFT (thumb center =
+   *  colLeft + 22px); within a progress column the node is justify-self:start
+   *  (dot center = colLeft + 22px) → node i is directly above thumb i. */
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    overflow-x: visible;
+  }
+  .navCell {
+    /* the grid sizes the columns now — no flex basis / fixed width */
+    width: auto;
+    min-width: 0;
+  }
+  .navTitle {
+    font-size: var(--t-sm);
+  }
+
+  /* progress row → the SAME grid as .nav. Column geometry (shared by the rail
+   *  + fill below):
+   *    --half      = half a thumb/node = the node-center inset within a column
+   *    --col-pitch = x-distance between adjacent column lefts = adjacent node
+   *                  centers = (100% + gap) / n  (derived: c+g where
+   *                  c=(100% - (n-1)g)/n)  */
+  .progress {
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    column-gap: var(--gap-sm);
+    padding: 0;
+    --half: calc(var(--tap-min) / 2);
+    --col-pitch: calc((100% + var(--gap-sm)) / var(--n));
+    /* the line extends this far BEFORE the first dot and AFTER the last dot so
+     *  the ends aren't dead-ends (J9). */
+    --rail-overhang: 18px;
+  }
+  .node {
+    /* left-align the node in its column so the dot center = colLeft + 22px,
+     *  matching the thumbnail center in the nav column above. */
+    justify-self: start;
+  }
+
+  /* FULL hero-banner width: the line spans the entire .progress track (which is
+   *  edge-aligned to the banner), so the tail reaches the banner's right edge
+   *  and the head its left edge — no dead-ends. */
+  .rail {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+
+  /* fill is anchored at the first node center (--half) and grows in absolute
+   *  column-pitch units to the active node, then advances one pitch over the
+   *  dwell — so it always lands under the active node (FIX 2). */
+  .railFill {
+    /* blue grows from the LEFT edge (0) to the active node center
+     *  (= --half + seg-i·pitch); the trailing run to the banner's right edge
+     *  stays grey (J9). */
+    left: 0;
+    --fill-from: calc(var(--half) + var(--seg-i) * var(--col-pitch));
+    --fill-to: calc(var(--half) + (var(--seg-i) + 1) * var(--col-pitch));
+    width: var(--fill-from);
+    max-width: calc(var(--half) + (var(--n) - 1) * var(--col-pitch));
+    animation: heroSegGrid var(--seg-dur) linear forwards;
+  }
+  .railFillStatic {
+    animation: none;
+    width: var(--fill-from);
+  }
+}
+
+/* desktop fill advance (absolute column-pitch units) */
+@keyframes heroSegGrid {
+  from {
+    width: var(--fill-from);
+  }
+  to {
+    width: var(--fill-to);
+  }
+}
+
+/* ---- reduced motion: static fill, no advance, no slide-transition ---------
+ * The active segment is shown FULL instantly; completed stay full; future
+ * stay empty. Autoplay is already disabled in JS (A11/F5). */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
+  /* progress segment never advances — fills only to the active node. The
+   *  static WIDTH is already correct per breakpoint (.railFill base = mobile
+   *  fraction; the desktop block = column-pitch); here we only kill the
+   *  advance animation defensively (JS also adds .railFillStatic). */
+  .railFill {
+    animation: none;
+  }
+  .dot {
+    transition: none;
+  }
+}

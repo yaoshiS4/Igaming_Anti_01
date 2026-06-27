@@ -1,0 +1,47 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.triggerWrap {
+  display: contents;
+}
+
+.panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  min-width: 200px;
+  max-width: min(90vw, 360px);
+  z-index: var(--z-dropdown);
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--halo);
+  padding: var(--space-2);
+  outline: none;
+  animation: drop var(--dur-fast) var(--ease-entrance);
+}
+
+.bottom-start {
+  left: 0;
+}
+.bottom-end {
+  right: 0;
+}
+
+@keyframes drop {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

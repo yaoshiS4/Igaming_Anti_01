@@ -1,0 +1,87 @@
+/* ProductGrid — points catalog. Tokens only; @375 2-up → desktop 4-up. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gutter);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cell {
+  display: flex;
+  min-width: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  width: 100%;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.name {
+  font-size: var(--t-sm);
+  color: var(--text-hi);
+  line-height: var(--lh-tight);
+  font-weight: var(--weight-semi);
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.price {
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+}
+
+.unit {
+  font-size: var(--t-micro);
+  font-weight: var(--weight-reg);
+  color: var(--text-mid);
+}
+
+.redeemed {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+
+.timerLabel {
+  color: var(--text-dim);
+}

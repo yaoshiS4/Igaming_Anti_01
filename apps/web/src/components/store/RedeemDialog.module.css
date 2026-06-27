@@ -1,0 +1,91 @@
+/* RedeemDialog — confirm/result. Tokens only; equal-salience result. */
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.product {
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--t-sm);
+}
+
+.row dt {
+  color: var(--text-mid);
+}
+
+.row dd {
+  margin: 0;
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-hi);
+}
+
+.row dd[data-low="true"] {
+  color: var(--loss);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.iconOk,
+.iconErr {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+}
+
+/* equal salience — success uses --win, failure uses --error. No win-juice. */
+.iconOk {
+  background: var(--tint);
+  color: var(--win);
+}
+
+.iconErr {
+  background: var(--tint);
+  color: var(--error);
+}
+
+.resultTitle {
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.resultBody {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  line-height: var(--lh-body);
+}

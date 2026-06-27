@@ -1,0 +1,79 @@
+/* RightRail — desktop ≥1240 only; hidden below (page folds figures inline). */
+
+.rail {
+  display: none;
+}
+
+.card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.cardTitle {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+  margin-bottom: var(--space-3);
+}
+
+.jackpot {
+  color: var(--brand-accent);
+}
+
+.errorLine {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+}
+
+.row {
+  margin-bottom: var(--space-2);
+}
+
+.board {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.boardRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--t-sm);
+}
+.boardRow:last-child {
+  border-bottom: 0;
+}
+.rank {
+  width: 1.6em;
+  text-align: center;
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-family: var(--brand-font-num);
+}
+.player {
+  color: var(--text);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.amount {
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-hi);
+  white-space: nowrap;
+}
+
+@media (min-width: 1240px) {
+  .rail {
+    display: block;
+    width: var(--rail-w);
+    flex: none;
+  }
+}

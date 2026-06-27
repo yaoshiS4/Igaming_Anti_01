@@ -1,0 +1,240 @@
+/* AuthModal — 2-zone centred dialog (desktop) / single-zone sheet (mobile).
+ * The desktop panel width (720px for the 2-zone layout) is set via the
+ * Overlay `desktopMaxWidth` prop, NOT here.
+ *
+ * PASSWORD-ONLY: no method tabs / no OTP (defect 3). The left brand panel is a
+ * filled logo + tagline + trust-bullet column — no empty placeholder boxes. */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* brand zone — hidden on mobile (sheet shows the form only) */
+.brandZone {
+  display: none;
+}
+
+.formZone {
+  padding: var(--space-2) var(--space-5) var(--space-4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.title {
+  font-size: var(--t-h2);
+  color: var(--text-hi);
+}
+
+.closeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  margin-right: calc(var(--space-2) * -1);
+  border: 0;
+  background: transparent;
+  color: var(--text-mid);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+}
+.closeBtn:hover {
+  color: var(--text-hi);
+}
+.closeBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.form {
+  margin-bottom: var(--space-3);
+}
+
+/* the single honest register confirmation — equal-salience, no win-juice */
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+.successIcon {
+  color: var(--win); /* neutral success, NOT brand-juiced */
+}
+.successText {
+  font-size: var(--t-h3);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+.switch {
+  text-align: center;
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+.switchBtn {
+  border: 0;
+  background: transparent;
+  color: var(--brand-cta);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  padding: var(--space-1);
+  min-height: var(--tap-min);
+}
+.switchBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* LOGIN: "Quên mật khẩu?" — right-aligned just under the password field */
+.forgotRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: calc(var(--space-2) * -1);
+  margin-bottom: var(--space-2);
+}
+.forgotLink {
+  border: 0;
+  background: transparent;
+  color: var(--brand-cta);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  padding: var(--space-1);
+  min-height: var(--tap-min);
+}
+.forgotLink:hover {
+  text-decoration: underline;
+}
+.forgotLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* FORGOT: the email-or-phone instruction above the reset field */
+.resetPrompt {
+  margin-bottom: var(--space-4);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+}
+
+/* ---- DESKTOP: 2-zone side-by-side ≥640 ---- */
+@media (min-width: 640px) {
+  .layout {
+    flex-direction: row;
+    align-items: stretch; /* both zones share the tallest height */
+  }
+
+  /* BRAND PANEL — a filled column: logo + tagline pinned top, trust bullets
+   *  spread to the bottom so the panel reads as one solid gold-on-dark surface
+   *  with no dead space. */
+  .brandZone {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--space-5);
+    width: 280px;
+    flex: none;
+    padding: var(--space-6) var(--space-5);
+    background:
+      radial-gradient(
+        120% 80% at 0% 0%,
+        rgba(243, 184, 103, 0.12),
+        transparent 60%
+      ),
+      var(--surface-3);
+    border-right: 1px solid var(--gold-hairline);
+  }
+
+  .brandTop {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .brandLogo {
+    display: block;
+    width: 132px;
+    height: auto;
+  }
+  .brandTag {
+    font-size: var(--t-body);
+    line-height: var(--lh-body);
+    color: var(--text-hi);
+    font-weight: var(--weight-semi);
+  }
+
+  /* trust bullets — a COMPACT, top-anchored group (fixed rhythm). The variable
+   *  leftover height is filled by .brandArt below, NOT by stretching these
+   *  bullets apart — so they never go sparse beside the tall 5-field register. */
+  .trustList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .trustItem {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  /* decorative brand fill — grows to consume the height the form leaves so the
+   *  panel is a finished surface at any modal height (no void, no sparse list).
+   *  A soft gold spotlight + a faint casino-chip mark; purely decorative. */
+  .brandArt {
+    flex: 1 1 auto;
+    min-height: 64px;
+    margin-top: var(--space-4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    background: radial-gradient(
+      62% 60% at 50% 58%,
+      rgba(243, 184, 103, 0.13),
+      transparent 70%
+    );
+  }
+  .brandArtMark {
+    width: clamp(84px, 46%, 156px);
+    height: auto;
+    color: var(--brand-accent);
+    opacity: 0.17;
+  }
+  .trustIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex: none;
+    border-radius: var(--radius-md);
+    background: rgba(243, 184, 103, 0.14);
+    color: var(--brand-accent);
+  }
+  .trustText {
+    font-size: var(--t-sm);
+    line-height: var(--lh-body);
+    color: var(--text-mid);
+  }
+
+  .formZone {
+    flex: 1;
+    padding: var(--space-5) var(--space-6) var(--space-6);
+  }
+}

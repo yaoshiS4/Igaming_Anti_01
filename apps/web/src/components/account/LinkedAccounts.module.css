@@ -1,0 +1,114 @@
+/* ============================================================================
+ * BankAccounts / CryptoAddresses — linked-account list panels. Tokens only.
+ * ==========================================================================*/
+
+.wrap {
+  min-width: 0;
+}
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--card-pad);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+.titleIcon {
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+.titleText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.title {
+  font-size: var(--t-h2); /* J9 sub-title 20/600 */
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.subtitle {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+.empty {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  padding: var(--space-5) 0;
+  text-align: center;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--card-pad-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.itemIcon {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--tint);
+  color: var(--brand-accent);
+}
+.itemMain {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.itemTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.itemName {
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.itemNum {
+  font-size: var(--t-sm);
+  font-family: var(--brand-font-num);
+  color: var(--text);
+  letter-spacing: 0.04em;
+  word-break: break-all;
+}
+.itemSub {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+.notice {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--tint);
+  border: 1px solid var(--border);
+}

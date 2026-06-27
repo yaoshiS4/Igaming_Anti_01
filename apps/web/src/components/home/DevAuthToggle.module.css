@@ -1,0 +1,85 @@
+/* DevAuthToggle — fixed top-left, clear of the sticky header. Tokens only. */
+
+.fab,
+.panel {
+  position: fixed;
+  /* below the 60px header band + a gap, so it never overlaps the TopBar */
+  top: calc(var(--header-h) + var(--space-2));
+  left: var(--space-2);
+  z-index: var(--z-toast);
+}
+
+.fab {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-pill);
+  border: 1px dashed var(--brand-accent-hairline);
+  background: var(--scrim);
+  color: var(--brand-accent);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  opacity: 0.7;
+}
+.fab:hover {
+  opacity: 1;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  width: 160px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-3);
+  border: 1px dashed var(--brand-accent-hairline);
+  box-shadow: var(--halo);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tag {
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  color: var(--text-mid);
+  font-weight: var(--weight-bold);
+}
+.close {
+  border: none;
+  background: transparent;
+  color: var(--text-mid);
+  font-size: var(--t-h3);
+  line-height: 1;
+  cursor: pointer;
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.cycle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-hi);
+  cursor: pointer;
+  width: 100%;
+}
+.stateLabel {
+  font-size: var(--t-body);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+}
+.hint {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}

@@ -1,0 +1,32 @@
+/* (member) route group — desktop two-column member area. Tokens only.
+ * Mobile-first @375: rail stacks above content. ≥992: 304px rail + fluid col. */
+
+.area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+  /* ambient backdrop behind the rail + content: a faint gold bloom (top) + cool
+   * blue lift (bottom) over the locked --canvas (re-expresses J9's per-tier
+   * background art as pure CSS; IP-safe, brand-following via color-mix). */
+  background: var(--page-bloom);
+}
+
+.column {
+  display: block;
+  min-width: 0;
+  /* flat matte so the lifted hero/action/tile surfaces read as raised */
+  background: var(--member-canvas);
+}
+
+@media (min-width: 992px) {
+  .area {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--gap); /* J9 dominant 16px gap */
+  }
+  .column {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

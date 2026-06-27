@@ -1,0 +1,42 @@
+.skeleton {
+  display: inline-block;
+  background: linear-gradient(
+    100deg,
+    var(--surface-2) 30%,
+    var(--surface-hover) 50%,
+    var(--surface-2) 70%
+  );
+  background-size: 200% 100%;
+  animation: sweep var(--dur-slow) linear infinite;
+  /* keep the slow workhorse but loop a touch longer for a calm sweep */
+  animation-duration: 1400ms;
+}
+
+.text {
+  border-radius: var(--radius-sm);
+}
+
+.pill {
+  border-radius: var(--radius-pill);
+}
+
+.block {
+  border-radius: var(--radius-card);
+}
+
+@keyframes sweep {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Reduced-motion: static branded tint, no sweep (SPEC-02 §7 / SPEC-03 A12). */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: var(--surface-2);
+  }
+}

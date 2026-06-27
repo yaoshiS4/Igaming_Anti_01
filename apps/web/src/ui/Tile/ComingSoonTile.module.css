@@ -1,0 +1,113 @@
+/* ============================================================================
+ * ComingSoonTile — premium gold-on-obsidian "Sắp ra mắt" filler.
+ * Token-only (no raw ramp hex, no px literals beyond hairline widths). The box
+ * is byte-identical in size to a 1×1 Tile: it fills the grid cell's fixed
+ * --tile-h height with --radius-md corners, so appending it never shifts layout.
+ * ==========================================================================*/
+
+.tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-md); /* J9 tile corner = 8px */
+  /* Lucky Obsidian field: deep tile base lifted by a warm gold bloom from the
+   * top, with a faint diagonal gold wash — derived entirely from brand/locked
+   * tokens (never a raw ramp literal). */
+  background:
+    radial-gradient(120% 90% at 50% -10%, var(--surface-hover), var(--tile) 62%),
+    linear-gradient(135deg, var(--brand-accent-hairline), transparent 55%),
+    var(--shell);
+  border: 1px solid var(--brand-accent-hairline);
+  box-shadow: var(--glow-gold);
+}
+
+/* diagonal sheen — a single soft gold band that sweeps slowly across the card.
+ * It sits above the field but below the content, clipped by .tile overflow. */
+.sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    var(--brand-accent-hairline) 48%,
+    var(--tint) 52%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  background-position: 130% 0;
+  opacity: 0.9;
+  animation: csSheen 6s var(--ease-standard) infinite;
+}
+
+@keyframes csSheen {
+  0%   { background-position: 130% 0; }
+  /* the band crosses once, then a long quiet hold before repeating */
+  28%  { background-position: -60% 0; }
+  100% { background-position: -60% 0; }
+}
+
+.inner {
+  position: relative; /* above the sheen */
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  text-align: center;
+}
+
+/* soft gold ring around the lock glyph */
+.lockRing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  color: var(--brand-accent);
+  background: radial-gradient(closest-side, var(--brand-accent-hairline), transparent);
+  border: 1px solid var(--brand-accent-hairline);
+}
+.lockIcon {
+  color: var(--brand-accent);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.label {
+  font-family: var(--brand-font-body);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: 0.02em;
+  color: var(--brand-accent);
+}
+
+.teaser {
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+  letter-spacing: 0.02em;
+  color: var(--text-mid);
+}
+
+/* Reduced-motion: hold the sheen still in its rest position. The global
+ * motion.css already zeroes --dur-* and clamps animation-duration, but the
+ * sheen's duration is a literal (6s) so it is gated explicitly here too. */
+@media (prefers-reduced-motion: reduce) {
+  .sheen {
+    animation: none;
+    background-position: -60% 0;
+  }
+}

@@ -1,0 +1,51 @@
+/* ============================================================================
+ * Yaobet — typography layer (SPEC-04 styles/typography.css)
+ * ----------------------------------------------------------------------------
+ * Swaps J9's PingFang-SC CJK stack for a Vietnamese-diacritic-complete Latin
+ * stack + a tabular-numeral face for VND/odds.
+ *
+ * FONT STRATEGY (SPEC-02 §4 + dev-fe brief): "Be Vietnam Pro" is the named
+ * brand face. We do NOT @import it from a remote host (the build must succeed
+ * offline and the app is self-contained). When a self-hosted ≤120KB VN subset
+ * lands under public/assets/fonts/, drop the @font-face blocks below back in.
+ * Until then --font-body/--font-num fall through to system-ui, which is
+ * VN-diacritic complete on every target platform — so ế/ữ/ặ render uncut.
+ * ==========================================================================*/
+
+/* When the licensed subset arrives, uncomment + point at the self-hosted files:
+@font-face {
+  font-family: "Be Vietnam Pro";
+  src: url("/assets/fonts/be-vietnam-pro-400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Be Vietnam Pro";
+  src: url("/assets/fonts/be-vietnam-pro-600.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Be Vietnam Pro";
+  src: url("/assets/fonts/be-vietnam-pro-700.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+*/
+
+/* Base type ramp. Components read --t-* / --weight-* tokens; these are the
+ * document-level defaults so unstyled VN copy is already on the AA ladder. */
+body {
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  font-weight: var(--weight-reg);
+  color: var(--text-hi);
+}
+
+/* Tabular numerals so money/odds don't reflow on tick (SPEC-02 §4 / A8). */
+.money,
+[data-numeric] {
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+}

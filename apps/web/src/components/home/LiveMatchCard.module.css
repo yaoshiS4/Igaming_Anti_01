@@ -1,0 +1,106 @@
+/* LiveMatchCard — crest slots + teams + equal-salience odds. Tokens only. */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  text-decoration: none;
+  color: var(--text);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* live state = TEXT label (never color-only) + a dot affordance */
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+  color: var(--text-hi);
+}
+.liveDot {
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--loss);
+}
+.pre {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+}
+.sportIcon {
+  color: var(--text-mid);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.team {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* crest SLOT — token-gradient disc awaiting licensed crest art */
+.crest {
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-pill);
+  background:
+    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.16), transparent 70%),
+    var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+}
+
+.teamName {
+  font-size: var(--t-sm);
+  color: var(--text-hi);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oddsCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 6ch;
+  justify-content: flex-end;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+}
+
+/* equal salience: both arrows same weight; up=win hue, down=loss hue, but the
+ * GLYPH carries the meaning so it is never color-only. */
+.arrowUp {
+  color: var(--win);
+  transform: rotate(-90deg);
+}
+.arrowDown {
+  color: var(--loss);
+  transform: rotate(0deg);
+}
+
+.stale {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.skelRow {
+  margin-top: var(--space-2);
+}

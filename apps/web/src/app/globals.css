@@ -1,0 +1,54 @@
+/* ============================================================================
+ * Yaobet — globals.css : the ONLY global sheet (SPEC-04 PART 2)
+ * ----------------------------------------------------------------------------
+ * Imports the design-token layers in order, sets the dark canvas + base type,
+ * and wires the reduced-motion contract. Components ship their own scoped
+ * *.module.css and read var(--…) from the layers below — they never re-author
+ * tokens and never add to this global sheet.
+ * Import order matters: reset → tokens (defines vars) → themes/brands
+ * (re-point) → typography/motion (consume vars).
+ * ==========================================================================*/
+
+@import "../styles/reset.css";
+@import "../styles/tokens.css";
+@import "../styles/themes.css";
+@import "../styles/brands.css";
+@import "../styles/typography.css";
+@import "../styles/motion.css";
+
+html {
+  height: 100%;
+  background: var(--shell);
+  color-scheme: dark;
+  /* No horizontal page scroll, ever (SPEC-04 8.1). Wide content scrolls in
+   * its own Scroller, not the body. */
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  background: var(--canvas);
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  overflow-x: hidden;
+}
+
+/* Headings inherit the body face; sizes are set per-component via --t-* tokens.
+ * Provide a sane default so unstyled headings are not browser-huge. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--weight-bold);
+  line-height: var(--lh-tight);
+}
+
+/* Respect the AA muted floor for any raw secondary text. */
+small {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}

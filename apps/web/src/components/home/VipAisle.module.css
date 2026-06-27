@@ -1,0 +1,154 @@
+/* VipAisle — tier deck + auth-aware progress panel. Tokens only. */
+
+.aisle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--t-h2);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+}
+.titleIcon {
+  color: var(--brand-accent);
+}
+
+.all {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--t-sm);
+  color: var(--brand-accent);
+  text-decoration: none;
+  min-height: var(--tap-min);
+}
+
+/* ---- progress panel (member) ---- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  border: 1px solid var(--brand-accent-hairline);
+}
+
+.panelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.curTier {
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+}
+.nextTier {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.track {
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-disabled);
+  overflow: hidden;
+}
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  /* fill is a truthful static width; the transition is decorative only and is
+   * zeroed under reduced-motion (motion.css) — never a fake 5s climb. */
+  transition: width var(--dur-base) var(--ease-standard);
+}
+.skelBar {
+  display: block;
+}
+
+.remain {
+  font-size: var(--t-sm);
+  color: var(--text);
+}
+.remain strong {
+  color: var(--text-hi);
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- guest join card ---- */
+.joinCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  align-items: flex-start;
+}
+.joinCopy {
+  font-size: var(--t-body);
+  color: var(--text);
+}
+
+/* ---- tier deck ---- */
+.deck {
+  display: flex;
+  gap: var(--space-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.deckItem {
+  flex: 0 0 auto;
+}
+.tierCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 140px;
+  padding: var(--space-4);
+  scroll-snap-align: start;
+}
+.badge {
+  width: var(--space-8);
+  height: var(--space-8);
+  border-radius: var(--radius-pill);
+  display: grid;
+  place-items: center;
+  color: var(--brand-accent);
+  background:
+    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.2), transparent 70%),
+    var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+}
+.tierName {
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+}
+.rate {
+  font-size: var(--t-micro);
+  color: var(--brand-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fill {
+    transition: none;
+  }
+}
