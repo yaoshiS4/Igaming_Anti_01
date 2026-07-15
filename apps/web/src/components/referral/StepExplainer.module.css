@@ -1,69 +1,120 @@
-/* StepExplainer — 4-step grid. Tokens only; @375 stack → 2-col desktop. */
+/* StepExplainer — 4-step grid. Tokens only; @375 single col → 2-col centered.
+ * J9 .step_box: grid repeat(2,1fr), fit-content, centered (margin 0 auto), gap
+ * 24px. Each .step_item is a ~214px image-over-caption card; we own no J9
+ * banners, so the "image" is our own icon tile (radius-md). .step_tips caption
+ * is white-60, 14px, line-height 150%. */
 
 .section {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  align-items: center;
 }
 
 .title {
   font-size: var(--t-h3);
   color: var(--text-hi);
   font-weight: var(--weight-semi);
+  align-self: flex-start;
 }
 
+/* lead-in onboarding headline (/gioi-thieu only) — the honest "no friends yet"
+ * line above the grid. Centered, muted, comfortable reading width. */
+.intro {
+  font-size: var(--t-body);
+  color: var(--text-mid);
+  text-align: center;
+  line-height: var(--lh-body);
+  max-width: 48ch;
+  margin: 0 auto;
+}
+
+/* J9 .step_box — centered fit-content grid. Single column @375. */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-3);
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 
 @media (min-width: 640px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
+    width: fit-content;
+    max-width: none;
   }
 }
 
+/* J9 .step_item — ~214px image-over-caption card. */
 .step {
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  border-radius: var(--radius-card);
-  background: var(--surface);
-  border: 1px solid var(--border);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
 }
 
-.iconWrap {
-  display: inline-flex;
+@media (min-width: 640px) {
+  .step {
+    width: 214px;
+  }
+}
+
+/* the banner — a colorful per-step gradient (J9's illustrated .step_img stand-in)
+ * + a white icon + a faded number watermark. Each step a distinct brand-palette
+ * hue, saturated→dark so the white icon stays readable. */
+.banner {
+  position: relative;
+  overflow: hidden;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
-  background: var(--brand-accent-hairline);
-  color: var(--brand-accent);
-}
-
-.copy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  min-width: 0;
-}
-
-.stepTitle {
-  font-size: var(--t-body);
   color: var(--text-hi);
-  font-weight: var(--weight-semi);
+}
+.tone0 {
+  background: linear-gradient(135deg, var(--brand-accent), color-mix(in srgb, var(--brand-accent) 38%, var(--shell)));
+}
+.tone1 {
+  background: linear-gradient(135deg, var(--info), color-mix(in srgb, var(--info) 38%, var(--shell)));
+}
+.tone2 {
+  background: linear-gradient(135deg, var(--win), color-mix(in srgb, var(--win) 38%, var(--shell)));
+}
+.tone3 {
+  background: linear-gradient(135deg, var(--loss), color-mix(in srgb, var(--loss) 42%, var(--shell)));
+}
+.bannerIcon {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.32));
+}
+.bannerNum {
+  position: absolute;
+  right: 10px;
+  bottom: -2px;
+  font-family: var(--brand-font-num);
+  font-size: 46px;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  color: var(--text-hi);
+  opacity: 0.22;
 }
 
+/* J9 .step_tips — caption beneath the image. white-60, 14px, line-height 150%. */
 .stepBody {
   font-size: var(--t-sm);
   color: var(--text-mid);
-  line-height: var(--lh-body);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.stepNum {
+  color: var(--text);
+  font-weight: var(--weight-semi);
 }

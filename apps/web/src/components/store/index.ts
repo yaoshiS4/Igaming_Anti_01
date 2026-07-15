@@ -13,3 +13,5 @@ export type { ProductGridProps } from "./ProductGrid";
 
 export { RedeemDialog } from "./RedeemDialog";
 export type { RedeemDialogProps } from "./RedeemDialog";
+
+export { StoreTerms } from "./StoreTerms";

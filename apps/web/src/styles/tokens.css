@@ -41,6 +41,8 @@
   --error:      #e42946; /* J9 red CTA/danger (validation, not outcomes). PINNED */
   --green:      #31bc69; /* J9 --Minor-Color-Green — flat positive accent. PINNED */
   --info:       #018fff; /* J9 blue solid */
+  --caution:    #f5a623; /* amber "allowed-but-costs-more" — NOT a reward (gold) nor a block (red/error). LOCKED neutral. PINNED; ≥4.5:1 vs canvas (8.59:1) */
+  --on-caution: #2a1a00; /* dark text on a solid --caution fill (≥4.5:1 → 8.31:1) */
   --focus-ring: #6ea8ff; /* AA focus indicator — LOCKED neutral blue. PINNED; ≥3:1 vs canvas */
 
   /* §3 — Text ladder on dark (AA-lifted) ------------------------------- */
@@ -163,6 +165,12 @@
   /* The signature J9 corner glow — soft ice-white bleed from the upper-right. */
   --card-sheen-grad:
     radial-gradient(circle at 78% 26%, rgba(204, 220, 255, 0.05) 0%, rgba(204, 220, 255, 0.01) 57%, transparent 72%);
+
+  /* QR/scan tile — a genuine pure-white surface (a QR must be on white to be
+   * scannable). The ONE intentional white block on a member surface; locked
+   * neutral, brand-agnostic (like --progress-dot). Components read this token,
+   * never a raw #fff (lint A2). */
+  --qr-surface: #ffffff;
 
   /* Balance renders near-WHITE (not gold — gold is chrome/CTA only). */
   --balance-text: var(--text-hi);

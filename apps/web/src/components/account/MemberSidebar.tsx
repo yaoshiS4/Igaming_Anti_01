@@ -44,7 +44,7 @@ import type {
   LiveMoney,
   VipProgress,
 } from "@/lib/types";
-import { Badge, Button, Icon, type IconName } from "@/ui";
+import { Button, Icon, type IconName } from "@/ui";
 import { LogoutButton } from "./LogoutButton";
 import styles from "./MemberSidebar.module.css";
 
@@ -117,13 +117,12 @@ function ProgressBar({ progress }: { progress: Envelope<VipProgress> }) {
   if (nextTierName === null) {
     return (
       <div className={styles.progress}>
-        <div className={styles.progressHead}>
-          <span className={styles.progressSpacer} aria-hidden="true" />
+        <div className={styles.progressRow}>
+          <div className={styles.track}>
+            <span className={styles.fill} style={{ width: "100%" }} />
+            <span className={styles.dot} style={{ left: "100%" }} aria-hidden="true" />
+          </div>
           <span className={styles.nextTag}>{currentTierName}</span>
-        </div>
-        <div className={styles.track}>
-          <span className={styles.fill} style={{ width: "100%" }} />
-          <span className={styles.dot} style={{ left: "100%" }} aria-hidden="true" />
         </div>
       </div>
     );
@@ -137,23 +136,19 @@ function ProgressBar({ progress }: { progress: Envelope<VipProgress> }) {
 
   return (
     <div className={styles.progress}>
-      <div className={styles.progressHead}>
-        <span className={styles.progressSpacer} aria-hidden="true" />
-        <span className={styles.nextTag}>
-          {nextTierName}
-          <Icon name="chevronRight" size={12} />
-        </span>
-      </div>
-      <div
-        className={styles.track}
-        role="progressbar"
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={Math.round(pct)}
-        aria-label={`${currentTierName} → ${nextTierName}`}
-      >
-        <span className={styles.fill} style={{ width: `${pct}%` }} />
-        <span className={styles.dot} style={{ left: `${pct}%` }} aria-hidden="true" />
+      <div className={styles.progressRow}>
+        <div
+          className={styles.track}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(pct)}
+          aria-label={`${currentTierName} → ${nextTierName}`}
+        >
+          <span className={styles.fill} style={{ width: `${pct}%` }} />
+          <span className={styles.dot} style={{ left: `${pct}%` }} aria-hidden="true" />
+        </div>
+        <span className={styles.nextTag}>{nextTierName}</span>
       </div>
       <p className={styles.caption}>
         {vi.account.progressPrefix} {formatVnd(remaining)} {vi.account.progressSuffix}{" "}
@@ -251,9 +246,7 @@ export function MemberSidebar({ balance, summary, progress }: MemberSidebarProps
           <div className={styles.idMain}>
             <div className={styles.nameRow}>
               <span className={styles.name}>{user.displayName}</span>
-              <Badge tone="gold" variant="subtle" className={styles.tierBadge}>
-                {tierLabel}
-              </Badge>
+              <span className={styles.tierTag}>{tierLabel}</span>
             </div>
 
             <button type="button" className={styles.idLine} onClick={copyId}>

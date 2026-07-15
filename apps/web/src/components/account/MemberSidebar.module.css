@@ -158,8 +158,22 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.tierBadge {
+/* current-tier RIBBON (J9 "游客"-style banner): a gold gradient label with a
+ *  concave notch on the left edge (clip-path → pure-CSS ribbon, no raster art),
+ *  NOT a rounded pill. Dark text on gold. */
+.tierTag {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2) 2px 11px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 6px 50%);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+  line-height: var(--lh-tight);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 /* ID as PLAIN TEXT + copy (J9 "九游ID: …"), NOT a chip/pill */
 .idLine {
@@ -208,21 +222,28 @@
   flex-direction: column;
   gap: var(--space-2);
 }
-.progressHead {
+/* track + next-tier ribbon share ONE line (J9: the tag caps the right end of
+ *  the progress bar, not a separate row above it). */
+.progressRow {
   display: flex;
   align-items: center;
+  gap: var(--space-2);
 }
-.progressSpacer {
-  flex: 1 1 auto;
-}
+/* next-tier RIBBON (J9 "新会员"-style banner): same clip-path ribbon shape as
+ *  the tier tag, but a dark gradient with brand-gold text — a target label, not
+ *  a pill. Sits at the right end of the progress track. */
 .nextTag {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: 2px var(--space-2);
-  border-radius: var(--radius-pill);
-  background: var(--progress-tag-bg);
-  border: 1px solid var(--progress-tag-border);
+  padding: 3px var(--space-2) 3px 11px;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 6px 50%);
+  /* a gold-tinted dark ribbon (bronze top → dark) so it POPS against the hero
+   *  and reads as a premium target — distinct from the solid-gold current tier. */
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brand-accent) 20%, var(--surface-3)),
+    var(--surface-3)
+  );
   color: var(--progress-tag-text);
   font-size: var(--t-micro);
   font-weight: var(--weight-semi);
@@ -231,6 +252,8 @@
 }
 .track {
   position: relative;
+  flex: 1 1 auto; /* fills the row; the next-tier ribbon caps the right end */
+  min-width: 0;
   width: 100%;
   height: 4px;
   border-radius: var(--radius-sm);

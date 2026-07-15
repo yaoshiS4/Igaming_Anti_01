@@ -35,8 +35,6 @@ export default async function AffiliatePage() {
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.heading}>Đại lý</h1>
-
       {/* KPI — real-or-omitted (§F): Skeleton loading / ErrorState / absent */}
       <ReferralKpiHeader kpi={kpi} />
 

@@ -17,8 +17,10 @@ export async function getReferralKpi(): Promise<Envelope<ReferralKpi>> {
   return simulateFetch<Envelope<ReferralKpi>>({
     status: "live",
     value: {
-      todayTurnover: { amount: 6_800_000, currency: "VND" },
-      currentCommission: { amount: 168_000, currency: "VND" },
+      effectiveInvites: 2,
+      myValidBetsToday: { amount: 1_250_000, currency: "VND" },
+      friendsTurnoverToday: { amount: 6_800_000, currency: "VND" },
+      forecastTomorrow: { amount: 42_000, currency: "VND" },
     },
     sourcedAt: nowIso(),
     freshnessMs: 60_000,

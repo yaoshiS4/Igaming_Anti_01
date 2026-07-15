@@ -12,6 +12,7 @@
  * ==========================================================================*/
 
 import type { MoneyValue, LiveMoney, AnyMoney } from "./types";
+import { vi } from "./i18n";
 
 /** Group digits VN-style: 1234567 → "1.234.567". */
 function groupVnd(amount: number): string {
@@ -85,6 +86,25 @@ export function isLuckySafe(amount: number): boolean {
 export function isStale(sourcedAt: string, freshnessMs: number, now: number = Date.now()): boolean {
   const sourced = new Date(sourcedAt).getTime();
   return now - sourced > freshnessMs;
+}
+
+/* ----------------------------------------------------------------------------
+ * RELATIVE TIME — shared plain-VN humanizer (notification bell + message
+ * center). The source `at` is the server clock; this is a DISPLAY-only
+ * humanization against the client clock, never a stored value. Units come from
+ * the vi.notifications catalog (Vừa xong / N phút trước / N giờ trước / N ngày
+ * trước) so the bell and the inbox read identically.
+ * --------------------------------------------------------------------------*/
+
+/** Plain-VN relative time from an ISO instant against the client clock. */
+export function relativeTime(iso: string, now: number = Date.now()): string {
+  const diffMin = Math.max(0, Math.round((now - new Date(iso).getTime()) / 60_000));
+  if (diffMin < 1) return vi.notifications.justNow;
+  if (diffMin < 60) return `${diffMin} ${vi.notifications.minutesAgo}`;
+  const diffHr = Math.round(diffMin / 60);
+  if (diffHr < 24) return `${diffHr} ${vi.notifications.hoursAgo}`;
+  const diffDay = Math.round(diffHr / 24);
+  return `${diffDay} ${vi.notifications.daysAgo}`;
 }
 
 /** Re-export the money type guard at the format boundary for convenience. */

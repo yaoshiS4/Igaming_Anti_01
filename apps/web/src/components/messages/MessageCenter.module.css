@@ -1,0 +1,242 @@
+/* ============================================================================
+ * MessageCenter — "/tin-nhan" inbox panel. Tokens only (lint A2: never a raw
+ * ramp/hex literal — the unread gold wash is a color-mix on --brand-accent).
+ * Outer panel ports SecurityCenter .panel/.titleRow; the unread cue (gold dot +
+ * faint wash + 3px left accent edge) ports NotificationBell .rowUnread/.unreadDot.
+ * Mobile-first @375: the header actions cluster wraps below the title.
+ * Reduced-motion safe (no required animation).
+ * ==========================================================================*/
+
+/* ---- outer panel (ported from SecurityCenter .panel) -------------------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--card-pad); /* J9 spacious card 24px */
+}
+
+/* ---- header row --------------------------------------------------------- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.titleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.titleIcon {
+  color: var(--brand-accent);
+  flex: 0 0 auto;
+  margin-top: 2px;
+}
+.titleText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.title {
+  font-size: var(--t-h1); /* J9 section title 24/600 */
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+.subtitle {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+/* ---- header actions cluster (right-pinned; wraps below title @375) ------ */
+.actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+/* quiet pills — NOT loud gold CTAs. mark-all-read = accent text on a subtle
+ * chip; delete-all = the scarce/danger accent token (red is CTA/destructive
+ * only, never an outcome). Button's ghost variant supplies the chip; we only
+ * tint the label here. */
+.markAll {
+  color: var(--brand-accent);
+}
+.deleteAll {
+  color: var(--brand-cta-accent);
+}
+
+/* ---- filter dropdown trigger (ghost pill + trailing chevron) ------------ */
+.filterTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  color: var(--text-hi);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.filterTrigger:hover {
+  background: var(--surface-hover);
+  border-color: var(--brand-accent-hairline);
+}
+.filterTrigger:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* dropdown panel children (role=menu list of options) */
+.filterMenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.filterOption {
+  display: block;
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--t-sm);
+  cursor: pointer;
+}
+.filterOption:hover {
+  background: var(--tint);
+}
+.filterOption:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+.filterOptionActive {
+  color: var(--brand-accent);
+  font-weight: var(--weight-semi);
+}
+
+/* ---- message list ------------------------------------------------------- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* one message card on the --surface-2 sub-surface */
+.item {
+  position: relative;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* UNREAD cue (dual-encoded): faint gold wash + 3px left accent edge. The wash
+ * is a color-mix on --brand-accent (NOT a raw rgba), so it tracks the token. */
+.itemUnread {
+  background: color-mix(in srgb, var(--brand-accent) 6%, var(--surface-2));
+}
+.itemUnread::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: var(--space-2);
+  bottom: var(--space-2);
+  width: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+}
+
+/* inner padding container — shared by the read <div> and the unread <button> */
+.itemInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: var(--card-pad-sm); /* ~16px */
+}
+
+/* the unread card is a button: strip the native chrome, keep it a full target */
+.itemButton {
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-standard);
+}
+.itemButton:hover {
+  background: var(--surface-hover);
+}
+.itemButton:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+.itemHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.subject {
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  line-height: var(--lh-tight);
+  min-width: 0;
+}
+/* read subject de-emphasizes (mirror NotificationBell .rowRead .rowTitle) */
+.subjectRead {
+  font-size: var(--t-body);
+  font-weight: var(--weight-reg);
+  color: var(--text);
+  line-height: var(--lh-tight);
+  min-width: 0;
+}
+.time {
+  margin-left: auto;
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  white-space: nowrap;
+  flex: none;
+}
+.unreadDot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent);
+}
+.body {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  line-height: var(--lh-tight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterTrigger,
+  .itemButton {
+    transition: none;
+  }
+}

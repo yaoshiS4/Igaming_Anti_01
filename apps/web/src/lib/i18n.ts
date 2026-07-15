@@ -162,6 +162,114 @@ export const vi = {
     live: "TRỰC TIẾP",
   },
 
+  /* Points store — card-face gates & micro-copy (plan §3; NEW store.* keys).
+   * ITEM analog of the PRD points→cash mechanic: never imply reduced value —
+   * only the POINT cost rises for an early redeem; the item/face is unchanged. */
+  store: {
+    title: "Cửa hàng điểm",
+    /** points-required corner badge unit — rendered as `${n} điểm` (COUNT, never ₫). */
+    pointsUnit: "điểm",
+    /** filter tabs above the grid (client-side, filter by product.category). */
+    tabAll: "Tất cả",
+    tabVoucher: "Voucher tiền",
+    tabProduct: "Sản phẩm",
+    /** top-left card tag by family. */
+    categoryVoucher: "Voucher tiền",
+    categoryProduct: "Sản phẩm",
+    /** withdrawal condition (info only): `{n}` = rolling multiplier to wager before withdrawing.
+     *  VOUCHER cards only — physical products hide this line. */
+    rollingLine: "Rút sau {n} vòng cược",
+    /** GLOBAL redemption tally (social proof) — `{n}` = total redeems across all users. */
+    redeemedCount: "Đã đổi {n} lượt",
+    /** breaker reopen-time value for the paused dialog `{when}` slot (mock). */
+    pausedReopen: "ít phút nữa",
+    /** RUNNING-cooldown label — precedes the live countdown ("wait FOR full rate"). */
+    fullRateAfter: "Thời gian chờ",
+    /** cooldown ZERO-state label — only shown once the timer hits zero. */
+    fullRateReady: "Có thể đổi ngay",
+    /* terse card-face CTAs (verbose both-numbers button lives in the dialog). */
+    ctaRedeem: "Đổi ngay",
+    /** disabled CTA when cost > balance; `{short}` = formatCount(basePoints − balance). */
+    ctaInsufficient: "Thiếu {short} điểm",
+    ctaSoldOut: "Tạm hết hàng",
+    /** single top-left tag on a sold-out card (ONE sold-out signal set). */
+    soldOutTag: "Tạm hết",
+    ctaLoginToRedeem: "Đăng nhập để đổi",
+    /* TEMPORARY limit-lock (at_floor) card state — distinct from permanent Hết hàng.
+     * The member hit the escalation cap; a clean wait returns them to base/100%. */
+    ctaLimitReached: "Hết lượt đổi", // disabled CTA at the redemption cap; the cooldown chip stays visible
+    /* dialog EARLY-state label for the passive-alternative countdown (frames the
+     * timer as the ALTERNATIVE to claiming now, not a promise on this claim). */
+    waitForBaseLabel: "Chờ hết giờ để về mức thường",
+  },
+
+  /* Claim dialog — VERBATIM from PRD §7.3.1. Compliance-critical: no string may
+   * imply reduced value for an early claim (only more points, same item/face);
+   * the escalated button shows BOTH points and face; every escalated/at-cap/
+   * unlimited/insufficient state carries a "Chờ để được full rate" action. */
+  claim: {
+    fullRate:
+      "Điểm cần dùng {points} · Bạn nhận {cash} · Tỷ lệ 100% ✓ · Thời gian chờ đã đặt lại hoàn toàn.",
+    earlyEscalated:
+      "⚠️ Bạn đang đổi sớm — trả nhiều điểm hơn cho cùng số tiền. Điểm {points} · Bạn nhận {cash} (không đổi) · Tỷ lệ {pct}% (bước {k}) · Thời gian chờ bắt đầu lại từ đầu.",
+    atFloor:
+      "⚠️ Tỷ lệ thấp nhất cho gói này — bạn đang trả nhiều điểm nhất cho số tiền này và sẽ không tăng thêm. Điểm {points} · Bạn nhận {cash} (không đổi). Đổi tiếp giữ nguyên mức này và đặt lại thời gian chờ. Chờ hết chu kỳ chờ để về {base_points} điểm.",
+    unlimitedDeep:
+      "⚠️ Gói này không giới hạn số lần đổi. Mỗi lần đổi sớm tốn nhiều điểm hơn cho cùng {cash} — không có mức sàn. Điểm hiện tại {points} · Bạn đã dùng {cycle_points} điểm trong chu kỳ này. Chờ hết thời gian để đặt lại về {base_points} điểm.",
+    insufficient:
+      "Bạn không đủ điểm cho lần đổi sớm (tăng cấp) này — nó tốn nhiều điểm hơn. Chờ về full rate để tốn ít điểm hơn ({base_points}).",
+    paused:
+      "Đổi thưởng tạm dừng và sẽ mở lại sau {when}. Tỷ lệ và thời gian chờ của bạn không thay đổi — vị trí của bạn giữ nguyên trong lúc tạm dừng.",
+    resetConfirm:
+      "Đã khôi phục full rate ✓ — bạn đã trả {points} điểm cho {cash}.",
+    committedEscalated:
+      "Đã đổi ✓ — {points} điểm → {cash}. Chờ hết thời gian chờ để lần sau được full rate (ít điểm hơn).",
+    /* Buttons, controls (PRD §7.3.1). */
+    btnFullRate: "Đổi {cash}",
+    btnEscalated: "Đổi ngay ({points} điểm → {cash})",
+    btnWait: "Chờ để được full rate",
+    btnCancel: "Hủy",
+    btnConfirm: "Xác nhận đổi",
+    /* gold confirm label in the EARLY dialog (immediate-claim choice vs the wait). */
+    btnEarlyConfirm: "Đổi ngay",
+    /* ---- dialog copy (extracted from hardcoded JSX + the case-2 disclosure fix) ---- */
+    /** modal title (base + early). */
+    dialogTitle: "Xác nhận đổi quà",
+    /** header muted label before the gold face-value amount. */
+    valueLabel: "Trị giá",
+    /** hero cost label in the dialog (same base + early). */
+    costLabel: "Điểm cần dùng",
+    /** small unit beside the hero numeral (styled independently of store.pointsUnit). */
+    costUnit: "điểm",
+    /** CASE-2 line A — costs-more only (line B owns the reset fact; no overlap). */
+    earlyWarn: "Bạn đang đổi sớm nên cần nhiều điểm hơn mức thường.",
+    /** CASE-2 line B — the explicit cooldown-RESET fact (the disclosure gap fix). */
+    earlyResetWarn: "Đổi bây giờ sẽ đặt lại thời gian chờ về từ đầu.",
+    /** honest base-cost comparison under the escalated hero numeral; `{points}` = `N điểm`. */
+    /** quiet subline under the hero cost in the BASE dialog only. */
+    baseSubline: "Mức thường · Tỷ lệ 100%",
+    /* cost-card breakdown rows (under a divider). */
+    rowBalanceNow: "Số dư hiện tại",
+    rowBalanceAfter: "Sau khi đổi",
+    rowRolling: "Điều kiện rút",
+    /** rolling row value — `{n}` = rolling multiplier (voucher only). */
+    rollingValue: "{n} vòng cược",
+    /** amber caution callout in the EARLY dialog — names BOTH point figures + reset.
+     *  `{time}` = live countdown to the running cooldown. */
+    earlyCallout:
+      "Thời gian chờ còn {time}. Nếu đổi ngay, bạn sẽ cần dùng nhiều điểm hơn và thời gian chờ bị đặt lại từ đầu.",
+    /** neutral hint under the (red) hero cost when unaffordable (replaces blue banner). */
+    insufficientHint: "Chờ về mức thường để cần ít điểm hơn.",
+    /* success receipt (extracted from hardcoded JSX). */
+    successTitle: "Đổi quà thành công",
+    /** success subline — `{name}` = the redeemed product name (bold in JSX). */
+    successSub: "{name} đã được thêm vào ví quà của bạn.",
+    successPointsRow: "Điểm đã dùng",
+    /** remaining-balance pill label after a successful redeem (number = balance − charged). */
+    successBalanceLeft: "Số dư còn lại",
+    btnClose: "Xong",
+  },
+
   cashback: {
     title: "Hoàn trả",
     claimable: "Có thể nhận",
@@ -222,6 +330,61 @@ export const vi = {
     kindDeposit: "Nạp tiền",
     kindEvent: "Sự kiện",
     kindSystem: "Hệ thống",
+  },
+
+  /* Member message center (/tin-nhan). Reuses notifications.markAllRead +
+   * markRead + the relative-time units above (no duplication). */
+  messages: {
+    title: "Tin nhắn",
+    /** subtitle unit; rendered as `${n} tin nhắn chưa đọc`. */
+    subtitleUnread: "tin nhắn chưa đọc",
+    subtitleAllRead: "Đã đọc tất cả",
+    filterAll: "Tất cả",
+    filterUnread: "Chưa đọc",
+    filterRead: "Đã đọc",
+    filterLabel: "Lọc tin nhắn",
+    deleteAll: "Xóa tất cả",
+    empty: "Chưa có tin nhắn",
+    emptyHint: "Các tin nhắn mới sẽ xuất hiện tại đây.",
+    guestPrompt: "Đăng nhập để xem tin nhắn của bạn.",
+  },
+
+  /* Referral / Giới thiệu page (/gioi-thieu) + shared Đại lý (/dai-ly) bands.
+   * Plain-VN labels for the J9 refer-page rebuild. Truthful-only: no fabricated
+   * percent or reward figure lives here — only field/section labels. */
+  referral: {
+    pageHeading: "Giới thiệu bạn bè",
+    kpiPanelTitle: "Tổng quan thưởng",
+    /* J9 奖励总览 — exact labels (#1 is a COUNT of valid new referrals). */
+    kpiStat1: "Giới thiệu hợp lệ trong tháng",
+    kpiStat2: "Cược hợp lệ của tôi hôm nay",
+    kpiStat3: "Bạn bè cược tích lũy hôm nay",
+    kpiStat4: "Hoa hồng dự kiến ngày mai",
+    invitePanelTitle: "Công cụ mời bạn bè",
+    inviteCodeLabel: "Mã giới thiệu",
+    inviteLinkLabel: "Liên kết giới thiệu",
+    inviteCopy: "Sao chép",
+    inviteCopied: "Đã sao chép",
+    inviteSaveQr: "Lưu mã QR",
+    invitePosterTitle: "Ảnh mời / mã QR",
+    invitePosterHint: "Ảnh chia sẻ sẽ hiển thị tại đây khi sẵn sàng.",
+    inviteGuestNote: "Đăng nhập để lấy mã giới thiệu của riêng bạn.",
+    commissionPanelTitle: "Hoa hồng giới thiệu",
+    commissionHeldLabel: "Hoa hồng hiện có",
+    commissionDetailsLink: "Chi tiết hoạt động",
+    commissionRowTurnover: "Doanh thu",
+    commissionRowCommission: "Hoa hồng",
+    commissionGuestPrompt: "Đăng nhập để xem hoa hồng giới thiệu của bạn.",
+    commissionEmptyTitle: "Chưa có hoa hồng",
+    commissionEmptyMessage:
+      "Khi bạn bè được giới thiệu phát sinh doanh thu, hoa hồng sẽ hiển thị tại đây.",
+    stepsHeading: "Cách hoạt động",
+    stepsIntro:
+      "Bạn chưa có bạn bè được giới thiệu — hãy mời bạn bè hoàn thành các bước để nhận thưởng.",
+    step1: "Gửi mã QR hoặc liên kết mời",
+    step2: "Bạn bè đăng ký và đăng nhập",
+    step3: "Bạn bè tham gia chơi",
+    step4: "Nhận hoa hồng theo điều khoản",
   },
 
   /* J9-exact footer — 3-column band + copyright. */

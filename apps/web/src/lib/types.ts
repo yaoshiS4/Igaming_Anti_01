@@ -176,14 +176,62 @@ export interface Promo {
   href: string;
 }
 
+/* ----------------------------------------------------------------------------
+ * PRODUCT (points store × restart-cooldown, STORE-cuahangdiem plan §1.1)
+ * ----------------------------------------------------------------------------
+ * Points → ITEM analog of the PRD's points → CASH restart-cooldown mechanic.
+ * The house always pays the FULL item/face; only the POINT cost escalates on
+ * an early (cooldown-running) claim. `rolling`/`stock` are owner catalog gates
+ * rendered as card-face disabled states, NEVER as an in-dialog claim refusal
+ * (§0.2). Derived point-cost/branch math lives in lib/store/escalation.ts.
+ * --------------------------------------------------------------------------*/
 export interface Product {
+  // — identity / display —
   id: string;
   name: string;
   imageSrc: string; // asset slot
-  pointsPrice: number;
+  /** catalog family — drives the top-left tag AND the rolling disclosure:
+   *  'voucher' → shows the "Rút sau {n} vòng cược" card line + the "Điều kiện rút"
+   *  dialog row; 'product' (physical goods) → hides BOTH (a phone has no rolling). */
+  category: "voucher" | "product";
+
+  // — owner catalog gates (NEW, not in PRD; card-face display gates only) —
+  /** withdrawal condition, INFO only: rolling MULTIPLIER the user must wager AFTER
+   *  redeeming before they can withdraw (e.g. 3 → "3 vòng cược"). Never a gate. */
+  rollingRequired: number;
+  /** total units minted for this item */
+  stockTotal: number;
+  /** units still available; 0 = sold out (item analog of PACKAGE_REMOVED).
+   *  Drives the sold-out state ONLY — the remaining count is never displayed. */
+  stockRemaining: number;
+  /** GLOBAL count of successful redemptions of this item across ALL users
+   *  (community social-proof; NOT this user's count). Display-only, guest-safe. */
   redeemedCount: number;
-  /** ISO deadline for limited offers; null = always available */
-  endsAt: string | null;
+
+  // — PRD escalation config (§4.2 owner inputs) —
+  /** P — the item's face value / reward, paid IN FULL every claim (for disclosure). */
+  faceValue: MoneyValue;
+  /** base points at full rate = points_1 = P/r0 (step-1 cost). Replaces flat pointsPrice. */
+  basePoints: number;
+  /** q — repeat fraction, 0 < q ≤ 1. Each early claim costs 1/q× more points. */
+  repeatFraction: number;
+  /** CD in minutes — fixed cooldown length; restarts the clock on any grant. */
+  cooldownMinutes: number;
+  /** M — max escalation steps; null = unlimited (no floor). */
+  maxSteps: number | null;
+
+  // — PER-USER runtime state (mock the server row; §5 gates) —
+  // IMPORTANT: these are per-user fields — in a real API they MUST come from an
+  // authenticated endpoint, never the public catalog, and are NEVER rendered on
+  // the card face (the card is guest-safe). The dialog consumes them at claim.
+  /** esc_step the NEXT claim would land on given the clock: 1 = full rate/BASE. */
+  currentStep: number;
+  /** ISO absolute expiry of the running cooldown; null = not running → next claim is BASE. */
+  cooldownEndsAt: string | null;
+  /** how many times THIS user has redeemed it (dialog cap logic only; never on the card). */
+  userRedeemedCount: number;
+  /** cumulative points burned this cycle — REQUIRED by claim.unlimited_deep (FR-42). */
+  cyclePointsBurned: number;
 }
 
 export interface Referral {
@@ -201,8 +249,10 @@ export interface Commission {
 }
 
 export interface ReferralKpi {
-  todayTurnover: MoneyValue;
-  currentCommission: MoneyValue;
+  effectiveInvites: number; // J9 本月截至今日有效新增 — valid new referrals this month to-date (COUNT, not money)
+  myValidBetsToday: MoneyValue; // J9 我今日有效投注(CN) — my valid bets today
+  friendsTurnoverToday: MoneyValue; // J9 今日好友累计投注(CN) — friends' cumulative bets today
+  forecastTomorrow: MoneyValue; // J9 预计明天佣金(CN) — forecast commission tomorrow
 }
 
 export interface Vertical {

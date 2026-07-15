@@ -1,4 +1,39 @@
-/* ProductGrid — points catalog. Tokens only; @375 2-up → desktop 4-up. */
+/* ProductCard / ProductGrid — points catalog. Tokens only; @360 no overflow.
+ * Grid ramp: 2-up (base) → 3-up (@768) → 4-up (@1024). The image bleeds to the
+ * card edge; a coin badge floats top-right; the body below carries title, value,
+ * withdrawal condition, a live cooldown chip, and a floored CTA. */
+
+/* ---- Filter tabs (client-side, filter by category) ---------------------- */
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+.tab:hover {
+  color: var(--text-hi);
+}
+
+.tabActive {
+  color: var(--brand-accent);
+  background: var(--surface-2);
+  border-color: var(--brand-accent-hairline);
+}
 
 .grid {
   display: grid;
@@ -29,59 +64,265 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-3);
+  gap: 0; /* media + body own their spacing; image bleeds full-width */
+  padding: 0;
   width: 100%;
+  height: 100%; /* fill the stretched cell → equal card heights across the row */
+  min-width: 0;
+  overflow: hidden;
 }
 
-.meta {
+/* ---- Thumbnail ---------------------------------------------------------- */
+.media {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Sold-out treatment — desaturate + dim the thumbnail. */
+.mediaSoldOut .img {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+/* Points coin pill — top-RIGHT corner badge: the BASE (original) points price. */
+.pointsBadge {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2) 2px var(--space-1);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--canvas) 78%, transparent);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--brand-accent-hairline);
+  color: var(--brand-accent);
+  font-weight: var(--weight-bold);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* The gold "P" coin mark inside the badge (gold gradient, dark on-accent glyph). */
+.pMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35em;
+  height: 1.35em;
+  border-radius: var(--radius-pill);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
+  font-size: 0.78em;
+  font-weight: var(--weight-bold);
+}
+
+/* Top-LEFT tag — category ("Voucher tiền"/"Sản phẩm"), OR the single "Tạm hết"
+   sold-out signal (one sold-out tag, no third string). */
+.categoryTag {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  line-height: 1.4;
+}
+
+/* Branded fallback tile when the product image fails to load — never a dropzone.
+   Obsidian bg + gold hairline + centered muted gift glyph over the product name. */
+.fallbackTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  height: 100%;
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--brand-accent-hairline);
+  text-align: center;
+}
+
+.fallbackGlyph {
+  color: var(--brand-accent);
+  opacity: 0.7;
+}
+
+.fallbackName {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  line-height: var(--lh-tight);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---- Body --------------------------------------------------------------- */
+.body {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: var(--space-4);
 }
 
-.name {
-  font-size: var(--t-sm);
+/* Reward name — up to two lines, then ellipsis (keeps card rhythm). */
+.title {
+  margin: 0;
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
   color: var(--text-hi);
   line-height: var(--lh-tight);
-  font-weight: var(--weight-semi);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.priceRow {
+/* Reward value — the amount the member receives IN FULL (gold accent figure). */
+/* Value + rolling share ONE row — value left (gold), rolling right (muted). */
+.valueRow {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
-  flex-wrap: wrap;
+  min-width: 0;
 }
 
-.price {
-  font-family: var(--brand-font-num);
-  font-variant-numeric: tabular-nums;
+.value {
+  flex: none;
   font-size: var(--t-h3);
   font-weight: var(--weight-bold);
   color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-tight);
 }
 
-.unit {
+/* Withdrawal condition — "Rút sau N vòng cược" (VOUCHERS only; info only). */
+.rollingLine {
+  margin: 0;
+  flex: 0 1 auto;
+  min-width: 0;
   font-size: var(--t-micro);
-  font-weight: var(--weight-reg);
+  line-height: var(--lh-tight);
+  color: var(--text-mid);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+/* Reserved empty slot on PHYSICAL-product cards — matches the voucher rolling
+   line's vertical footprint (1 line of --t-sm) so value/CTA baselines stay
+   pixel-aligned across a mixed voucher+product row. */
+.rollingSlot {
+  display: block;
+  font-size: var(--t-sm);
+  line-height: var(--lh-tight);
+  min-height: 1em;
+}
+
+/* Live cooldown — a dark-glass chip OVERLAID on the thumbnail (bottom-left) so
+   the card body stays identical across every card: equal heights, floored CTAs.
+   Amber-accented "waiting" affordance; present only while the cooldown runs. */
+.cooldownChip {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  max-width: calc(100% - var(--space-4));
+  padding: 3px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--canvas) 72%, transparent);
+  backdrop-filter: blur(6px);
+  border: 1px solid color-mix(in srgb, var(--caution) 45%, transparent);
+  font-size: var(--t-micro);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.cooldownGlyph {
+  flex: none;
+  color: var(--caution);
+}
+
+.cooldownLabel {
   color: var(--text-mid);
 }
 
-.redeemed {
-  font-size: var(--t-micro);
-  color: var(--text-mid);
+.cooldownClock {
+  color: var(--caution);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
 }
 
-.timer {
+/* ---- TEMPORARY limit-lock (at_floor) body status ------------------------
+   Sits ABOVE .cta inside .body so equal-height + floored CTA are preserved.
+   Amber semantic (allowed-but-costs-more cap), NOT a loss/red. Full-color thumb
+   stays — this is a temporary "come back later", distinct from grayscale Hết hàng. */
+.limitStatus {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: var(--t-micro);
+  padding-top: var(--space-2);
+  border-top: 1px solid color-mix(in srgb, var(--caution) 30%, var(--border));
+  font-size: var(--t-sm);
   color: var(--text-mid);
 }
 
-.timerLabel {
+.limitGlyph {
+  flex: none;
+  color: var(--caution);
+}
+
+.limitStatusText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.limitStatusLine {
+  line-height: var(--lh-tight);
+  color: var(--text-mid);
+}
+
+.limitClock {
+  color: var(--caution);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.limitHelper {
+  font-size: var(--t-micro);
+  line-height: var(--lh-tight);
   color: var(--text-dim);
+}
+
+/* CTA pinned to the card floor — equalizes the button baseline across the row. */
+.cta {
+  margin-top: auto;
 }

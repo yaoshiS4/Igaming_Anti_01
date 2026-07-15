@@ -20,6 +20,7 @@ import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { getNotifications } from "@/lib/mock";
 import type { Notification, NotificationKind } from "@/lib/types";
 import { vi } from "@/lib/i18n";
+import { relativeTime } from "@/lib/format";
 import { Icon, type IconName } from "@/ui/Icon/Icon";
 import styles from "./NotificationBell.module.css";
 
@@ -37,18 +38,6 @@ const KIND_LABEL: Record<NotificationKind, string> = {
   event: vi.notifications.kindEvent,
   system: vi.notifications.kindSystem,
 };
-
-/** Plain-VN relative time from an ISO instant against the client clock. The
- *  source `at` is the server clock; this is a display-only humanization. */
-function relativeTime(iso: string, now: number = Date.now()): string {
-  const diffMin = Math.max(0, Math.round((now - new Date(iso).getTime()) / 60_000));
-  if (diffMin < 1) return vi.notifications.justNow;
-  if (diffMin < 60) return `${diffMin} ${vi.notifications.minutesAgo}`;
-  const diffHr = Math.round(diffMin / 60);
-  if (diffHr < 24) return `${diffHr} ${vi.notifications.hoursAgo}`;
-  const diffDay = Math.round(diffHr / 24);
-  return `${diffDay} ${vi.notifications.daysAgo}`;
-}
 
 function unreadLabel(count: number): string {
   if (count === 0) return vi.notifications.allRead;

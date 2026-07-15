@@ -52,8 +52,6 @@ export default async function WalletPage() {
 
   return (
     <section className={styles.page} aria-label={vi.wallet.title}>
-      <h1 className={styles.heading}>{vi.wallet.title}</h1>
-
       <WalletTabs
         balance={balance}
         available={{ amount: wallet.balance.amount, currency: "VND" }}

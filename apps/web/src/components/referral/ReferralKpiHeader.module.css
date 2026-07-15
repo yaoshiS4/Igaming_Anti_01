@@ -1,13 +1,27 @@
-/* ReferralKpiHeader — KPI strip. Tokens only; mobile-first @375. */
+/* ReferralKpiHeader — reward-overview band. Tokens only; mobile-first @375.
+ * J9 .top_right (the WIDER 570px reward-overview panel): a panel title over a
+ * stat row. KPI numbers render near-WHITE (--text-hi), never gold — gold is
+ * chrome/CTA only (tokens §9); J9 .bonus_num is #fff. */
 
 .card {
-  padding: var(--space-4);
-}
-
-.row {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  padding: var(--card-pad);
+}
+
+/* panel title — "Tổng quan thưởng". t-h1 24px, weight-semi, near-white. */
+.panelTitle {
+  font-size: var(--t-h1);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+  margin-bottom: var(--space-5);
+}
+
+/* 4 KPIs in a 2×2 grid (J9 奖励总览 — 2 columns × 2 rows). */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5) var(--space-4);
 }
 
 .stat {
@@ -17,31 +31,35 @@
   min-width: 0;
 }
 
+/* icon + label row (J9 shows a small gold icon beside each stat label). */
+.statHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+.statIcon {
+  flex: 0 0 auto;
+  color: var(--brand-accent);
+}
+
 .label {
   font-size: var(--t-sm);
   color: var(--text-mid);
+  line-height: var(--lh-tight);
+  min-width: 0;
 }
 
 .value {
   color: var(--text-hi);
 }
 
-.divider {
-  display: none;
-}
-
-@media (min-width: 640px) {
-  .row {
-    flex-direction: row;
-    align-items: stretch;
-  }
-  .stat {
-    flex: 1;
-  }
-  .divider {
-    display: block;
-    width: 1px;
-    align-self: stretch;
-    background: var(--border);
-  }
+/* COUNT value (#1 本月截至今日有效新增) — a plain number, matched to the money
+ * num-lg size, near-white (gold is chrome only). */
+.countValue {
+  font-family: var(--brand-font-num);
+  font-size: var(--t-num-lg);
+  font-weight: var(--weight-bold);
+  line-height: 1.1;
+  color: var(--text-hi);
 }

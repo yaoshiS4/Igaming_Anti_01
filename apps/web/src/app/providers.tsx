@@ -16,7 +16,7 @@ import { AuthModalProvider } from "@/lib/auth/modal";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <MockAuthProvider initialState="guest">
+    <MockAuthProvider initialState="tiered">
       <AuthModalProvider>{children}</AuthModalProvider>
     </MockAuthProvider>
   );

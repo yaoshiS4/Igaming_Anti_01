@@ -1,10 +1,13 @@
-/* InviteTools — code/link/poster. Tokens only; mobile-first @375. */
+/* InviteTools — code/link/QR. Tokens only; mobile-first @375.
+ * J9 referral-method panel: code+link stacked LEFT (~71%), white QR tile RIGHT.
+ * The 2-col split is gated at the band breakpoint (640px) — it collapses to a
+ * stack in /dai-ly's narrow column (beside the 304px rail). */
 
 .card {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  padding: var(--space-4);
+  padding: var(--card-pad);
 }
 
 .title {
@@ -13,10 +16,18 @@
   font-weight: var(--weight-semi);
 }
 
+/* J9 2-col: .box_left (fields) + .box_right (QR). Stacks @375 / narrow column. */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
 .fields {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  min-width: 0;
 }
 
 .field {
@@ -40,17 +51,23 @@
   border: 1px solid var(--border);
 }
 
+/* code value — brand-accent GOLD, tabular (J9 .copy_conte Roboto 20px/500). */
 .code {
   flex: 1;
   font-family: var(--brand-font-num);
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.02em;
   font-size: var(--t-h3);
   font-weight: var(--weight-bold);
   color: var(--brand-accent);
   min-width: 0;
+  /* clip rather than overflow onto the copy button (the broken overlap). */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* link value — white-ish, ellipsised (J9 .copy_conte.url white-90 12px). */
 .link {
   flex: 1;
   font-size: var(--t-sm);
@@ -61,48 +78,78 @@
   min-width: 0;
 }
 
-.posterRow {
+/* RIGHT column — white QR tile + label + save action. */
+.qrCol {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--surface-2);
-  border: 1px dashed var(--border);
+  gap: var(--space-2);
 }
 
-.posterSlot {
+/* the single WHITE block on the page (J9 .box_right .QR-code: #fff, radius 8px,
+ * flex-center). A QR must sit on white to scan. */
+.qrTile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  flex: 0 0 auto;
+  border-radius: var(--radius-md);
+  background: var(--qr-surface);
+}
+
+/* real QR fills ~90% of the white tile (J9 .qr_box 90%). */
+.qrImg {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+/* honest placeholder INSIDE the white tile — a muted grid glyph, never a fake
+ * QR. Dark ink on the white surface so it reads as an empty scan slot. */
+.qrPlaceholder {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  flex: 0 0 auto;
-  border-radius: var(--radius-md);
-  background:
-    linear-gradient(135deg, var(--surface-3), var(--surface));
-  color: var(--text-mid);
+  color: var(--shell);
+  opacity: 0.35;
 }
 
-.posterCopy {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  min-width: 0;
-}
-
-.posterTitle {
+.qrTitle {
   font-size: var(--t-sm);
   color: var(--text-hi);
   font-weight: var(--weight-semi);
 }
 
-.posterHint {
+.qrHint {
   font-size: var(--t-micro);
   color: var(--text-mid);
+  text-align: center;
+  /* wrap WITHIN the QR column — a wide max-width here balloons the flex:0-0-auto
+   * column and crushes the code/link fields beside it. */
+  max-width: 100%;
 }
 
 .guestNote {
   font-size: var(--t-sm);
   color: var(--text-mid);
+}
+
+/* ≥640px: J9 2-col — fields LEFT (~71%) / QR tile RIGHT. The gate is the BAND
+ * width so /dai-ly's narrow column keeps the stack (the fields never crush). */
+@media (min-width: 640px) {
+  .layout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+  .fields {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .qrCol {
+    flex: 0 0 auto;
+    width: 116px; /* cap the QR column so the code/link fields keep their width */
+  }
 }

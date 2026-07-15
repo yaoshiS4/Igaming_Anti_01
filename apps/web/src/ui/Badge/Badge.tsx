@@ -13,6 +13,7 @@ export type BadgeTone =
   | "info"
   | "win"
   | "loss"
+  | "caution"
   | "danger";
 
 export interface BadgeProps {

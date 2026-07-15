@@ -1,25 +1,136 @@
-/* RedeemDialog — confirm/result. Tokens only; equal-salience result. */
+/* RedeemDialog — confirm / success. Tokens only. Cost is the hero of the confirm
+ * step; success is a clean receipt. No win-juice, no reduced-value cues. */
 
 .confirm {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-4); /* premium rhythm — hero cost breathes above the callout */
 }
 
-.product {
+/* ---- Item header (gold-P coin + name + value) --------------------------- */
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* Gold-P coin — rounded-square gold gradient with a dark on-accent "P". */
+.coin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
   font-size: var(--t-h3);
-  color: var(--text-hi);
-  font-weight: var(--weight-semi);
+  font-weight: var(--weight-bold);
+  line-height: 1;
 }
 
-.rows {
+.itemMeta {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  margin: 0;
+  gap: 2px;
+  min-width: 0;
 }
 
-.row {
+.itemName {
+  margin: 0;
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  line-height: var(--lh-tight);
+}
+
+.itemValue {
+  margin: 0;
+  line-height: var(--lh-tight);
+}
+
+/* "Trị giá" muted label. */
+.valueLabel {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+/* The gold face-value amount. */
+.valueAmount {
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Cost — hero fact on a NEUTRAL card (no muddy amber fill) ----------- */
+.cost {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+/* Label left, big number right — receipt-clean. */
+.costMain {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.costLabel {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+/* The HERO numeral — dominates every other figure in the dialog. State-driven
+   colour: --text-hi base / --caution early / --loss unaffordable. */
+.costValue {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  font-size: var(--t-hero);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-tight);
+}
+
+/* Small unit beside the hero numeral — quiet, never competes with the number. */
+.costUnit {
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-mid);
+}
+
+/* BASE quiet subline (Mức thường · Tỷ lệ 100%). */
+.baseSubline {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+/* EARLY honest base-cost comparison, right-aligned under the escalated hero. */
+.costCompare {
+  display: block;
+  margin-top: var(--space-1);
+  text-align: right;
+  font-size: var(--t-sm);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Cost-card breakdown (divider + label/value rows) ------------------- */
+.costDivider {
+  height: 1px;
+  margin: var(--space-3) 0;
+  background: var(--border);
+}
+
+.costRow {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -27,65 +138,181 @@
   font-size: var(--t-sm);
 }
 
-.row dt {
+.costRow + .costRow {
+  margin-top: var(--space-2);
+}
+
+.costRowLabel {
   color: var(--text-mid);
 }
 
-.row dd {
-  margin: 0;
-  font-family: var(--brand-font-num);
-  font-variant-numeric: tabular-nums;
+.costRowValue {
   color: var(--text-hi);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
 }
 
-.row dd[data-low="true"] {
+/* "Sau khi đổi" — the resulting balance, in gold. */
+.costRowAfter {
+  color: var(--brand-accent);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Escalated (early) — colour lives on the NUMBER + a hairline, not a fill. */
+.cost[data-tone="caution"] {
+  border-color: color-mix(in srgb, var(--caution) 45%, var(--border));
+}
+.cost[data-tone="caution"] .costValue {
+  color: var(--caution);
+}
+
+/* Unaffordable — red. */
+.cost[data-tone="alert"] {
+  border-color: color-mix(in srgb, var(--loss) 45%, var(--border));
+}
+.cost[data-tone="alert"] .costValue {
   color: var(--loss);
 }
 
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--space-3);
+/* BASE reassurance line — value intact + reset is normal. */
+.reassure {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
 }
 
+/* ---- EARLY caution callout — the TWO explicit facts (costs-more + reset) --
+   Amber, subordinate to the hero: a left accent + hairline, no muddy fill. */
+.callout {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid color-mix(in srgb, var(--caution) 40%, var(--border));
+  border-left: 2px solid color-mix(in srgb, var(--caution) 70%, transparent);
+  border-radius: var(--radius-md);
+}
+
+.calloutGlyph {
+  flex: none;
+  margin-top: 1px;
+  color: var(--caution);
+}
+
+.calloutLine {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+  min-width: 0;
+}
+
+/* The live countdown spliced into the callout copy — amber, emphasised. */
+.calloutClock {
+  color: var(--caution);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Unaffordable — one quiet neutral hint under the red hero (no blue banner). */
+.insufficientHint {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+}
+
+/* ---- Info banner (paused) ---------------------------------------------- */
+.banner {
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  color: var(--text-hi);
+  background: color-mix(in srgb, var(--info) 12%, transparent);
+  border-color: color-mix(in srgb, var(--info) 36%, transparent);
+}
+
+/* ---- Actions — two buttons, ONE line, equal width ---------------------- */
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+.actions > * {
+  flex: 1 1 0;
+}
+
+/* ---- SUCCESS receipt ---------------------------------------------------- */
 .result {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--space-3);
-  padding: var(--space-3) 0;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
 }
 
-.iconOk,
-.iconErr {
+/* GOLD success badge — on-brand (gold ring + gold check), NEVER green/--win. */
+.successBadge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--brand-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand-accent) 40%, transparent);
+  color: var(--brand-accent);
 }
 
-/* equal salience — success uses --win, failure uses --error. No win-juice. */
-.iconOk {
-  background: var(--tint);
-  color: var(--win);
+.successHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
 }
 
-.iconErr {
-  background: var(--tint);
-  color: var(--error);
+.successTitle {
+  margin: 0;
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
 }
 
-.resultTitle {
-  font-size: var(--t-h3);
+.successSub {
+  margin: 0;
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+}
+
+/* Product name emphasised inside the success subline. */
+.successName {
   color: var(--text-hi);
   font-weight: var(--weight-semi);
 }
 
-.resultBody {
+/* Remaining-balance pill — muted label + gold number. */
+.successBalance {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+}
+
+.successBalanceLabel {
   font-size: var(--t-sm);
   color: var(--text-mid);
-  line-height: var(--lh-body);
+}
+
+.successBalanceValue {
+  font-size: var(--t-body);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
 }
