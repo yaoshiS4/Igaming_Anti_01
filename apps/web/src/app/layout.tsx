@@ -12,8 +12,23 @@
  * ==========================================================================*/
 
 import type { Metadata, Viewport } from "next";
+import { Cinzel } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+
+/* Luxury display serif for the /vip rebuild (headings / tier names / hero
+ * numerals). Exposed as the CSS var --font-cinzel and consumed via the
+ * --brand-font-display token (tokens.css), which carries a Georgia/serif
+ * fallback so runtime degrades gracefully if the font can't load.
+ * NOTE: next/font/google fetches at BUILD time — this reintroduces a network
+ * dependency to fonts.googleapis.com and WILL break a truly-offline build.
+ * Self-hosting via next/font/local is the fallback plan if CI must be offline. */
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  variable: "--font-cinzel",
+  display: "swap",
+});
 import { AppShell, Footer } from "@/components/layout";
 import { QuickActionRail } from "@/components/layout/QuickActionRail";
 
@@ -33,7 +48,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi" data-brand="yaobet" data-theme="obsidian">
+    <html
+      lang="vi"
+      data-brand="yaobet"
+      data-theme="obsidian"
+      className={cinzel.variable}
+    >
       <body>
         <Providers>
           <AppShell footer={<Footer />}>{children}</AppShell>

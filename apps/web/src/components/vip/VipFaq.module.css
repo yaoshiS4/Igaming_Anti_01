@@ -1,0 +1,130 @@
+/* ============================================================================
+ * Luxury VIP — VipFaq. Single-open accordion.
+ * Warm near-black rows on hairline borders; open row gets a faint gold film,
+ * a gold left accent bar, a gold question and a rotated chevron. Body reveals
+ * via a max-height transition.
+ * ==========================================================================*/
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.item {
+  position: relative;
+  border: 1px solid var(--vip-hairline);
+  border-radius: var(--vip-radius-control);
+  background: var(--vip-panel-bg);
+  overflow: hidden;
+  transition:
+    background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+/* Gold left accent bar — off by default, fades in when the row opens. */
+.item::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--vip-gold-grad);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-standard);
+}
+
+.item:hover {
+  border-color: color-mix(in srgb, var(--vip-gold-mid) 24%, transparent);
+}
+
+.itemOpen {
+  background: var(--vip-gold-tint);
+  border-color: color-mix(in srgb, var(--vip-gold-mid) 34%, transparent);
+}
+
+.itemOpen::before {
+  opacity: 1;
+}
+
+.question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  padding: var(--space-4) var(--space-5);
+  border: 0;
+  background: transparent;
+  color: var(--vip-text-primary);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  line-height: 1.4;
+  text-align: left;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+.question:hover {
+  color: var(--vip-gold-end);
+}
+
+.questionOpen,
+.questionOpen:hover {
+  color: var(--vip-gold-mid);
+}
+
+.chevron {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--vip-gold-mid) 30%, transparent);
+  color: var(--vip-gold-mid);
+  font-size: var(--t-h3);
+  line-height: 1;
+  transition:
+    transform var(--dur-slow) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+  border-color: color-mix(in srgb, var(--vip-gold-mid) 55%, transparent);
+  background: var(--vip-gold-tint);
+}
+
+.answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--dur-slow) var(--ease-standard);
+  color: var(--vip-text-secondary);
+}
+
+.answerOpen {
+  max-height: 520px;
+}
+
+.answerInner {
+  padding: 0 var(--space-5) var(--space-5);
+  font-size: var(--t-sm);
+  line-height: 1.65;
+  color: var(--vip-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .question {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--t-sm);
+  }
+
+  .answerInner {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+}

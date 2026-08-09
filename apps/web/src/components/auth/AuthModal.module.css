@@ -156,7 +156,7 @@
         transparent 60%
       ),
       var(--surface-3);
-    border-right: 1px solid var(--gold-hairline);
+    border-right: 1px solid var(--brand-accent-hairline);
   }
 
   .brandTop {

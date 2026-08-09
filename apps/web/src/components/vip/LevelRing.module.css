@@ -1,0 +1,43 @@
+/* SVG luxury-gold level ring. */
+.ring {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+
+.track {
+  stroke: var(--vip-hairline);
+  fill: none;
+}
+
+.arc {
+  stroke: url(#vipRingGrad);
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dasharray var(--dur-slow) var(--ease-entrance);
+}
+
+/* gradient stops (token-referenced, no literals) */
+.gradStart {
+  stop-color: var(--vip-gold-start);
+}
+.gradMid {
+  stop-color: var(--vip-gold-mid);
+}
+.gradEnd {
+  stop-color: var(--vip-gold-end);
+}
+
+.word {
+  fill: var(--vip-text-muted);
+  font-family: var(--brand-font-body);
+  font-weight: var(--weight-semi);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.num {
+  fill: var(--vip-gold-mid);
+  font-family: var(--brand-font-display);
+  font-weight: var(--weight-bold);
+}

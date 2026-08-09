@@ -57,8 +57,8 @@
 }
 
 .active {
-  color: var(--text-on-gold);
-  background: var(--gold-grad);
+  color: var(--brand-on-accent);
+  background: var(--brand-accent-grad);
 }
 
 .tabLabel {

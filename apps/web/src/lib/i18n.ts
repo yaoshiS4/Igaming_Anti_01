@@ -387,6 +387,46 @@ export const vi = {
     step4: "Nhận hoa hồng theo điều khoản",
   },
 
+  /* Luxury VIP program (/vip rebuild). VI source-of-truth copy keys. The
+   * BILINGUAL source the client island actually consumes lives in
+   * src/lib/vip/copy.ts (getVipCopy) since this catalog is single-locale VI;
+   * keep the two VI sets in sync. */
+  vip: {
+    allTiers: "Hành trình VIP",
+    tierSectionTitle: "So sánh đặc quyền",
+    lvlSectionTitle: "Các cấp độ hội viên",
+    tierMatrixTitle: "Đặc quyền theo hạng",
+    faqTitle: "Câu hỏi thường gặp",
+    needWager: "Cược tuần",
+    newTag: "MỚI",
+    levelWord: "CẤP",
+    statPoints: "Điểm",
+    youAreHere: "Bạn ở đây",
+    progressLabel: "Tiến độ cược lên hạng sau",
+    pointsToNextSuffix: "điểm để lên",
+    rbGift: "Quà thăng cấp",
+    rbLive: "Hoàn cược Live",
+    rbSports: "Hoàn cược Thể thao",
+    rbSlots: "Hoàn cược Nổ hũ",
+    rbTable: "Hoàn cược Game bàn",
+    rbCashback: "Hoàn tiền tuần",
+    bnPoints: "Đổi điểm ưu đãi",
+    bnShop: "Chọn quà cửa hàng",
+    bnEvent: "Ưu tiên sự kiện",
+    bnHost: "Quản lý VIP riêng",
+    tBronze: "Đồng",
+    tSilver: "Bạc",
+    tGold: "Vàng",
+    tPlatinum: "Bạch Kim",
+    tDiamond: "Kim Cương",
+    guestBadge: "Chương trình VIP",
+    guestH1: "Đặc quyền dành riêng cho hội viên VIP",
+    guestSub:
+      "Chơi càng nhiều, hạng càng cao. Mở khóa hoàn tiền, quà thăng cấp và quản lý VIP riêng qua 5 hạng và 50 cấp độ.",
+    ctaRegister: "Đăng ký ngay",
+    ctaLogin: "Đăng nhập",
+  },
+
   /* J9-exact footer — 3-column band + copyright. */
   footer: {
     partners: "Đối tác",

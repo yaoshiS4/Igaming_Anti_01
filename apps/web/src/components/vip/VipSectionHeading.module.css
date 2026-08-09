@@ -1,0 +1,10 @@
+/* Small-caps Cinzel section heading (stub). */
+.heading {
+  font-family: var(--brand-font-display);
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  font-variant-caps: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--vip-gold-mid);
+  margin: 0;
+}

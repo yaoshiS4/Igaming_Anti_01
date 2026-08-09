@@ -1,0 +1,62 @@
+/* Luxury VIP program — page-root palette wrapper + section rhythm (stub).
+ * The .vipPalette wrapper scopes the warm-near-black + gold palette to /vip. */
+
+.vipPalette {
+  background: var(--vip-page-bg);
+  color: var(--vip-text-primary);
+  font-family: var(--brand-font-body);
+  min-height: 100%;
+  padding: var(--space-5) var(--gutter) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  overflow-x: hidden;
+}
+
+.inner {
+  width: 100%;
+  max-width: var(--frame-w);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* small deferrable EN/VI toggle */
+.langToggle {
+  align-self: flex-end;
+  display: inline-flex;
+  gap: var(--space-1);
+  border: 1px solid var(--vip-hairline);
+  border-radius: var(--radius-pill);
+  padding: var(--space-1);
+}
+
+.langBtn {
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--vip-text-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.langBtnActive {
+  background: var(--vip-gold-grad);
+  color: var(--vip-gold-ink);
+  font-weight: var(--weight-semi);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    max-width: 100%;
+  }
+}

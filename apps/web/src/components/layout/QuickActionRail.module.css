@@ -29,7 +29,7 @@
   position: relative;
   border-radius: var(--radius-sm);
   overflow: hidden;
-  border: 1px solid var(--gold-hairline);
+  border: 1px solid var(--brand-accent-hairline);
   background: var(--surface);
   box-shadow: var(--shadow-2, 0 4px 16px rgba(0, 0, 0, 0.45));
 }
@@ -52,8 +52,8 @@
   padding: 1px 2px;
   font-size: 9px;
   font-weight: var(--weight-semi);
-  color: var(--text-on-gold);
-  background: var(--gold-grad);
+  color: var(--brand-on-accent);
+  background: var(--brand-accent-grad);
   text-align: center;
 }
 
@@ -84,7 +84,7 @@
 .jackpotCard {
   position: relative;
   background: var(--surface-2);
-  border: 1px solid var(--gold-hairline);
+  border: 1px solid var(--brand-accent-hairline);
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-1) var(--space-1);
   text-align: center;
@@ -101,7 +101,7 @@
   font-variant-numeric: tabular-nums;
   font-size: var(--t-micro); /* 12px — fits the 60px column */
   font-weight: var(--weight-bold);
-  color: var(--gold-500);
+  color: var(--brand-accent);
   line-height: 1.15;
   word-break: break-word;
 }
@@ -109,8 +109,8 @@
   display: block;
   padding: var(--space-1) 0;
   border-radius: var(--radius-pill);
-  background: var(--gold-grad);
-  color: var(--text-on-gold);
+  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent);
   font-size: 10px;
   font-weight: var(--weight-bold);
   text-decoration: none;
@@ -154,8 +154,8 @@
 }
 .iconBtn:hover,
 .iconBtn[aria-expanded="true"] {
-  color: var(--gold-500);
-  border-color: var(--gold-hairline);
+  color: var(--brand-accent);
+  border-color: var(--brand-accent-hairline);
   background: var(--surface-hover);
 }
 .iconLabel {
@@ -174,7 +174,7 @@
   padding: var(--space-3);
   border-radius: var(--radius-md);
   background: var(--surface-3);
-  border: 1px solid var(--gold-hairline);
+  border: 1px solid var(--brand-accent-hairline);
   box-shadow: var(--shadow-2, 0 8px 24px rgba(0, 0, 0, 0.5));
   text-align: center;
 }
@@ -190,7 +190,7 @@
   margin: 0 0 var(--space-1);
   font-size: var(--t-sm);
   font-weight: var(--weight-bold);
-  color: var(--gold-500);
+  color: var(--brand-accent);
 }
 .popoverText {
   margin: 0;

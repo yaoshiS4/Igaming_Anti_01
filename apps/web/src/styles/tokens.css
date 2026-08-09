@@ -240,4 +240,59 @@
   --brand-font-body:       var(--font-body);     /* → --font-body   brand body face (VN-diacritic complete) */
   --brand-font-num:        var(--font-num);      /* → --font-num    brand tabular-numeral face */
   --brand-logo:            url("/assets/brand/logo.svg"); /* logo lockup slot (literal URL, no raw-ramp source) */
+
+  /* ======================================================================
+   * LUXURY VIP PROGRAM LAYER (/vip rebuild) — page-scoped palette.
+   * ----------------------------------------------------------------------
+   * A SELF-CONTAINED warm-near-black + luxury-gold palette for the /vip page
+   * only, applied via a .vipPalette page-root wrapper. Intentionally distinct
+   * from the app --canvas/--brand-accent chrome (a visible seam vs the shell
+   * is accepted & flagged). tokens.css is the ONLY file permitted literals;
+   * components read these via var() and tint via color-mix(). Names use the
+   * --vip-* prefix (NEVER --gold-*, which is RAW-RAMP-reserved). --font-cinzel
+   * is provided at runtime by next/font/google on <html> (layout.tsx). */
+
+  /* surfaces / text */
+  --vip-page-bg:        #0b0a07; /* warm near-black page */
+  --vip-panel-bg:       #17140d; /* warm panel */
+  --vip-panel-alt:      #141019; /* alt panel (cool-violet cast) */
+  --vip-inner-bg:       #0f0c07; /* inner well */
+  --vip-text-primary:   #e6ebf5;
+  --vip-text-secondary: #c9c3b4;
+  --vip-text-muted:     #8b96ad;
+  --vip-text-faint:     #6b7690;
+  --vip-text-disabled:  #565f70; /* dimmed locked-ahead values */
+
+  /* luxury gold ramp + ink */
+  --vip-gold-start: #9a7b1e;
+  --vip-gold-mid:   #e3c15a;
+  --vip-gold-end:   #f6e39a;
+  --vip-gold-ink:   #2e2404; /* ink ON a gold fill */
+  --vip-gold-grad:  linear-gradient(135deg, #9a7b1e, #e3c15a, #f6e39a);
+  --vip-gold-tint:  rgba(227, 193, 90, 0.08); /* faint gold film (open FAQ / selected col) */
+
+  /* semantic (distinct from app --win/--loss) */
+  --vip-positive: #34d399; /* unlocked ✓ */
+  --vip-negative: #fb7185;
+  --vip-hairline: rgba(255, 255, 255, 0.07);
+
+  /* per-tier gradients + accents (bronze → diamond) */
+  --vip-tier-bronze-grad:   linear-gradient(135deg, #8c5a2b, #c88f5a, #e0a56b);
+  --vip-tier-bronze-acc:    #e0a56b;
+  --vip-tier-silver-grad:   linear-gradient(135deg, #8a94a6, #cbd3df, #eef2f7);
+  --vip-tier-silver-acc:    #cbd3df;
+  --vip-tier-gold-grad:     linear-gradient(135deg, #9a7b1e, #e3c15a, #f6e39a);
+  --vip-tier-gold-acc:      #e3c15a;
+  --vip-tier-platinum-grad: linear-gradient(135deg, #6b7280, #cfd6e0, #e8edf3);
+  --vip-tier-platinum-acc:  #cfd6e0;
+  --vip-tier-diamond-grad:  linear-gradient(135deg, #3f7fb5, #9fd7ee, #e6f7ff);
+  --vip-tier-diamond-acc:   #9fd7ee;
+
+  /* VIP-local radii (panels reuse --radius-card 16 / pills --radius-pill) */
+  --vip-radius-table:   14px;
+  --vip-radius-control: 12px;
+  --vip-radius-gem:     8px;
+
+  /* display face — Cinzel (serif) with graceful offline serif fallback */
+  --brand-font-display: var(--font-cinzel), Georgia, "Times New Roman", serif;
 }

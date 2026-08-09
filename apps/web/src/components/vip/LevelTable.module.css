@@ -1,0 +1,138 @@
+/* ============================================================================
+ * Level table — 6 metric rows × 10 level cols of the SELECTED tier.
+ * Sticky first col + sticky header + sticky corner; horizontal scroll.
+ * Member CẤP-7 gold spotlight column; locked-ahead + above-tier dim/lock.
+ * ==========================================================================*/
+.scroller {
+  overflow-x: auto;
+  border-radius: var(--vip-radius-table);
+  border: 1px solid var(--vip-hairline);
+  background: var(--vip-panel-bg);
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 760px;
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- shared cell chrome --------------------------------------------------- */
+.th,
+.td {
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+  border-bottom: 1px solid var(--vip-hairline);
+  white-space: nowrap;
+  color: var(--vip-text-secondary);
+  background: var(--vip-panel-bg);
+  font-size: var(--t-sm);
+}
+
+tbody tr:last-child .td {
+  border-bottom: none;
+}
+
+/* ---- sticky first column (metric labels) + corner ------------------------- */
+.rowHead {
+  position: sticky;
+  left: 0;
+  z-index: var(--z-content);
+  text-align: left;
+  font-family: var(--brand-font-body);
+  font-weight: var(--weight-semi);
+  color: var(--vip-text-primary);
+  background: var(--vip-panel-alt);
+  border-right: 1px solid var(--vip-hairline);
+}
+
+/* ---- sticky header row ---------------------------------------------------- */
+.headRow .th {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  color: var(--vip-text-muted);
+  background: var(--vip-inner-bg);
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+}
+
+.corner {
+  z-index: calc(var(--z-sticky) + 1);
+  background: var(--vip-inner-bg);
+}
+
+/* header level label: small-caps word + Cinzel numeral */
+.levelWord {
+  display: block;
+  font-family: var(--brand-font-body);
+  font-size: var(--t-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vip-text-faint);
+  line-height: 1;
+}
+
+.levelNum {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--brand-font-display);
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  color: var(--vip-text-primary);
+  line-height: 1.1;
+}
+
+.lock {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-micro);
+  line-height: 1;
+  filter: grayscale(1) opacity(0.7);
+}
+
+/* ---- gold spotlight column (member's current level) ----------------------- */
+.spot {
+  color: var(--vip-gold-mid);
+  font-weight: var(--weight-bold);
+  background: color-mix(in srgb, var(--vip-gold-mid) 12%, var(--vip-panel-bg));
+  box-shadow:
+    inset 1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 45%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
+}
+
+.headRow .th.spot {
+  background: color-mix(in srgb, var(--vip-gold-mid) 16%, var(--vip-inner-bg));
+  box-shadow:
+    inset 1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 55%, transparent),
+    inset -1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 55%, transparent),
+    inset 0 2px 0 var(--vip-gold-mid);
+}
+
+.spot .levelWord {
+  color: color-mix(in srgb, var(--vip-gold-mid) 75%, transparent);
+}
+
+.spot .levelNum {
+  color: var(--vip-gold-end);
+}
+
+/* ---- dimmed / locked-ahead / above-tier cells ---------------------------- */
+.dim {
+  color: var(--vip-text-disabled);
+}
+
+.dim .levelWord,
+.dim .levelNum {
+  color: var(--vip-text-disabled);
+}
+
+@media (max-width: 900px) {
+  .th,
+  .td {
+    padding: var(--space-2) var(--space-3);
+  }
+}

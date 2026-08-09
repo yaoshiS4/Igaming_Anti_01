@@ -1,0 +1,143 @@
+/* Member privilege comparison — current tier → upgrade target. */
+.wrap {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  padding: var(--card-pad-sm);
+  border-radius: var(--radius-card);
+  background: var(--vip-panel-bg);
+  border: 1px solid var(--vip-hairline);
+}
+
+/* the right-hand (upgrade) card gets the gold treatment + glow */
+.cardTarget {
+  background:
+    radial-gradient(
+      120% 100% at 100% 0%,
+      color-mix(in srgb, var(--vip-gold-mid) 12%, transparent) 0%,
+      transparent 60%
+    ),
+    var(--vip-panel-bg);
+  border-color: color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vip-gold-mid) 12%, transparent);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--vip-hairline);
+}
+
+.gem {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--vip-radius-gem);
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vip-page-bg) 40%, transparent);
+}
+
+.cardTitle {
+  font-family: var(--brand-font-display);
+  font-size: var(--t-h3);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) 0;
+  color: var(--vip-text-secondary);
+  font-size: var(--t-sm);
+}
+
+.rowLabel {
+  min-width: 0;
+}
+
+.rowLocked {
+  color: var(--vip-text-muted);
+}
+
+.rowNew {
+  color: var(--vip-gold-mid);
+  font-weight: var(--weight-semi);
+}
+
+.marker {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  font-size: var(--t-micro);
+}
+
+.check {
+  color: var(--vip-positive);
+  background: color-mix(in srgb, var(--vip-positive) 16%, transparent);
+}
+
+.lock {
+  color: var(--vip-text-muted);
+}
+
+.newTag {
+  margin-left: auto;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--vip-gold-grad);
+  color: var(--vip-gold-ink);
+  font-size: var(--t-micro);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+}
+
+.arrow {
+  align-self: center;
+  color: var(--vip-gold-mid);
+  font-size: var(--t-display);
+  line-height: 1;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--vip-hairline);
+  color: var(--vip-text-muted);
+  font-size: var(--t-sm);
+}
+
+@media (max-width: 900px) {
+  .arrow {
+    transform: rotate(90deg);
+    align-self: center;
+  }
+}
