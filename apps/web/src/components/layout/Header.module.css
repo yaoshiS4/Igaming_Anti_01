@@ -91,7 +91,10 @@
   align-items: center;
   gap: var(--gap-xs);
   cursor: pointer;
-  color: var(--blue-soft);
+  /* Blue is RESERVED for focus. The J9 silver-blue --blue-soft was a resting
+   * nav-text colour, i.e. blue used decoratively — re-pointed to the champagne
+   * text ladder (--text = 13.20:1 on --header-bg). */
+  color: var(--text);
   text-decoration: none;
   font-size: var(--t-micro); /* 12px */
   font-weight: var(--weight-reg);
@@ -102,19 +105,21 @@
 }
 .rightNavLink:hover {
   color: var(--text-hi);
-  background: var(--tint);
+  background-color: var(--tint);
 }
 .rightNavLink:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
-/* J9 .right_nav li.VIP — gold-tinted highlight cell */
+/* J9 .right_nav li.VIP — gold-tinted highlight cell. The two raw rgba() literals
+ * here were the OLD gold (#f3b867), so this cell drifted off-palette after the
+ * Flat re-point; now derived from --brand-accent so it follows the brand. */
 .rightNavVip .rightNavLink {
-  background: rgba(243, 184, 103, 0.15);
+  background-color: color-mix(in srgb, var(--brand-accent) 15%, transparent);
   color: var(--brand-accent);
 }
 .rightNavVip .rightNavLink:hover {
-  background: rgba(243, 184, 103, 0.24);
+  background-color: color-mix(in srgb, var(--brand-accent) 24%, transparent);
   color: var(--brand-accent);
 }
 .rightNavIcon {
@@ -172,21 +177,32 @@
   font-size: var(--t-sm);
 }
 
-/* J9 .go_pay — gold gradient pill, fused to the chip's right edge */
+/* J9 .go_pay — SOLID gold pill (was a gradient), fused to the chip's right edge.
+ * `background-color`, never the `background` shorthand: the shorthand leaves a
+ * background-image slot and a same-colour gradient still computes AS a gradient
+ * on a button, which is exactly what the Flat system bans. */
 .goPay {
   height: 40px;
   padding: 0 var(--space-4);
   border: 0;
   border-top-right-radius: var(--radius-pill);
   border-bottom-right-radius: var(--radius-pill);
-  background: var(--brand-accent-grad);
-  color: var(--brand-on-accent);
+  background-color: var(--brand-accent);
+  color: var(--brand-on-accent); /* dark ink — 9.42:1; white on gold is 2.11:1 (AA fail) */
   font-size: var(--t-body);
   font-weight: var(--weight-semi);
   line-height: 40px;
   text-align: center;
   cursor: pointer;
   flex: none;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
+}
+/* uniform BUTTON hover — colour shift + 1.05. Same step as every other button
+ * in the chrome; the money CTA is NOT scaled harder than its neighbours. */
+.goPay:hover {
+  background-color: var(--brand-accent-2); /* dark ink stays AA at 6.86:1 */
+  transform: scale(1.05);
 }
 .goPay:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -212,15 +228,17 @@
   justify-content: space-between;
 }
 
-/* J9 .aa-line active underline: height:3px transition all .25s linear */
+/* J9 .aa-line active underline: height:3px. SOLID accent — an ACTIVE indicator
+ * is --brand-accent, never --focus-ring (blue is focus only). */
 .aaLine {
   display: block;
   height: 3px;
   width: 50px;
   margin-top: -3px;
   border-radius: var(--radius-pill);
-  background: var(--brand-accent-grad);
-  transition: all var(--dur-base) linear;
+  background-color: var(--brand-accent);
+  transition: width var(--dur-base) var(--ease-standard),
+    background-color var(--dur-base) var(--ease-standard);
 }
 
 /* category dropdown panel list (J9 sub-game grid stand-in) */
@@ -244,7 +262,7 @@
   font-size: var(--t-sm);
 }
 .megaItem:hover {
-  background: var(--surface-hover);
+  background-color: var(--surface-hover);
   color: var(--text-hi);
 }
 .megaItem:focus-visible {
@@ -262,5 +280,20 @@
   }
   .tier2 {
     display: block;
+  }
+}
+
+/* ---------- reduced motion ----------
+ * motion.css zeroes --dur-*, which removes the TRANSITION but leaves the
+ * transform applying instantly. Switch the transform itself off.            */
+@media (prefers-reduced-motion: reduce) {
+  .goPay,
+  .goPay:hover {
+    transform: none;
+    transition: none;
+  }
+  .aaLine,
+  .rightNavLink {
+    transition: none;
   }
 }

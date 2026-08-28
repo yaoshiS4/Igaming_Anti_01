@@ -1,0 +1,288 @@
+/* ============================================================================
+ * Yaobet — pack-opening stage.
+ * Big, lit, animated. No money figure exists on this surface by construction.
+ * ==========================================================================*/
+
+.stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* full-bleed: break out of the page gutter so the stage owns the screen */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  padding: var(--space-3) var(--gutter) var(--space-5);
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  min-height: 500px;
+  align-content: space-between;
+}
+
+/* every child sits in one centred column, whatever the viewport — except the
+   two out-of-flow layers: the backdrop and the terms button */
+.stage > *:not(.stadium):not(.chrome) {
+  width: 100%;
+  max-width: 620px;
+}
+
+.stadium {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── the terms button ───────────────────────────────────────────────────────
+   Sits in the sky, above the stands and clear of both the packs on the floor
+   and the CTA. An OPAQUE chip, not a bare glyph: the backdrop behind it runs
+   from a dark sky gradient to a bright floodlight ellipse, so a translucent
+   treatment fails contrast at one of the two ends. */
+
+/* The reference cluster: history + terms, paired top-right. Positioning moved
+   to the wrapper so the two buttons stay a unit and the stage keeps exactly one
+   piece of chrome rather than two floating chips. */
+.chrome {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  display: flex;
+  gap: var(--space-2);
+  z-index: 2;
+}
+
+/* FLAT: a square-cornered control, not a pill. Pills are reserved for tags and
+   badges now; a control that is round for decoration reads as a chip. The gold
+   hairline is what separates it from the sky behind it — there is no shadow to
+   do that job. */
+.info {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--brand-accent-hairline);
+  background: var(--surface);
+  color: var(--text-hi);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+/* Icons inside a hovered control step up 1.10 while the control steps 1.05 —
+   the group-hover idiom, applied identically to every icon-bearing control. */
+.info svg { transition: transform var(--dur-fast) var(--ease-standard); }
+
+.info:hover {
+  background: var(--surface-hover);
+  border-color: var(--brand-accent);
+  transform: scale(1.05);
+}
+
+.info:hover svg { transform: scale(1.1); }
+
+.info:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+
+
+
+/* ── the floor ──────────────────────────────────────────────────────────── */
+
+.floor {
+  display: grid;
+  place-items: center;
+  min-height: 322px;
+}
+
+.packs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  perspective: 900px;
+}
+
+.packSlot { width: 66px; display: grid; place-items: center; }
+
+.pack {
+  width: 172px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translateX(calc(var(--i) * 8px)) rotate(calc(var(--i) * 3deg)) scale(0.8);
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), filter 320ms ease, opacity 320ms ease;
+  filter: brightness(0.72) saturate(0.85);
+  animation: bob 3.4s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 180ms);
+}
+
+@keyframes bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -7px; }
+}
+
+.pack:disabled { cursor: default; }
+
+/* The pick reads through SIZE and LIGHT, not through a glow. A drop-shadow is
+   a shadow wearing a different property name, and the system has none. */
+.picked {
+  transform: translateX(calc(var(--i) * 8px)) rotate(0deg) scale(1.22);
+  filter: brightness(1.14) saturate(1.14);
+  z-index: 2;
+}
+
+.pack:not(:disabled):hover { filter: brightness(1) saturate(1); }
+
+.pack:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.foil { display: block; width: 100%; height: auto; }
+
+.sheen { animation: sheen 3.6s ease-in-out infinite; }
+
+@keyframes sheen {
+  0%, 100% { opacity: 0.25; transform: translateX(-16%); }
+  50%      { opacity: 0.7;  transform: translateX(16%); }
+}
+
+/* the tear */
+.tear { animation: tear 620ms cubic-bezier(0.3, 0, 0.2, 1) forwards; }
+
+@keyframes tear {
+  0%   { transform: translateX(calc(var(--i) * 8px)) scale(1.22) rotate(0deg); }
+  18%  { transform: translateX(calc(var(--i) * 8px)) scale(1.26) rotate(-3deg); }
+  34%  { transform: translateX(calc(var(--i) * 8px)) scale(1.26) rotate(3deg); }
+  100% { transform: translateX(calc(var(--i) * 8px)) scale(1.7) rotate(0deg); opacity: 0; }
+}
+
+.dim { opacity: 0; transform: translateY(24px) scale(0.7); }
+
+/* ── the prize ──────────────────────────────────────────────────────────── */
+
+.prize {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  animation: rise 420ms cubic-bezier(0.2, 0.9, 0.2, 1) backwards;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: scale(0.72) translateY(18px); }
+  60%  { transform: scale(1.05); }
+  to   { opacity: 1; transform: none; }
+}
+
+.prizeCard { width: 200px; }
+
+/* The rare card USED to breathe inside a looping gold glow. Both halves of that
+   are now banned: the glow is a shadow, and a looping animation that only rare
+   cards get is rarity-differentiated motion — the same inducement B1 rejects on
+   the rails. Rarity still reads, and reads honestly: `CardArt` draws a gold
+   stroke and a foil sweep on the face itself, and the line under it says
+   `Thẻ hiếm!`. The reveal is now one duration for every card. */
+
+.prizeLine {
+  margin: 0;
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+
+/* The duplicate subline. Deliberately NOT a gain treatment — no `+`, no win
+   colour, no number. It states what happened and stops. */
+.prizeSub {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--text);
+  text-align: center;
+}
+
+/* ── the action ─────────────────────────────────────────────────────────── */
+
+.actionWrap { display: grid; justify-items: center; gap: var(--space-2); }
+
+.turns {
+  margin: 0;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  font-size: var(--t-sm);
+  color: var(--text);
+  text-align: center;
+}
+
+.turns strong { color: var(--brand-accent); font-variant-numeric: tabular-nums; }
+
+/* THE `MỞ` CTA — flat.
+   Was a 180° gold gradient plus a coloured drop-shadow plus an infinite
+   shadow-pulse. All three are gone: gradients are permitted only as background
+   decoration, and the system has no shadows at all, so a pulse built out of
+   `box-shadow` has nothing left to animate. The button is now a SOLID accent
+   plate whose hover is a COLOUR SHIFT (`--brand-accent` → `--brand-accent-2`)
+   plus the uniform 1.05 scale every button in this feature gets. */
+.cta {
+  width: min(300px, 82%);
+  min-height: 60px;
+  border-radius: var(--radius-lg);
+  border: 0;
+  background: var(--brand-accent);
+  color: var(--brand-on-accent);
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.cta:hover:not(:disabled) {
+  background: var(--brand-accent-2);
+  transform: scale(1.05);
+}
+
+.cta:disabled {
+  background: var(--surface-disabled);
+  color: var(--text-dim);
+  cursor: not-allowed;
+}
+
+.cta:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+
+/* ── reduced motion: keep the state changes, drop the theatre ───────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .pack, .sheen, .cta, .prize { animation: none; }
+  .tear { animation: none; opacity: 0; }
+  .pack, .info, .info svg, .cta { transition: none; }
+
+  /* The hover scale is not merely un-animated here, it is ABSENT. Snapping a
+     control 5% larger with a zero-length transition is the same jolt the query
+     was set to avoid; the hover still answers, in colour. */
+  .cta:hover:not(:disabled),
+  .info:hover,
+  .info:hover svg { transform: none; }
+}
+
+/* desktop: more room, so the packs can be bigger still */
+@media (min-width: 900px) {
+  .stage > *:not(.stadium):not(.info) { max-width: 780px; }
+  /* keep the button on the content column's right edge, not the viewport's —
+     the stage is full-bleed, the column is not */
+  .info { right: max(var(--space-3), calc(50% - 390px)); }
+  .stage { min-height: 560px; }
+  .floor { min-height: 372px; }
+  .packSlot { width: 84px; }
+  .pack { width: 210px; }
+  .prizeCard { width: 240px; }
+}

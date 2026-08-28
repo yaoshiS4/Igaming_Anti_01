@@ -7,13 +7,13 @@
  * empty slot or a cloned game.
  *
  * Anatomy (token-derived only — no raw ramp literals, no external asset):
- *   • obsidian → gold radial+linear gradient field (Lucky Obsidian language)
- *   • a centred gold lock glyph in a soft ring (Icon `lock`, currentColor)
+ *   • FLAT solid --tile field with a load-bearing gold hairline (the old gold
+ *     radial+linear gradient field, its --glow-gold shadow and its sweeping
+ *     diagonal sheen are all removed: cards carry no gradients and no depth,
+ *     and an animated gold band is a glow by another name)
+ *   • a centred gold lock glyph on a solid 12% accent disc (Icon `lock`)
  *   • "Sắp ra mắt" headline (Vietnamese-first) + a small teaser/date line
- *   • a gentle diagonal sheen that sweeps once on a long loop — reduced-motion
- *     SAFE: motion rides the global --dur-* / prefers-reduced-motion contract
- *     (motion.css zeroes it) AND the keyframe is additionally gated by a local
- *     @media (prefers-reduced-motion: reduce) so the sheen holds still.
+ *   • fully static — reduced-motion safe by construction, no opt-out needed
  *
  * It is sized EXACTLY like a regular 1×1 game tile (fills the grid cell's fixed
  * --tile-h height) so appending it never shifts the layout on a tab switch.
@@ -44,9 +44,6 @@ export function ComingSoonTile({
       className={[styles.tile, className].filter(Boolean).join(" ")}
       aria-hidden="true"
     >
-      {/* the single diagonal sheen — reduced-motion safe (gated below) */}
-      <span className={styles.sheen} aria-hidden="true" />
-
       <span className={styles.inner}>
         <span className={styles.lockRing}>
           <Icon name="lock" size={22} className={styles.lockIcon} />

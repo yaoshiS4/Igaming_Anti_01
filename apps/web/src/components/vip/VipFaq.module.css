@@ -29,7 +29,7 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: 3px;
-  background: var(--vip-gold-grad);
+  background: var(--vip-gold-mid);
   opacity: 0;
   transition: opacity var(--dur-fast) var(--ease-standard);
 }
@@ -71,6 +71,12 @@
   color: var(--vip-gold-end);
 }
 
+/* BLUE MEANS FOCUS AND ONLY FOCUS */
+.question:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
 .questionOpen,
 .questionOpen:hover {
   color: var(--vip-gold-mid);
@@ -92,6 +98,17 @@
     transform var(--dur-slow) var(--ease-standard),
     border-color var(--dur-fast) var(--ease-standard),
     background var(--dur-fast) var(--ease-standard);
+}
+
+/* icon affordance = scale(1.10). The accordion TRIGGER is a full-bleed row, so
+ * scaling it 1.05 would clip against .item{overflow:hidden}; the chevron
+ * carries the hover instead. */
+.question:hover .chevron {
+  transform: scale(1.1);
+}
+
+.question:hover .chevronOpen {
+  transform: rotate(180deg) scale(1.1);
 }
 
 .chevronOpen {
@@ -126,5 +143,15 @@
 
   .answerInner {
     padding: 0 var(--space-4) var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .question:hover .chevron {
+    transform: none;
+  }
+  .question:hover .chevronOpen,
+  .chevronOpen {
+    transform: rotate(180deg);
   }
 }

@@ -3,13 +3,15 @@
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum" 1;
   font-weight: var(--weight-bold);
-  color: var(--text-hi);
   white-space: nowrap;
-  /* gold treatment allowed — these are large hero figures (≥18px) */
-  background: var(--brand-accent-grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  /* Gold treatment allowed — these are large hero figures (≥18px). Painted as
+   * a plain text colour (9.42:1 on --canvas, 8.76:1 on --surface). Was
+   * background:var(--brand-accent-grad) + background-clip:text +
+   * color:transparent; that only rendered gold because the accent ramp is a
+   * solid under the default brand, and `color: transparent` makes the figure
+   * vanish entirely under forced-colors/print, where background-clip is
+   * dropped but the transparent colour is not. */
+  color: var(--brand-accent);
 }
 
 .num {

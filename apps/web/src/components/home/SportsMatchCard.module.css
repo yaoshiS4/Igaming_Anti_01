@@ -171,11 +171,29 @@
   font-weight: var(--weight-bold);
   text-decoration: none;
   letter-spacing: 0.02em;
-  transition: filter var(--dur-fast) ease;
+  /* hover is a COLOUR shift + the uniform button scale — not a filter. A
+   * brightness() filter is depth-adjacent styling and it also cannot be
+   * re-skinned by a brand, whereas --brand-accent-2 follows [data-brand]. */
+  transition: transform var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
 }
 .cta:hover {
-  filter: brightness(1.05);
+  background: var(--brand-accent-2);
+  transform: scale(1.05);
 }
 .cta:active {
-  filter: brightness(0.96);
+  background: var(--brand-accent-2);
+  transform: scale(0.98);
+}
+.cta:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .cta:hover,
+  .cta:active {
+    transform: none;
+  }
 }

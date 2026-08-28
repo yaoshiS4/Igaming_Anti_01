@@ -5,6 +5,10 @@
  * motion reads the --dur-* tokens, zeroing them here disables every
  * token-obeying animation with NO per-component opt-in (LOCKED — not
  * overridable per brand).
+ *
+ * Flat Design timing (tokens.css §7): 200ms is the default for colour /
+ * opacity / border micro-interactions and 300ms is the ceiling, reserved for
+ * larger transforms. Snappy and direct — nothing eases in slowly.
  * ==========================================================================*/
 
 @media (prefers-reduced-motion: reduce) {

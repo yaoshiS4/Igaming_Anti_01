@@ -43,9 +43,20 @@
   color: var(--text-mid);
   cursor: pointer;
   border-radius: var(--radius-md);
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
+.closeBtn svg {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+/* uniform hover — button 1.05 / glyph 1.10, identical for every control here */
 .closeBtn:hover {
   color: var(--text-hi);
+  transform: scale(1.05);
+}
+.closeBtn:hover svg {
+  transform: scale(1.1);
 }
 .closeBtn:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -89,6 +100,10 @@
   cursor: pointer;
   padding: var(--space-1);
   min-height: var(--tap-min);
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.switchBtn:hover {
+  transform: scale(1.05);
 }
 .switchBtn:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -113,14 +128,32 @@
   cursor: pointer;
   padding: var(--space-1);
   min-height: var(--tap-min);
+  transition: transform var(--dur-fast) var(--ease-standard);
 }
 .forgotLink:hover {
   text-decoration: underline;
+  transform: scale(1.05);
 }
 .forgotLink:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .closeBtn,
+  .closeBtn svg,
+  .switchBtn,
+  .forgotLink {
+    transition: none;
+  }
+  /* absent, not instant */
+  .closeBtn:hover,
+  .closeBtn:hover svg,
+  .switchBtn:hover,
+  .forgotLink:hover {
+    transform: none;
+  }
 }
 
 /* FORGOT: the email-or-phone instruction above the reset field */
@@ -149,13 +182,12 @@
     width: 280px;
     flex: none;
     padding: var(--space-6) var(--space-5);
-    background:
-      radial-gradient(
-        120% 80% at 0% 0%,
-        rgba(243, 184, 103, 0.12),
-        transparent 60%
-      ),
-      var(--surface-3);
+    /* FLAT: a structural panel takes a SOLID fill, never a gradient. The one
+     * gradient left in this file is .brandArt, which is decoration, not a
+     * panel/card/button. The old rgba(243,184,103,…) was a stale literal of the
+     * pre-Flat amber accent — a raw hex on a component file (lint A2 in spirit)
+     * that no longer matched --brand-accent #d4af37. */
+    background: var(--surface-3);
     border-right: 1px solid var(--brand-accent-hairline);
   }
 
@@ -204,9 +236,13 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-md);
+    /* The system permits gradients ONLY as large background decoration — this
+     * is that: an inert art slot that grows to fill the panel's leftover height.
+     * Re-tinted off --brand-accent (was a raw amber literal) so it tracks the
+     * token instead of drifting from it. */
     background: radial-gradient(
       62% 60% at 50% 58%,
-      rgba(243, 184, 103, 0.13),
+      color-mix(in srgb, var(--brand-accent) 13%, transparent),
       transparent 70%
     );
   }
@@ -224,7 +260,7 @@
     height: 32px;
     flex: none;
     border-radius: var(--radius-md);
-    background: rgba(243, 184, 103, 0.14);
+    background: color-mix(in srgb, var(--brand-accent) 14%, transparent);
     color: var(--brand-accent);
   }
   .trustText {

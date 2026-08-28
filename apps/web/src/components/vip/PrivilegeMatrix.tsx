@@ -76,7 +76,7 @@ export function PrivilegeMatrix({
               >
                 <span
                   className={styles.gem}
-                  style={{ background: tier.grad }}
+                  style={{ background: tier.acc }}
                   aria-hidden
                 />
                 <span className={styles.tierName}>{copy[tier.nameKey]}</span>

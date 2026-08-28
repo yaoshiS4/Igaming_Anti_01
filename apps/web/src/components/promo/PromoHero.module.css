@@ -7,6 +7,9 @@
   padding: 0;
 }
 
+/* FULL-BLEED hero backdrop — the one gradient class the flat system still
+ * permits ("subtle directional gradients" as large background decoration).
+ * It is the placeholder for licensed banner art, not a card or button fill. */
 .media {
   display: block;
   width: 100%;
@@ -50,6 +53,8 @@
   color: var(--text-mid);
 }
 
+/* solid gold fill (--brand-accent-grad is a solid colour at the token layer),
+ * dark on-gold ink for AA, uniform button hover: scale(1.05) + colour shift */
 .cta {
   display: inline-flex;
   align-items: center;
@@ -61,6 +66,23 @@
   color: var(--brand-on-accent);
   font-weight: var(--weight-semi);
   text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+.cta:hover {
+  background: var(--brand-accent-2);
+  transform: scale(1.05);
+}
+.cta:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta,
+  .cta:hover {
+    transform: none;
+  }
 }
 
 @media (min-width: 768px) {

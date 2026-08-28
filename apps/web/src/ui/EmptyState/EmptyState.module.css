@@ -7,6 +7,10 @@
   padding: var(--space-7) var(--space-4);
   text-align: center;
   background: var(--surface-2);
+  /* Borders are load-bearing: --surface-2 #1a1a1a on --canvas #0a0a0a is
+   * 1.20:1, so with shadows and gradients banned this panel had NO visible
+   * edge at all. The gold hairline is 3.39:1 against it — clears 1.4.11. */
+  border: 1px solid var(--border);
   border-radius: var(--radius-card);
   color: var(--text-mid);
 }

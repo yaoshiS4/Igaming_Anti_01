@@ -16,6 +16,9 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-1);
+  /* 60px is MIRRORED in ShellChrome.module.css, which reserves this column in
+   * the content frame at ≥1024 so the fixed rail never covers a link. Change
+   * both together. */
   width: 60px; /* one icon button wide — J9-compact */
   pointer-events: none; /* re-enabled per interactive child below */
 }
@@ -25,13 +28,24 @@
 }
 
 /* ---------- 1 · World-Cup promo thumbnail (compact, dismissable) ---------- */
+/* Flat: NO box-shadow. The 1px gold hairline is the only separation mechanism
+ * (party-mode ruling A2 — --surface #141414 on --canvas #0a0a0a is 1.07:1, so a
+ * borderless card is invisible). The former `box-shadow: var(--shadow-2, …)`
+ * read a token that did not exist, so the hardcoded fallback painted a shadow
+ * on all ~24 routes; the call site is REMOVED, not neutralised. */
 .promoThumb {
   position: relative;
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--brand-accent-hairline);
   background: var(--surface);
-  box-shadow: var(--shadow-2, 0 4px 16px rgba(0, 0, 0, 0.45));
+  transition: transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+/* uniform CARD hover — 1.02 on every card, never scaled by prominence/value */
+.promoThumb:hover {
+  transform: scale(1.02);
+  border-color: var(--brand-accent);
 }
 .promoLink {
   display: block;
@@ -52,8 +66,10 @@
   padding: 1px 2px;
   font-size: 9px;
   font-weight: var(--weight-semi);
-  color: var(--brand-on-accent);
-  background: var(--brand-accent-grad);
+  color: var(--brand-on-accent); /* dark ink on gold — 9.42:1 (white would be 2.11:1) */
+  /* SOLID fill. `background-color` (not the `background` shorthand) so no
+   * background-image can ever be computed here. */
+  background-color: var(--brand-accent);
   text-align: center;
 }
 
@@ -68,26 +84,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 0;
+  border: 1px solid var(--border);
   border-radius: var(--radius-pill);
-  background: rgba(0, 0, 0, 0.55);
+  /* was a raw rgba() — semantic tokens only. Opaque --surface + the gold
+   * hairline reads over the promo image without a shadow or a blur. */
+  background-color: var(--surface);
   color: var(--text-hi);
-  font-size: 12px;
+  font-size: var(--t-micro);
   line-height: 1;
   cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
+/* uniform BUTTON hover — 1.05 on every button */
 .promoClose:hover {
-  background: rgba(0, 0, 0, 0.78);
+  background-color: var(--surface-hover);
+  transform: scale(1.05);
 }
 
 /* ---------- 2 · Super-jackpot card (compact, dismissable) ---------- */
 .jackpotCard {
   position: relative;
-  background: var(--surface-2);
+  background-color: var(--surface-2);
   border: 1px solid var(--brand-accent-hairline);
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-1) var(--space-1);
   text-align: center;
+  transition: transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.jackpotCard:hover {
+  transform: scale(1.02); /* same 1.02 as .promoThumb — value-blind */
+  border-color: var(--brand-accent);
 }
 .jackpotKicker {
   margin: 0 0 2px;
@@ -105,19 +133,28 @@
   line-height: 1.15;
   word-break: break-word;
 }
+/* Flat: SOLID gold pill, no gradient, no shadow, no filter. `background-color`
+ * is deliberate — the `background` shorthand would leave a background-image
+ * slot, and a same-colour gradient still *computes* as a gradient on a button. */
 .jackpotCta {
   display: block;
   padding: var(--space-1) 0;
   border-radius: var(--radius-pill);
-  background: var(--brand-accent-grad);
-  color: var(--brand-on-accent);
-  font-size: 10px;
+  background-color: var(--brand-accent);
+  color: var(--brand-on-accent); /* 9.42:1 */
+  font-size: var(--t-micro);
   font-weight: var(--weight-bold);
   text-decoration: none;
   text-align: center;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
+/* hover is a COLOUR SHIFT (was `filter: brightness()` — a filter is banned and
+ * would make computed `filter` non-`none`). --brand-accent-2 keeps the dark ink
+ * at 6.86:1 — still AA. Scale is the uniform 1.05 button step. */
 .jackpotCta:hover {
-  filter: brightness(1.05);
+  background-color: var(--brand-accent-2);
+  transform: scale(1.05);
 }
 
 /* ---------- 3 · Icon stack ---------- */
@@ -144,19 +181,33 @@
   gap: 2px;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  background: var(--surface);
+  background-color: var(--surface);
   color: var(--text-mid);
   font: inherit;
   cursor: pointer;
   text-decoration: none;
-  transition: color var(--dur-fast, 120ms) ease, border-color var(--dur-fast, 120ms) ease,
-    background var(--dur-fast, 120ms) ease;
+  /* --dur-fast/--ease-standard, no hardcoded fallback: the fallback masked the
+   * reduced-motion contract (motion.css zeroes --dur-* at :root). */
+  transition: color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
 .iconBtn:hover,
 .iconBtn[aria-expanded="true"] {
   color: var(--brand-accent);
-  border-color: var(--brand-accent-hairline);
-  background: var(--surface-hover);
+  border-color: var(--brand-accent);
+  background-color: var(--surface-hover);
+  transform: scale(1.05); /* uniform button step */
+}
+/* --focus-ring appears ONLY inside :focus-visible, never as a selected/expanded
+ * colour (the expanded state above is --brand-accent). */
+.promoLink:focus-visible,
+.promoClose:focus-visible,
+.jackpotCta:focus-visible,
+.iconBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .iconLabel {
   font-size: 9px;
@@ -173,9 +224,10 @@
   min-width: 132px;
   padding: var(--space-3);
   border-radius: var(--radius-md);
-  background: var(--surface-3);
+  background-color: var(--surface-3);
+  /* second orphan `var(--shadow-2, <fallback>)` call site — REMOVED. The popover
+   * separates from the page with its hairline, like every other panel. */
   border: 1px solid var(--brand-accent-hairline);
-  box-shadow: var(--shadow-2, 0 8px 24px rgba(0, 0, 0, 0.5));
   text-align: center;
 }
 .qrBox {
@@ -200,22 +252,50 @@
 }
 
 /* ---------- responsive ---------- *
- * Desktop (≥1024px): full rail with promo cards + icon stack.
- * Mobile (<1024px): drop the promo cards entirely (they'd crowd a 375px
- * screen + collide with the BottomTabBar); keep only the compact icon stack,
- * floated low-right above the tab bar.                                        */
+ * Desktop (≥1024px): full rail with promo cards + icon stack. ShellChrome
+ * reserves the 60px column so it floats over the frame's gutter, not over
+ * content.
+ *
+ * Mobile (<1024px): the rail is REMOVED, not shrunk.
+ * ------------------------------------------------------------------------
+ * It previously kept a 48px-wide, ~204px-tall fixed icon stack pinned above
+ * the BottomTabBar. Measured at 390px, that column stole the tap from real
+ * content on 6 of 9 routes audited — the home provider scroller and its `JILI`
+ * tab, the /khuyen-mai filter tabs and the welcome-bonus card, two /vip tier
+ * cards, the /cua-hang `Đổi ngay` button, the /tier ladder scroller, and a
+ * /ho-tro footer link. There is no gutter to hide in at 390px: reserving one
+ * would cost ~15% of the content width on EVERY route (and the Footer is
+ * full-bleed outside the frame, so it would need the same treatment).
+ *
+ * Nothing is lost but a convenience: every destination is already one tap away
+ * — Sưu tập (header utility nav + /bo-suu-tap), Giải đấu (/tier), Tải app
+ * (/tai-app + footer), CSKH (/ho-tro + footer) — and mobile already carries a
+ * sticky Header, the Danh mục launcher and a 5-tab BottomTabBar. The one real
+ * casualty is back-to-top; see the backlog note.                              */
 @media (max-width: 1023px) {
   .rail {
-    top: auto;
-    bottom: calc(var(--bottombar-h, 56px) + var(--space-3));
-    transform: none;
-    width: 48px;
+    display: none;
   }
+}
+
+/* ---------- reduced motion ----------
+ * motion.css zeroes --dur-* app-wide, which kills the TRANSITION but not the
+ * transform itself — a reduced-motion user would still get an instant jump.
+ * Every transform added above is switched off here, explicitly.            */
+@media (prefers-reduced-motion: reduce) {
   .promoThumb,
-  .jackpotCard {
-    display: none;
+  .promoThumb:hover,
+  .promoClose,
+  .promoClose:hover,
+  .jackpotCard,
+  .jackpotCard:hover,
+  .jackpotCta,
+  .jackpotCta:hover,
+  .iconBtn,
+  .iconBtn:hover,
+  .iconBtn[aria-expanded="true"] {
+    transform: none;
+    transition: none;
   }
-  .iconLabel {
-    display: none;
-  }
+  /* .rail's translateY(-50%) is LAYOUT, not motion — it must survive. */
 }

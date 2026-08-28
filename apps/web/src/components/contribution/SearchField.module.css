@@ -1,0 +1,157 @@
+/* ============================================================================
+ * SearchField — hand-rolled input (prototype §2.2). 48px (--tap-bar) tall,
+ * 16px (--t-body) text so iOS never zooms on focus; leading search glyph; a
+ * 44×44 clear ✕ padded off the field edge. Tokens only — no --loss / --error /
+ * --win / --text-dim / --vip-* / --brand-font-display; no raw hex / px / ms.
+ *
+ * FLAT input contract (30-PM-DESIGN-SYSTEM, as CORRECTED 2026-08-17):
+ *   resting = filled --surface-3 PLUS a 1px --border hairline;
+ *   focus   = 2px SOLID accent border, never a glow ring.
+ *
+ * The original rule said "resting = no border". Reversed by the PM: --surface-3
+ * against this page ground is ~1.1:1, so a border-less field has no boundary at
+ * all and fails WCAG 1.4.11's 3:1 floor for UI component edges. The flat system
+ * removes shadow, gradient and border simultaneously; in a dark palette nothing
+ * survives that, so the hairline is load-bearing for fields as it is for cards.
+ * DO NOT remove the resting border again.
+ *
+ * The accent focus edge overrides the feature's earlier "no --brand-accent" rule
+ * for the FOCUS edge ONLY: that rule exists because gold is reward chrome and a
+ * contribution rate must not read as a prize — a transient keyboard state
+ * carries no such reading, and the app must not run two focus languages. Every
+ * RESTING/value colour on this surface stays neutral; the resting hairline is
+ * --border, the LOCKED constant, not a brand accent.
+ * ==========================================================================*/
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  width: 100%;
+}
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--tap-bar);
+  /* 1px pad compensates the 1px resting border: content box is identical at rest
+   * (1 border + 1 pad) and at focus (2 border + 0 pad) — no reflow. */
+  padding: 1px;
+  background: var(--surface-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+
+.control:focus-within {
+  border-width: 2px;
+  /* FOCUS IS BLUE, EVERYWHERE — PM ruling, reconciling a split between two
+     sweep areas (one used --brand-accent here, one used --focus-ring).
+     Focus is ONE affordance and gets ONE colour: a user learns "blue = where I
+     am" once, or not at all. Two reinforcing reasons for blue over gold:
+       · --focus-ring is the PINNED, AA-guaranteed indicator (8.21:1 vs canvas),
+         locked identical across brands. Gold is not.
+       · On this product gold is REWARD chrome. Focus is not a reward, and the
+         trust surfaces (contribution/restricted) already forbid brand accent
+         for exactly that reason.
+     The design system's "border-2 solid Primary" was written for a light
+     palette where Primary WAS the focus blue and the two coincided. In dark
+     gold they diverge, and the accessibility token wins. */
+  border-color: var(--focus-ring);
+  padding: 0;
+}
+
+.lead {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--space-3);
+  color: var(--text-mid);
+  font-size: var(--t-body);
+  flex: 0 0 auto;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  padding-inline: 0 var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-body); /* 16px — below it iOS zooms on focus */
+  line-height: var(--lh-body);
+}
+
+.input::placeholder {
+  color: var(--text-mid);
+  opacity: 1;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+/* clear ✕ — 44×44 tap target, padded off the field edge */
+.clear {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  margin-inline-end: var(--space-1);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: var(--text-mid);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
+}
+
+/* uniform hover — button 1.05, never scaled by prominence */
+.clear:hover {
+  color: var(--text-hi);
+  transform: scale(1.05);
+}
+
+.hintLive,
+.hintOffline {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-tight);
+}
+
+/* the static offline hint is revealed only by the JS-off <noscript> style */
+.hintOffline {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control,
+  .clear {
+    transition: none;
+  }
+  /* absent, not instant */
+  .clear:hover {
+    transform: none;
+  }
+}
+
+/* module-local visually-hidden helper (there is no global one) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

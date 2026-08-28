@@ -48,11 +48,16 @@
   background: var(--brand-accent-grad);
   flex: 0 0 auto;
 }
+/* AA FIX: this read `color: var(--surface-1)` — a token that does not exist
+ * (the ladder is --surface / --surface-2 / --surface-3). The var() was invalid
+ * at computed-value time, so `color` fell back to the INHERITED --text-hi
+ * champagne, painting near-white on the #d4af37 gold avatar: 2.11:1, an AA
+ * fail. --brand-on-accent is the dark ink the system defines for gold: 9.42:1. */
 .avatarInitial {
   font-size: var(--t-h2);
   font-weight: var(--weight-bold);
   font-family: var(--brand-font-num);
-  color: var(--surface-1);
+  color: var(--brand-on-accent);
 }
 .idText {
   display: flex;

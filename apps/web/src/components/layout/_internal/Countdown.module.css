@@ -26,7 +26,12 @@
   border-radius: var(--radius-sm);
   color: var(--text-hi);
   font-weight: var(--weight-bold);
-  font-size: var(--t-h3);
+  /* The clock is the card's subject, so it carries the card's largest type.
+     --t-h3 (18px) read as a caption next to a 16px title and lost the hierarchy
+     the Flat system puts entirely on size and weight. Four 2.4ch segments plus
+     padding and gaps stay well inside the 304px rail at this size. */
+  font-size: var(--t-h1);
+  padding: 4px var(--space-2);
 }
 
 .unitLabel {

@@ -1,0 +1,388 @@
+/* ============================================================================
+ * Yaobet — reward ceremony.
+ * ----------------------------------------------------------------------------
+ * Motion is TRANSFORM AND OPACITY ONLY, so the whole sequence stays on the
+ * compositor — a ceremony that janks on a mid-range Android is worse than none.
+ * No particle layer, no looping glow: every animation here runs once, forwards,
+ * and stops. See the component header for why this is a receipt, not a jackpot.
+ * ==========================================================================*/
+
+.panel {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+  text-align: center;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+}
+
+/* ── the stage: the player's own cards gathering ─────────────────────────── */
+
+.stage {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.fan {
+  position: relative;
+  width: 120px;
+  height: 168px;
+}
+
+/* Each card starts spread by its signed index and settles to a tight stack.
+   `--i` is the signed offset from centre, so the fan is symmetric for any set
+   size — a 5-card set and an 11-card set gather the same way. */
+.card {
+  position: absolute;
+  inset: 0;
+  transform:
+    translateX(calc(var(--i) * 26px))
+    rotate(calc(var(--i) * 5deg));
+  transform-origin: 50% 120%;
+  transition:
+    transform 780ms cubic-bezier(0.22, 0.61, 0.36, 1),
+    opacity 380ms ease;
+}
+
+/* Gathered: everything collapses onto the centre card, slightly fanned so the
+   stack still reads as several cards rather than one. */
+.panel[data-beat="seal"] .card,
+.panel[data-beat="receipt"] .card {
+  transform:
+    translateX(calc(var(--i) * 2px))
+    rotate(calc(var(--i) * 0.8deg))
+    scale(0.94);
+}
+
+.card :global(svg),
+.card img {
+  width: 100%;
+  height: 100%;
+  /* --radius-md, matching `CardArt`'s own wrap. The two were 16 and 8 and the
+     mismatch showed as a bright corner sliver on every gathered card. */
+  border-radius: var(--radius-md);
+}
+
+/* ── the seal ───────────────────────────────────────────────────────────── */
+
+.seal {
+  position: absolute;
+  width: 132px;
+  height: 132px;
+  opacity: 0;
+  transform: scale(0.86);
+  transition: opacity 260ms ease, transform 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+
+.panel[data-beat="seal"] .seal,
+.panel[data-beat="receipt"] .seal {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sealRing,
+.sealRingInner,
+.sealTick {
+  fill: none;
+  stroke: var(--brand-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sealRing { stroke-width: 2.5; opacity: 0.9; }
+.sealRingInner { stroke-width: 1; opacity: 0.4; }
+.sealTick { stroke-width: 5; }
+
+/* The ring and the tick DRAW rather than fade — the gesture of a stamp being
+   applied, which is what a completion is. */
+.sealRing,
+.sealTick {
+  stroke-dasharray: var(--len, 340);
+  stroke-dashoffset: var(--len, 340);
+}
+
+.sealTick { --len: 60; }
+
+.panel[data-beat="seal"] .sealRing,
+.panel[data-beat="receipt"] .sealRing {
+  animation: draw 620ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.panel[data-beat="seal"] .sealTick,
+.panel[data-beat="receipt"] .sealTick {
+  animation: draw 380ms cubic-bezier(0.4, 0, 0.2, 1) 380ms forwards;
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ── the statement ──────────────────────────────────────────────────────── */
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--t-micro);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-accent);
+}
+
+.setName {
+  margin: 0;
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+  text-wrap: balance;
+}
+
+.count {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+}
+
+.count strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The amount. Present from the first frame — it does NOT animate in, and it
+   does NOT count up. See the component header. */
+.amount {
+  margin: var(--space-1) 0 0;
+  font-size: var(--t-h1);
+  font-weight: var(--weight-bold);
+  color: var(--brand-accent);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.provisional {
+  margin: 0;
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+}
+
+/* ── the receipt ────────────────────────────────────────────────────────── */
+
+.receipt {
+  width: 100%;
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--border);
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 320ms ease, transform 320ms ease;
+}
+
+.receipt[data-ready="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Held open while the credit is in flight so the panel does not resize under
+   the player's thumb at the moment the button appears. */
+.pending {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--text-dim);
+  min-height: var(--tap-min);
+  display: grid;
+  place-items: center;
+}
+
+.credited {
+  margin: 0;
+  font-size: var(--t-body);
+  color: var(--text);
+}
+
+.credited strong { color: var(--text-hi); font-weight: var(--weight-semi); }
+
+.terms {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.terms li {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  line-height: var(--lh-body);
+}
+
+.terms strong { color: var(--text); font-weight: var(--weight-semi); }
+
+.txn {
+  margin: 0;
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+}
+
+.txn code {
+  color: var(--text-mid);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* `Xác nhận` / `Xong` — flat.
+   Same treatment as the pack-stage CTA, and deliberately the same numbers: a
+   solid accent plate, a hover COLOUR SHIFT to `--brand-accent-2`, the uniform
+   1.05. The confirm button on the destructive step is not given more weight
+   than the dismiss button on the receipt. */
+.done {
+  width: 100%;
+  min-height: var(--tap-min);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--brand-accent);
+  color: var(--brand-on-accent);
+  font-size: var(--t-body);
+  font-weight: var(--weight-bold);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.done:hover { background: var(--brand-accent-2); transform: scale(1.05); }
+
+.done:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+/* ── refusal ────────────────────────────────────────────────────────────── */
+
+.failTitle {
+  margin: 0;
+  font-size: var(--t-h2);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+}
+
+.failBody {
+  margin: 0;
+  font-size: var(--t-body);
+  color: var(--text);
+}
+
+.failHint {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--text-dim);
+}
+
+/* ── reduced motion: arrive, do not perform ─────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .seal,
+  .receipt,
+  .done,
+  .cancel {
+    transition: none;
+  }
+
+  .sealRing,
+  .sealTick {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  /* The component already SKIPS to the receipt under this query (see the
+     `reduced` branch in RewardCeremony.tsx). The hover scale is dropped with
+     it — the ceremony arrives, it does not perform. */
+  .done:hover,
+  .cancel:hover { transform: none; }
+}
+
+/* ── the confirm phase: what the exchange costs ──────────────────────────── */
+
+/* A card, so it takes the gold hairline and the card radius (ruling A2). */
+.cost {
+  width: 100%;
+  margin-top: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--brand-accent-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  display: grid;
+  gap: var(--space-2);
+  text-align: left;
+}
+
+.costHead {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--text);
+  line-height: var(--lh-body);
+}
+
+.costHead strong { color: var(--text-hi); font-weight: var(--weight-semi); }
+
+.costSpare {
+  margin: 0;
+  font-size: var(--t-micro);
+  color: var(--win);
+  line-height: var(--lh-body);
+}
+
+/* Caution, not danger. The action is reversible by playing again — it is a
+   cost to disclose, not a warning to alarm with. */
+.costWarn {
+  margin: 0;
+  font-size: var(--t-micro);
+  font-weight: var(--weight-semi);
+  color: var(--caution);
+}
+
+.costList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+
+.costList li {
+  font-size: var(--t-micro);
+  color: var(--text-mid);
+  line-height: var(--lh-tight);
+}
+
+.costList strong {
+  color: var(--caution);
+  font-variant-numeric: tabular-nums;
+}
+
+.cancel {
+  width: 100%;
+  min-height: var(--tap-min);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.cancel:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+  transform: scale(1.05);
+}
+
+.cancel:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }

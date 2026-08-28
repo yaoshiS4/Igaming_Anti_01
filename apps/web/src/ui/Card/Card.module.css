@@ -44,16 +44,27 @@ button.card {
   cursor: pointer;
   transition:
     transform var(--dur-base) var(--ease-standard),
-    box-shadow var(--dur-base) var(--ease-standard),
+    background-color var(--dur-base) var(--ease-standard),
     border-color var(--dur-base) var(--ease-standard);
 }
 
-/* pointer (mouse) → glow + subtle lift */
+/* Icons inside an interactive card ride the card's hover at 1.10. Targets the
+ * stable [data-icon] hook the Icon primitive stamps on its <svg>, because a
+ * CSS-Module class from Icon.module.css is hashed and unreachable from here. */
+.interactive [data-icon] {
+  transition: transform var(--dur-base) var(--ease-standard);
+}
+
+/* pointer (mouse) → UNIFORM scale(1.02) + a border COLOUR shift. Was
+ * translateY(-2px) + box-shadow:var(--glow-gold); the glow token is now `none`,
+ * so the lift was the only surviving feedback and it was the wrong idiom. */
 @media (hover: hover) and (pointer: fine) {
   .interactive:hover {
     border-color: var(--brand-accent);
-    box-shadow: var(--glow-gold);
-    transform: translateY(-2px);
+    transform: scale(1.02);
+  }
+  .interactive:hover [data-icon] {
+    transform: scale(1.1);
   }
 }
 
@@ -69,20 +80,24 @@ button.card {
   outline-offset: 2px;
 }
 
-/* lit/active state */
+/* Lit/active state. The glow that used to carry this resolves to `none` under
+ * the flat ban, which left `active` signalled by a hairline→solid border step
+ * alone. An 8% accent film over --surface restores a legible lit state as a
+ * SOLID computed colour (color-mix, not a gradient — cards may not carry one).
+ * NOTE: accent gold, never --focus-ring: blue is focus and only focus. */
 .active {
   border-color: var(--brand-accent);
-  box-shadow: var(--glow-gold);
+  background: color-mix(in srgb, var(--brand-accent) 8%, var(--surface));
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .interactive {
-    transition: box-shadow var(--dur-base) var(--ease-standard);
+  .interactive,
+  .interactive [data-icon] {
+    transition: border-color var(--dur-base) var(--ease-standard);
   }
-  .interactive:hover {
-    transform: none;
-  }
-  .interactive:active {
+  .interactive:hover,
+  .interactive:active,
+  .interactive:hover [data-icon] {
     transform: none;
   }
 }

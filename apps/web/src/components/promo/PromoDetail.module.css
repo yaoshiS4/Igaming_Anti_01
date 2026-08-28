@@ -24,6 +24,8 @@
   padding: 0;
 }
 
+/* FULL-BLEED hero backdrop — permitted background decoration, not a card fill;
+ * the placeholder for licensed banner art. */
 .media {
   display: block;
   width: 100%;

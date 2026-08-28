@@ -11,8 +11,8 @@
   justify-content: space-around;
   height: calc(var(--bottombar-h) + env(safe-area-inset-bottom, 0px));
   padding-bottom: env(safe-area-inset-bottom, 0px);
-  background: var(--surface); /* opaque */
-  border-top: 1px solid var(--border);
+  background-color: var(--surface); /* opaque */
+  border-top: 1px solid var(--border); /* load-bearing: 1.07:1 vs --canvas */
 }
 
 .tab {
@@ -72,9 +72,10 @@
   height: 52px;
   margin-top: -22px; /* raise above the bar */
   border-radius: var(--radius-pill);
-  background: var(--brand-cta-accent); /* scarce/register accent — CTA, never an outcome */
-  color: #fff;
-  box-shadow: var(--lift);
+  background-color: var(--brand-cta-accent); /* scarce/register accent — CTA, never an outcome */
+  color: var(--text-hi); /* was a raw #fff — 3.21:1 vs the accent, clears the 3:1 non-text floor */
+  /* Flat: no lift. The 3px --surface ring is what separates the raised circle
+   * from the bar; a shadow was doing nothing the ring does not. */
   border: 3px solid var(--surface);
 }
 

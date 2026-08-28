@@ -1,0 +1,48 @@
+/* ============================================================================
+ * RestrictedIntro — sentence-case h1 on the BODY face (never the Cinzel display
+ * face); a lifted lead; a bordered "Lưu ý" note callout at the --text-mid AA
+ * floor. Tokens only — no raw hex / px / ms; no --loss / --error / --win /
+ * --text-dim / --brand-font-display.
+ * ==========================================================================*/
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.title {
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-h1);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+}
+
+/* the lifted lead — what the list IS + why a bet may not count in a promo */
+.lead {
+  color: var(--text);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+}
+
+/* the load-bearing note — a bordered callout so it reads as guidance, not fine
+ * print (it prevents the "I can never play these" misread) */
+.note {
+  margin-top: var(--space-2);
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  min-width: 0;
+}
+
+.noteLabel {
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-weight: var(--weight-semi);
+}

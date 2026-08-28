@@ -38,9 +38,13 @@ export function VipHeroMember({
           />
           <div className={styles.who}>
             <h1 className={styles.name}>{user.name}</h1>
+            {/* SOLID tier accent — tier.grad is a 3-stop metallic gradient and
+                the flat system bans gradients on chips/buttons/cards. tier.acc
+                is the same tier's flat accent; --vip-gold-ink stays legible on
+                every one of the five accents. */}
             <span
               className={styles.tierPill}
-              style={{ background: tier.grad }}
+              style={{ background: tier.acc }}
             >
               <span className={styles.crown} aria-hidden>
                 ♛

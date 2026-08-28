@@ -5,6 +5,11 @@
 }
 
 .card {
+  /* Establishes the containment context the jackpot's fluid type measures
+     against — the CARD, not the viewport. A viewport-relative size would keep
+     overflowing here, because this rail is a fixed 304px at every width above
+     1240px and does not grow with the screen. */
+  container-type: inline-size;
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
@@ -21,6 +26,27 @@
 
 .jackpot {
   color: var(--brand-accent);
+}
+
+/* The jackpot pool is UNBOUNDED IN LENGTH and the card is not. At a fixed
+   --t-num-lg (32px), "28.686.888.000 đ" needs ~304px inside a ~272px box and
+   broke out of the card. Fluid between two TOKENS so the type scale still owns
+   the bounds — never below --t-h2, never above the hero size it was designed
+   for, and whatever fits in between.
+
+   Two classes on purpose: MoneyValue sets font-size from its own `num-lg`
+   class, and a single-class rule here would be decided by stylesheet order
+   rather than intent. */
+.card .jackpot {
+  /* Bounded by --t-h1 (24px), NOT --t-num-lg (32px). Measured on the running
+     rail: at 32px this pool needed ~304px inside a 270px box and burst the
+     card; at 24px it measures 226px, leaving ~44px — about two more digits
+     before the clamp floor takes over. A jackpot only ever grows, so "fits
+     exactly" is not fitting. */
+  font-size: clamp(var(--t-h2), 9cqi, var(--t-h1));
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .errorLine {

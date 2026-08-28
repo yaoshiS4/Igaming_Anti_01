@@ -1,6 +1,8 @@
 /* ============================================================================
- * Luxury VIP — Guest hero. Gold-bordered warm panel with a radial gold glow,
- * Cinzel display H1, and two CTAs (register / login). NO stat numbers.
+ * Luxury VIP — Guest hero. FLAT: a solid warm panel drawn by a load-bearing
+ * gold hairline (ruling A2) with a full-bleed hero backdrop gradient — the ONE
+ * gradient class the system still permits. NO shadow, NO glow, NO blur halo.
+ * Two CTAs (register / login) on solid fills with a hover COLOUR shift.
  * Page-scoped dark palette (VIP tokens only).
  * ==========================================================================*/
 
@@ -15,6 +17,7 @@
   gap: var(--space-3);
   padding: calc(var(--card-pad) * 1.75) var(--card-pad);
   border-radius: var(--radius-card);
+  /* full-bleed hero backdrop — permitted as large background decoration */
   background:
     radial-gradient(
       120% 140% at 50% 0%,
@@ -22,26 +25,9 @@
       transparent 60%
     ),
     var(--vip-panel-bg);
+  /* the border is the ONLY separation mechanism: shadows are banned and the
+   * panel/page pair measures ~1.1:1 on its own (ruling A2). */
   border: 1px solid color-mix(in srgb, var(--vip-gold-mid) 34%, transparent);
-  box-shadow:
-    var(--glow-gold),
-    0 24px 60px -30px color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
-}
-
-/* soft off-frame gold halo behind the copy */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: -40% 20% auto 20%;
-  height: 70%;
-  z-index: -1;
-  background: radial-gradient(
-    60% 100% at 50% 0%,
-    color-mix(in srgb, var(--vip-gold-mid) 22%, transparent),
-    transparent 70%
-  );
-  filter: blur(24px);
-  pointer-events: none;
 }
 
 .badge {
@@ -63,9 +49,9 @@
   width: 12px;
   height: 12px;
   border-radius: var(--vip-radius-gem);
-  background: var(--vip-gold-grad);
+  /* solid gold — the gem's glow was a shadow by another name */
+  background: var(--vip-gold-mid);
   transform: rotate(45deg);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--vip-gold-mid) 60%, transparent);
 }
 
 .title {
@@ -107,19 +93,30 @@
   font-weight: var(--weight-semi);
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  /* uniform button motion: scale(1.05) on hover, token duration/easing */
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
 }
 
+.ctaPrimary:hover,
+.ctaGhost:hover {
+  transform: scale(1.05);
+}
+
+/* SOLID gold fill — the 3-stop --vip-gold-grad is banned on a button. Ink is
+ * --vip-gold-ink (dark) on --vip-gold-mid: white here would be an AA fail. */
 .ctaPrimary {
   border: 0;
-  background: var(--vip-gold-grad);
+  background: var(--vip-gold-mid);
   color: var(--vip-gold-ink);
-  box-shadow: 0 8px 24px -10px color-mix(in srgb, var(--vip-gold-mid) 70%, transparent);
 }
 
+/* hover = a COLOUR shift, not a lift */
 .ctaPrimary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--vip-gold-mid) 85%, transparent);
+  background: var(--vip-gold-end);
 }
 
 .ctaGhost {
@@ -130,12 +127,14 @@
 
 .ctaGhost:hover {
   background: color-mix(in srgb, var(--vip-gold-mid) 12%, transparent);
-  transform: translateY(-1px);
+  border-color: var(--vip-gold-mid);
 }
 
+/* BLUE MEANS FOCUS AND ONLY FOCUS — the locked neutral --focus-ring, never a
+ * brand/tier colour (which would make focus indistinguishable from selection). */
 .ctaPrimary:focus-visible,
 .ctaGhost:focus-visible {
-  outline: 2px solid var(--vip-gold-end);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -146,5 +145,14 @@
   .ctaPrimary,
   .ctaGhost {
     flex: 1 1 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ctaPrimary,
+  .ctaGhost,
+  .ctaPrimary:hover,
+  .ctaGhost:hover {
+    transform: none;
   }
 }

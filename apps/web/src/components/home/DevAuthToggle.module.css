@@ -35,7 +35,6 @@
   border-radius: var(--radius-lg);
   background: var(--surface-3);
   border: 1px dashed var(--brand-accent-hairline);
-  box-shadow: var(--halo);
 }
 
 .row {

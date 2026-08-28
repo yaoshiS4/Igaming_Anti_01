@@ -27,6 +27,7 @@
   --brand-cta-accent:      var(--cta-accent);
   --brand-font-body:       var(--font-body);
   --brand-font-num:        var(--font-num);
+  --brand-font-head:       var(--font-head);
   --brand-logo:            url("/assets/brand/logo.svg");
 }
 
@@ -41,7 +42,12 @@
   --brand-cta:             #2f6bff;
   --brand-cta-grad:        linear-gradient(90deg, #3b7bff, #2f6bff);
   --brand-cta-accent:      #ff3d57;
-  --brand-font-body:       "Be Vietnam Pro", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-  --brand-font-num:        "Be Vietnam Pro", ui-monospace, "DIN Alternate", sans-serif;
+  /* The faces are injected by next/font under HASHED family names, so a bare
+   * "Be Vietnam Pro" / "Montserrat" literal here would silently miss the
+   * loaded font and drop to system-ui. Reference the loader vars instead —
+   * still a --brand-* declaration, so lint A1 is unaffected. */
+  --brand-font-body:       var(--font-be-vietnam), system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --brand-font-num:        var(--font-be-vietnam), ui-monospace, "DIN Alternate", sans-serif;
+  --brand-font-head:       var(--font-montserrat), system-ui, "Segoe UI", Roboto, Arial, sans-serif;
   --brand-logo:            url("/assets/brand/emerald-logo.svg");
 }

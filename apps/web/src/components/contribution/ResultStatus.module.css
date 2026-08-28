@@ -1,0 +1,25 @@
+/* ============================================================================
+ * ResultStatus — one muted line at the --text-mid AA floor / --t-sm. No colour
+ * carries meaning here; no --text-dim, no --t-micro. No percentage ever appears
+ * in this line (the rate lives only in the table's rate column).
+ * ==========================================================================*/
+
+.status {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-tight);
+  min-height: var(--t-sm); /* reserve the line so a count landing shifts nothing */
+}
+
+/* module-local visually-hidden helper (there is no global one) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

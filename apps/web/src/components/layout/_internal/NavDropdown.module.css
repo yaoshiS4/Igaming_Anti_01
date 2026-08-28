@@ -19,27 +19,37 @@
   gap: var(--space-2); /* J9 8px icon↔label */
   padding: 0;
   border: 0;
-  background: transparent;
-  color: var(--blue-soft); /* J9 #c5ddf0 silver-blue */
+  background-color: transparent;
+  /* Blue is FOCUS ONLY — the J9 silver-blue resting colour is re-pointed to the
+   * champagne text ladder (--text = 13.20:1 on --header-bg). */
+  color: var(--text);
   font: inherit;
-  font-size: var(--t-body); /* 16px rest */
+  font-size: var(--t-body); /* 16px — FIXED at rest AND on hover */
   font-weight: var(--weight-reg);
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;
-  transition: all var(--dur-base) linear; /* J9 .25s linear */
+  /* explicit properties, not `all …  linear`: --ease-standard + --dur-base, and
+   * `all` would animate the transform/colour set unpredictably. */
+  transition: color var(--dur-base) var(--ease-standard),
+    transform var(--dur-base) var(--ease-standard);
 }
 
-/* J9 hover/active: 20px 600 weight + gold-gradient text fill */
+/* Flat: the J9 hover was a 16px→20px SIZE JUMP inside a fixed 152px cell (a
+ * reflowing, prominence-differentiated hover) painted with a two-stop
+ * linear-gradient text-clip whose first stop was a raw #fff9f0. Both are
+ * banned. Replaced by the uniform 1.05 button scale + a solid accent colour;
+ * ACTIVE reads as gold (--brand-accent), never as the focus blue.            */
 .trigger:hover,
 .active {
-  font-size: var(--t-h2); /* 20px */
+  color: var(--brand-accent); /* 9.42:1 on --header-bg */
+}
+/* persistent SELECTED weight (a state marker, not a hover effect) */
+.active {
   font-weight: var(--weight-semi);
-  background: linear-gradient(180deg, #fff9f0, var(--brand-accent) 101.67%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+}
+.trigger:hover {
+  transform: scale(1.05);
 }
 
 .trigger:focus-visible {
@@ -48,11 +58,12 @@
   border-radius: var(--radius-md);
 }
 
-/* leading per-vertical glyph — J9 .iconfont 24×24, keeps its own color */
+/* leading per-vertical glyph — J9 .iconfont 24×24, keeps its own color.
+ * The -webkit-text-fill-color overrides existed only to punch the glyph back
+ * out of the gradient text-clip above; that clip is gone, so they are too. */
 .navIcon {
   flex: 0 0 auto;
-  color: var(--blue-soft);
-  -webkit-text-fill-color: currentColor; /* glyph stays solid under text-clip */
+  color: var(--text-mid);
   opacity: 0.9;
 }
 
@@ -64,8 +75,7 @@
 
 .caret {
   flex: 0 0 auto;
-  color: var(--blue-soft);
-  -webkit-text-fill-color: currentColor;
+  color: var(--text-mid);
   opacity: 0.7;
 }
 .trigger:hover .caret,
@@ -79,10 +89,11 @@
   left: 0;
   margin-top: var(--space-1);
   min-width: 220px;
-  background: var(--surface); /* opaque */
+  background-color: var(--surface); /* opaque — never a backdrop blur */
+  /* Flat: no elevation. The hairline is the separation (--surface on --canvas
+   * is 1.07:1, so this border is load-bearing, not decorative). */
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--lift);
   padding: var(--space-2);
   z-index: var(--z-dropdown);
   animation: panel-in var(--dur-fast) var(--ease-entrance);
@@ -98,5 +109,10 @@
 @media (prefers-reduced-motion: reduce) {
   .panel {
     animation: none;
+  }
+  .trigger,
+  .trigger:hover {
+    transform: none;
+    transition: none;
   }
 }

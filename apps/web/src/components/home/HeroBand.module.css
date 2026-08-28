@@ -63,12 +63,15 @@
   pointer-events: none;
 }
 
-/* image SLOT — token-derived gradient, the honest fallback when no banner art
- *  (only the empty-state branch uses this now; banner slides are image-only). */
+/* image SLOT — the honest fallback when no banner art (only the empty-state
+ *  branch uses this now; banner slides are image-only). This is a FULL-BLEED
+ *  hero backdrop, the one place the flat system still allows a directional
+ *  gradient — but the raw rgba() literal is gone, it reads --brand-accent-
+ *  hairline like every other component-level accent tint. */
 .slot,
 .slotEmpty {
   background:
-    radial-gradient(120% 120% at 85% 15%, rgba(243, 184, 103, 0.18), transparent 60%),
+    radial-gradient(120% 120% at 85% 15%, var(--brand-accent-hairline), transparent 60%),
     linear-gradient(135deg, var(--surface) 0%, var(--surface-3) 100%);
 }
 
@@ -95,11 +98,16 @@
 /* ===========================================================================
  * (a) ANIMATED PROGRESS-LINE INDICATOR  (J9-EXACT)
  * A thin FULL-WIDTH track with one node dot per slide; the ACTIVE node is a
- * larger filled BLUE dot, and a BLUE SEGMENT advances rightward over the
- * autoplay dwell from the active node toward the next node. Nodes double as
- * the clickable navigation (defect-2: arrows removed).
- * J9 swiper theme = #007aff → our --info (#018fff). Inactive nodes = muted
- * grey; the base rail is a hairline. Static under reduced-motion.
+ * larger filled BRAND-ACCENT dot, and a brand-accent SEGMENT advances rightward
+ * over the autoplay dwell from the active node toward the next node. Nodes
+ * double as the clickable navigation (defect-2: arrows removed).
+ *
+ * WAS --info (blue). Blue means FOCUS and only focus in this system: a blue
+ * playhead sitting next to a blue :focus-visible ring made "the slide you are
+ * on" and "the control your keyboard is on" the same colour. Selected/active
+ * state is --brand-accent; --focus-ring stays exclusive to :focus-visible.
+ * Inactive nodes = muted grey; the base rail is a hairline. Static under
+ * reduced-motion.
  * ======================================================================== */
 .progress {
   position: relative;
@@ -129,11 +137,11 @@
   height: 2px;
   transform: translateY(-50%);
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.16); /* hairline on dark */
+  background: var(--progress-track); /* locked neutral hairline groove on dark */
   pointer-events: none;
 }
 
-/* the advancing BLUE segment. It starts at the rail's left and grows to the
+/* the advancing brand-accent segment. It starts at the rail's left and grows to the
  * active node's center (--seg-frac), then advances one inter-node span across
  * the dwell (--seg-dur). --seg-frac/-next are resolved per breakpoint so the
  * fill always lands under the active node (FIX 2). */
@@ -144,7 +152,7 @@
   height: 2px;
   transform: translateY(-50%);
   border-radius: var(--radius-pill);
-  background: var(--info); /* J9 swiper blue #007aff ≈ --info #018fff */
+  background: var(--brand-accent); /* SELECTED-state colour — never --focus-ring */
   pointer-events: none;
   width: calc((100% - 10px) * var(--seg-frac));
   /* never overshoot the rail (last slide: --seg-frac=1, no further node) */
@@ -188,14 +196,14 @@
   width: 8px;
   height: 8px;
   border-radius: var(--radius-pill);
-  background: rgba(255, 255, 255, 0.32);
+  background: var(--text-dim);
   transition: transform var(--dur-fast) var(--ease-standard),
     background var(--dur-fast) var(--ease-standard);
 }
 
-/* reached/active nodes → larger filled BLUE dot (active reads as the playhead) */
+/* reached/active nodes → larger filled ACCENT dot (active reads as the playhead) */
 .nodeOn .dot {
-  background: var(--info);
+  background: var(--brand-accent);
   transform: scale(1.4);
 }
 

@@ -1,0 +1,130 @@
+/* ============================================================================
+ * Pager — the numbered pager, rendered INSIDE the table frame but OUTSIDE the
+ * Scroller (it never scrolls sideways); a top hairline separates it from the
+ * last row. Neutral chrome only — the active page reads as a raised --surface-3
+ * chip (NOT gold: gold is reserved, and no rate value lives here anyway). Tokens
+ * only — no --loss / --error / --win / --text-dim / --brand-accent / --vip-* /
+ * --brand-font-display; no raw hex / px / ms.
+ * ==========================================================================*/
+
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  border-top: 1px solid var(--border);
+  padding: var(--space-3);
+  min-width: 0;
+}
+
+/* Prev / Next — a 44×44 square step */
+.step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  flex: 0 0 auto;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-hi);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
+}
+
+/* uniform hover: EVERY button in this pager scales 1.05 — the active page is
+ * not scaled differently from an inactive one (30-PM-DESIGN-SYSTEM §B1). */
+.step:hover:not(:disabled) {
+  background: var(--surface-hover);
+  transform: scale(1.05);
+}
+
+.step:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.step:disabled {
+  background: var(--surface-disabled);
+  color: var(--text-mid);
+  cursor: not-allowed;
+}
+
+/* the numbered page list */
+.pages {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--tap-min);
+  height: var(--tap-min);
+  padding: 0 var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--text-mid);
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
+}
+
+.page:hover {
+  background: var(--surface-hover);
+  color: var(--text-hi);
+  transform: scale(1.05);
+}
+
+.page:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* the active page — a raised, bordered chip; never gold */
+.pageOn {
+  background: var(--surface-3);
+  border-color: var(--border);
+  color: var(--text-hi);
+}
+
+/* the ellipsis — inert, muted */
+.gap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-4);
+  height: var(--tap-min);
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step,
+  .page {
+    transition: none;
+  }
+  /* absent, not instant */
+  .step:hover:not(:disabled),
+  .page:hover {
+    transform: none;
+  }
+}

@@ -14,41 +14,12 @@
   width: 100%;
   overflow: hidden;
   border-radius: var(--radius-md); /* J9 tile corner = 8px */
-  /* Lucky Obsidian field: deep tile base lifted by a warm gold bloom from the
-   * top, with a faint diagonal gold wash — derived entirely from brand/locked
-   * tokens (never a raw ramp literal). */
-  background:
-    radial-gradient(120% 90% at 50% -10%, var(--surface-hover), var(--tile) 62%),
-    linear-gradient(135deg, var(--brand-accent-hairline), transparent 55%),
-    var(--shell);
+  /* FLAT: a solid --tile fill. Was a radial gold bloom + diagonal gold wash
+   * over --shell, plus box-shadow:var(--glow-gold). A tile is a card, and cards
+   * take solid fills with no depth; the gold hairline draws the edge and the
+   * gold lock/label carry the premium read. */
+  background: var(--tile);
   border: 1px solid var(--brand-accent-hairline);
-  box-shadow: var(--glow-gold);
-}
-
-/* diagonal sheen — a single soft gold band that sweeps slowly across the card.
- * It sits above the field but below the content, clipped by .tile overflow. */
-.sheen {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    115deg,
-    transparent 30%,
-    var(--brand-accent-hairline) 48%,
-    var(--tint) 52%,
-    transparent 70%
-  );
-  background-size: 220% 100%;
-  background-position: 130% 0;
-  opacity: 0.9;
-  animation: csSheen 6s var(--ease-standard) infinite;
-}
-
-@keyframes csSheen {
-  0%   { background-position: 130% 0; }
-  /* the band crosses once, then a long quiet hold before repeating */
-  28%  { background-position: -60% 0; }
-  100% { background-position: -60% 0; }
 }
 
 .inner {
@@ -62,7 +33,9 @@
   text-align: center;
 }
 
-/* soft gold ring around the lock glyph */
+/* gold ring around the lock glyph — FLAT: the radial "soft glow" behind it was
+ * a glow by another name. A solid 12% accent film reads as a lit disc without
+ * simulating light falloff. */
 .lockRing {
   display: flex;
   align-items: center;
@@ -71,7 +44,7 @@
   height: 44px;
   border-radius: var(--radius-pill);
   color: var(--brand-accent);
-  background: radial-gradient(closest-side, var(--brand-accent-hairline), transparent);
+  background: color-mix(in srgb, var(--brand-accent) 12%, var(--tile));
   border: 1px solid var(--brand-accent-hairline);
 }
 .lockIcon {
@@ -102,12 +75,7 @@
   color: var(--text-mid);
 }
 
-/* Reduced-motion: hold the sheen still in its rest position. The global
- * motion.css already zeroes --dur-* and clamps animation-duration, but the
- * sheen's duration is a literal (6s) so it is gated explicitly here too. */
-@media (prefers-reduced-motion: reduce) {
-  .sheen {
-    animation: none;
-    background-position: -60% 0;
-  }
-}
+/* No motion left to gate: the 6s diagonal sheen was removed with the gradient
+ * field (an animated gold band sweeping a card is a glow, and cards may not
+ * carry gradients). The tile is now fully static, so it is reduced-motion safe
+ * by construction rather than by opt-out. */

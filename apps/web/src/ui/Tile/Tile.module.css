@@ -24,7 +24,10 @@
   display: block;
 }
 
-/* PLACEHOLDER SLOT — token-derived gradient (no external asset). */
+/* PLACEHOLDER SLOT — FLAT solid fill (no external asset). Was a radial+linear
+ * gradient field; a Tile IS a card (it renders inside Card variant="tile"), and
+ * cards take solid fills only. The uppercase label carries the "awaiting art"
+ * read, not the gradient. */
 .slot {
   position: absolute;
   inset: 0;
@@ -32,9 +35,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-3);
-  background:
-    radial-gradient(120% 120% at 30% 20%, var(--surface-hover), var(--tile) 60%),
-    linear-gradient(135deg, var(--tint), transparent);
+  background: var(--surface-2);
   border-bottom: 1px solid var(--brand-accent-hairline);
 }
 
@@ -56,10 +57,16 @@
 
 /* J9 label sits OVER the bottom of the cover art on a dark scrim, so the tile is
  * one fixed-height art cell (not art + a separate label block that breaks 205px).
- * The scrim is a DEEP gradient (transparent → rgba(0,0,0,.85)) tall enough to
- * carry both the 2-line name and the provider so they read cleanly over busy art,
- * never on the raw key-art. justify-content:flex-end pins the text to the base so
- * the label-block is anchored identically on every tile. */
+ * The scrim is a DEEP gradient tall enough to carry both the 2-line name and the
+ * provider so they read cleanly over busy art, never on the raw key-art. This is
+ * a legibility scrim over photographic content — permitted as large background
+ * decoration; it is not a card fill and carries no depth cue.
+ *
+ * DEEPENED + de-hardcoded. The old stops (rgba(0,0,0,.45) at 45%) put --text-hi
+ * at 2.94:1 over worst-case white key-art — an AA fail that the removed
+ * text-shadow was silently propping up. --scrim (0.70) at the same position
+ * measures 7.39:1, so the contrast is now real rather than shadow-assisted, and
+ * every stop is a token (no raw rgba literals). */
 .scrim {
   position: absolute;
   inset: auto 0 0 0;
@@ -70,26 +77,20 @@
   gap: 2px;
   /* taller, deeper scrim: most of the fade is empty, the dark base sits under text */
   padding: var(--space-5) var(--space-3) var(--space-3);
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.45) 45%,
-    rgba(0, 0, 0, 0.85) 100%
-  );
+  background: linear-gradient(180deg, transparent 0%, var(--scrim) 45%, var(--shell) 100%);
 }
 
 /* Title reserves EXACTLY 2 lines (line-clamp:2 + a 2-line fixed height) so a
  * 1-line and a 2-line title yield the SAME label-block height — every 1×1 tile
  * stays uniform regardless of name length. height (not min-height) pins the block
  * at two --t-sm × --lh-tight lines even when the title is one line, so a missing
- * caption can never shrink the block either. Bolder weight + text-shadow lift the
- * name off busy art. */
+ * caption can never shrink the block either. Bolder weight + the deepened scrim
+ * (not a text-shadow) lift the name off busy art. */
 .name {
   font-size: var(--t-sm);
   font-weight: var(--weight-bold);
   line-height: var(--lh-tight);
   color: var(--text-hi);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
   /* reserve two lines: clamp to 2 and FIX the block to a 2-line height */
   height: calc(var(--t-sm) * var(--lh-tight) * 2);
   display: -webkit-box;
@@ -101,13 +102,13 @@
   overflow-wrap: anywhere;
 }
 
-/* provider line — lifted to a near-white muted tone (was --text-mid .62, faint
- * over art) + a shadow so it stays legible against the brightest key-art. */
+/* provider line — the semantic --text token (was a raw hsla white-alpha literal
+ * plus a text-shadow). It sits on the deepest part of the scrim, where it
+ * measures 13.59:1, so neither the literal nor the shadow was needed. */
 .caption {
   font-size: var(--t-micro);
   font-weight: var(--weight-semi);
-  color: hsla(0, 0%, 100%, 0.82);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

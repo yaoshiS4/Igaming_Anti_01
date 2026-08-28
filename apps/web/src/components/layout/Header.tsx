@@ -56,6 +56,7 @@ export interface HeaderProps {
  * default. Each routes to its surface (never a dead label). */
 const RIGHT_NAV: { id: string; href: string; icon: IconName; label: string; vip?: boolean }[] = [
   { id: "vip", href: "/vip", icon: "vip", label: vi.header.vip, vip: true },
+  { id: "collection", href: "/bo-suu-tap", icon: "card", label: vi.header.collection },
   { id: "promo", href: "/khuyen-mai", icon: "gift", label: vi.header.promo },
   { id: "store", href: "/cua-hang", icon: "ticket", label: vi.header.store },
   { id: "glamor", href: "/phong-cach", icon: "trophy", label: vi.header.glamor },

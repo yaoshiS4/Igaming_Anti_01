@@ -51,13 +51,24 @@
   font-weight: var(--weight-bold);
   letter-spacing: 0.04em;
   color: var(--text-mid);
-  transition: border-color var(--dur-fast) var(--ease-standard);
+  transition: border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
 
+/* every provider chip is the same fixed 128×48 cell and hovers identically */
 @media (hover: hover) and (pointer: fine) {
   .item:hover .logo {
     border-color: var(--brand-accent);
     color: var(--text-hi);
+    transform: scale(1.02);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo,
+  .item:hover .logo {
+    transform: none;
   }
 }
 

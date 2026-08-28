@@ -22,9 +22,10 @@
   display: flex;
   flex-direction: column;
   background: var(--surface);
+  /* FLAT: no --halo. The gold hairline is the ONLY thing separating this panel
+   * from the scrim/canvas behind it, so it is load-bearing, not decorative. */
   border: 1px solid var(--brand-accent-hairline);
   border-radius: var(--radius-card);
-  box-shadow: var(--halo);
   animation: pop var(--dur-base) var(--ease-entrance);
   outline: none;
 }
@@ -67,10 +68,16 @@
   border-radius: var(--radius-pill);
   color: var(--text-mid);
   cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
 }
+/* UNIFORM button hover: scale(1.05) + a colour shift — same as every Button. */
 .closeBtn:hover {
   color: var(--text-hi);
   background: var(--surface-hover);
+  transform: scale(1.05);
 }
 .closeBtn:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -142,5 +149,11 @@
   .panel,
   .scrim {
     animation: none;
+  }
+  .closeBtn {
+    transition: none;
+  }
+  .closeBtn:hover {
+    transform: none;
   }
 }

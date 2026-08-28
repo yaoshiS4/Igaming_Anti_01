@@ -14,9 +14,12 @@
 
 .panel {
   position: relative;
-  background: var(--surface);
+  background-color: var(--surface);
   color: var(--text-hi);
-  box-shadow: var(--halo);
+  /* Flat: the --halo box-shadow is gone. A sheet/dialog is --surface #141414
+   * sitting on a scrimmed --canvas — without an edge it has none, so the
+   * hairline becomes the separation mechanism (ruling A2). */
+  border: 1px solid var(--border);
   width: 100%;
   max-height: 92vh;
   overflow-y: auto;

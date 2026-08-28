@@ -86,11 +86,20 @@
   font-weight: var(--weight-semi);
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-standard),
-    border-color var(--dur-fast) var(--ease-standard);
+    border-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
+/* uniform hover — 1.05 on the button, 1.10 on its chevron */
 .filterTrigger:hover {
   background: var(--surface-hover);
   border-color: var(--brand-accent-hairline);
+  transform: scale(1.05);
+}
+.filterTrigger svg {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+.filterTrigger:hover svg {
+  transform: scale(1.1);
 }
 .filterTrigger:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -142,16 +151,28 @@
   gap: var(--space-3);
 }
 
-/* one message card on the --surface-2 sub-surface */
+/* One message card on the --surface-2 sub-surface.
+ *
+ * The hairline is LOAD-BEARING, not decoration: --surface-2 #1a1a1a on the
+ * panel's --surface #141414 measures 1.14:1, and the flat system bans the two
+ * other separation mechanisms (shadow, card gradient). Without this border the
+ * card had no edge at all. --border is the locked gold-tinted hairline and
+ * clears the WCAG 1.4.11 3:1 non-text floor on its own. */
 .item {
   position: relative;
   background: var(--surface-2);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
 /* UNREAD cue (dual-encoded): faint gold wash + 3px left accent edge. The wash
- * is a color-mix on --brand-accent (NOT a raw rgba), so it tracks the token. */
+ * is a color-mix on --brand-accent (NOT a raw rgba), so it tracks the token.
+ *
+ * VERIFIED against the "blue means focus and ONLY focus" rule: unread is
+ * --brand-accent here, not --focus-ring. A member standing on a row with the
+ * keyboard must stay distinguishable from a row that merely has not been read;
+ * sharing the hue would erase that. Same for .unreadDot below. */
 .itemUnread {
   background: color-mix(in srgb, var(--brand-accent) 6%, var(--surface-2));
 }
@@ -186,6 +207,10 @@
   cursor: pointer;
   transition: background var(--dur-fast) var(--ease-standard);
 }
+/* Colour shift only — NO hover scale. This button is the full bleed of .item,
+ * which clips (overflow:hidden) to keep the unread accent edge inside the radius;
+ * a scaled child would be cropped by its own parent. Every row — read or unread,
+ * first or last — answers identically, which is what "uniform hover" protects. */
 .itemButton:hover {
   background: var(--surface-hover);
 }
@@ -236,7 +261,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .filterTrigger,
+  .filterTrigger svg,
   .itemButton {
     transition: none;
+  }
+  /* absent, not instant */
+  .filterTrigger:hover,
+  .filterTrigger:hover svg {
+    transform: none;
   }
 }

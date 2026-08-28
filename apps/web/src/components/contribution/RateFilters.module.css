@@ -1,0 +1,160 @@
+/* ============================================================================
+ * RateFilters — the conventional-table header IA (owner override,
+ * decisions/2026-08-10). A full-width PRIMARY search on top; a SECONDARY filter
+ * bar below with three filters (category dropdown · provider dropdown · rate-%
+ * pill group) that stack <768 and wrap to a row ≥768. Tokens only — no --loss /
+ * --error / --win / --text-dim / --brand-accent / --vip-* / --brand-font-display;
+ * no raw hex / px / ms (the media-query breakpoints are the sanctioned literals).
+ * ==========================================================================*/
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+/* ---- PRIMARY: full-width search ------------------------------------------- */
+.searchWrap {
+  width: 100%;
+  min-width: 0;
+}
+
+/* ---- SECONDARY: the three-filter bar -------------------------------------- */
+.filterBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.selectWrap {
+  min-width: 0;
+}
+
+.bucketWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .filterBar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-4);
+  }
+  /* the two dropdowns share the first line; the pill group wraps to its own */
+  .selectWrap {
+    flex: 1 1 auto;
+  }
+  .bucketWrap {
+    flex: 1 1 100%;
+  }
+}
+
+/* ---- dropdown trigger (category + provider) -------------------------------- */
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-sm);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+/* Colour shift only — NO hover scale. A dropdown trigger anchors a popover to
+ * its own box; scaling it on hover moves the anchor out from under the pointer
+ * mid-open. Same documented exception the collection feature applies to its
+ * <select>. Every trigger on this surface behaves identically. */
+.trigger:hover {
+  background: var(--surface-hover);
+  border-color: var(--brand-accent-hairline);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.triggerLabel {
+  color: var(--text-mid);
+  flex: 0 0 auto;
+}
+
+.triggerValue {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: var(--weight-semi);
+}
+
+.chevron {
+  flex: 0 0 auto;
+  color: var(--text-mid);
+  font-size: var(--t-body);
+}
+
+/* ---- dropdown menu (inside ui/Dropdown's panel) --------------------------- */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: var(--tap-min);
+  padding: 0 var(--space-3);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.option:hover {
+  background: var(--surface-hover);
+  color: var(--text-hi);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.optionOn {
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger {
+    transition: none;
+  }
+}

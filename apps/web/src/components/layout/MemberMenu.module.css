@@ -60,10 +60,10 @@
   right: 0;
   margin-top: var(--space-2);
   width: 260px;
-  background: var(--surface);
+  background-color: var(--surface);
+  /* Flat: no elevation — the hairline carries the edge. */
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--lift);
   padding: var(--space-2);
   z-index: var(--z-dropdown);
   animation: menu-in var(--dur-fast) var(--ease-entrance);

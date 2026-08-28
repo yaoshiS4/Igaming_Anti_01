@@ -54,14 +54,13 @@
   gap: var(--space-2);
 }
 
-/* crest SLOT — token-gradient disc awaiting licensed crest art */
+/* crest SLOT awaiting licensed crest art — flat solid disc + gold hairline
+ * (was a radial gradient carrying a raw rgba() literal) */
 .crest {
   width: var(--space-6);
   height: var(--space-6);
   border-radius: var(--radius-pill);
-  background:
-    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.16), transparent 70%),
-    var(--surface-3);
+  background: var(--surface-3);
   border: 1px solid var(--brand-accent-hairline);
 }
 

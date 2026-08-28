@@ -1,4 +1,26 @@
-/* AuthField — TextField analog for the auth modal. */
+/* AuthField — TextField analog for the auth modal.
+ *
+ * FLAT / DARK-LUXURY input contract (30-PM-DESIGN-SYSTEM, as CORRECTED 2026-08-17):
+ *   resting → filled --surface-3 PLUS a 1px --border hairline;
+ *   focus   → a 2px SOLID accent border. Never a glow/shadow ring (the flat
+ *             system bans depth, and --glow-gold/--halo/--lift are `none`).
+ *
+ * The original ruling said "resting = filled surface, NO border". That was a
+ * literal translation of the light-mode system ("Gray 100 background. No
+ * border."), and it does not survive the palette swap: --surface-3 #212121 on
+ * the modal's --surface #141414 is 1.14:1, so a border-less field has no
+ * boundary at all and fails WCAG 1.4.11 (3:1 for UI component boundaries). The
+ * flat system removes shadow, gradient AND border simultaneously; in a light
+ * palette white-on-gray-100 survives that, at near-black on near-black nothing
+ * does. The hairline is therefore load-bearing here exactly as it is on cards.
+ * PM reversed the rule; this is the corrected build. DO NOT "fix" it back.
+ *
+ * Focus stays a WEIGHT change in the SAME hue (1px 55%-alpha gold → 2px solid
+ * gold), never a second colour. Padding compensates the extra border pixel so
+ * the box geometry is byte-identical in both states — no reflow on focus.
+ *
+ * The blue --focus-ring stays reserved for :focus-visible on the icon button;
+ * it is NEVER a resting/selected colour. */
 
 .field {
   margin-bottom: var(--space-2);
@@ -21,14 +43,30 @@
   align-items: center;
   gap: var(--space-2);
   min-height: var(--tap-min);
-  padding: 0 var(--space-3);
-  background: var(--surface-2);
+  /* +1px on each side compensates the 1px resting border, so the CONTENT box is
+   * identical at rest (1 border + 1 pad) and at focus (2 border + 0 pad). */
+  padding: 1px calc(var(--space-3) + 1px);
+  background: var(--surface-3);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   transition: border-color var(--dur-fast) var(--ease-standard);
 }
 .box:focus-within {
-  border-color: var(--brand-cta);
+  border-width: 2px;
+  /* FOCUS IS BLUE, EVERYWHERE — PM ruling, reconciling a split between two
+     sweep areas (one used --brand-accent here, one used --focus-ring).
+     Focus is ONE affordance and gets ONE colour: a user learns "blue = where I
+     am" once, or not at all. Two reinforcing reasons for blue over gold:
+       · --focus-ring is the PINNED, AA-guaranteed indicator (8.21:1 vs canvas),
+         locked identical across brands. Gold is not.
+       · On this product gold is REWARD chrome. Focus is not a reward, and the
+         trust surfaces (contribution/restricted) already forbid brand accent
+         for exactly that reason.
+     The design system's "border-2 solid Primary" was written for a light
+     palette where Primary WAS the focus blue and the two coincided. In dark
+     gold they diverge, and the accessibility token wins. */
+  border-color: var(--focus-ring);
+  padding: 0 var(--space-3);
 }
 
 .boxError {
@@ -54,8 +92,11 @@
   outline: none;
   height: var(--tap-min);
 }
+/* --text-mid (#888888), not --text-dim: --text-dim is declared decorative-only
+ * in tokens.css and measures 3.34:1 on --surface-3 — a placeholder is the field's
+ * only hint before typing, so it holds the AA floor (5.0:1 on --surface-3). */
 .input::placeholder {
-  color: var(--text-dim);
+  color: var(--text-mid);
 }
 
 .eye {
@@ -70,13 +111,39 @@
   color: var(--text-mid);
   cursor: pointer;
   border-radius: var(--radius-md);
+  transition:
+    color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
+/* the house uniform hover: button 1.05, its glyph 1.10 — never differentiated
+ * by prominence (30-PM-DESIGN-SYSTEM §B1). */
 .eye:hover {
   color: var(--text-hi);
+  transform: scale(1.05);
+}
+.eye:hover svg {
+  transform: scale(1.1);
+}
+.eye svg {
+  transition: transform var(--dur-fast) var(--ease-standard);
 }
 .eye:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .eye,
+  .eye svg {
+    transition: none;
+  }
+  /* ABSENT, not merely instant — snapping a control 5% larger with a zero-length
+   * transition is the same jolt the query exists to avoid. */
+  .eye:hover,
+  .eye:hover svg {
+    transform: none;
+  }
 }
 
 /* reserved error row — always present so no layout shift on error appearance */

@@ -37,6 +37,8 @@
   padding: 0;
 }
 
+/* Every chip is the SAME 200px min-width and hovers to the SAME scale(1.02),
+ * whatever promo it carries — no "best value" chip is rendered larger. */
 .chip {
   display: flex;
   flex-direction: column;
@@ -49,6 +51,25 @@
   text-decoration: none;
   scroll-snap-align: start;
   min-height: var(--tap-min);
+  transition: transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard);
+}
+.chip:hover {
+  transform: scale(1.02);
+  border-color: var(--brand-accent);
+  background: var(--surface-hover);
+}
+.chip:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .chip:hover {
+    transform: none;
+  }
 }
 
 .chipCat {

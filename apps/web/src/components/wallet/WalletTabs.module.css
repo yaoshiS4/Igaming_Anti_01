@@ -42,8 +42,14 @@
   font-weight: var(--weight-semi);
   cursor: pointer;
   transition:
+    transform var(--dur-fast) var(--ease-standard),
     color var(--dur-fast) var(--ease-standard),
     background var(--dur-fast) var(--ease-standard);
+}
+
+/* every tab is flex:1 1 0 — identical width — and hovers identically */
+.tab:hover {
+  transform: scale(1.05);
 }
 
 .tab:hover:not(.active) {
@@ -56,9 +62,19 @@
   outline-offset: -2px;
 }
 
+/* SELECTED, not focused: a solid brand fill with the system's dark on-gold ink
+ * (white here would be 2.11:1). --brand-accent-grad resolves to a solid colour
+ * at the token layer — the flat ban is enforced there. */
 .active {
   color: var(--brand-on-accent);
   background: var(--brand-accent-grad);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .tab:hover {
+    transform: none;
+  }
 }
 
 .tabLabel {

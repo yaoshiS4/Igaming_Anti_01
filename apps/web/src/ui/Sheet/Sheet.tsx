@@ -2,7 +2,8 @@
  * Sheet — the bottom-sheet base for every mobile overlay (SPEC-03 §E/H4): the
  * AuthModal sheet, DepositSheet, CategorySheet. Lazy-mounted (NOT in DOM until
  * `open`); SOLID --scrim (no backdrop-filter:blur — lint); pinned to the bottom
- * edge with --radius-card top corners + grab-handle; honors safe-area-inset-
+ * edge with --radius-card top corners + a load-bearing gold top hairline (FLAT
+ * — no --halo, no depth) + grab-handle; honors safe-area-inset-
  * bottom. Dismiss via Esc + scrim + swipe-down; focus-trapped with return-focus
  * to the trigger. Reduced-motion → instant mount/unmount (no slide).
  * ==========================================================================*/

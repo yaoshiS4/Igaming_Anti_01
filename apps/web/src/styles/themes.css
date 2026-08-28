@@ -6,8 +6,16 @@
  * this selector exists so the hook is wired and any future theme re-points
  * GROUP-A surface/text tokens here (NOT in brands.css). Brand and theme are
  * orthogonal axes: [data-brand] re-skins accent; [data-theme] re-skins canvas.
+ *
+ * Under the Flat / Dark-Luxury re-point, "obsidian" is now literally obsidian:
+ * --canvas #0a0a0a, --surface #141414, --text-hi #f2f0e4 champagne, accent
+ * #d4af37 gold. PM ruling A1 settled the light-vs-dark contradiction in the
+ * source design system in favour of dark, so there is still exactly ONE theme
+ * and this block stays a no-op. A future light theme would re-point the
+ * GROUP-A canvas/surface/text ladder HERE — and would additionally have to
+ * re-derive --border and --text-on-gold, which are tuned for a dark ground.
  * ==========================================================================*/
 
 [data-theme="obsidian"] {
-  /* v1 OLED-dark == the :root defaults; no overrides needed yet. */
+  /* v1 Flat / Dark-Luxury == the :root defaults; no overrides needed yet. */
 }

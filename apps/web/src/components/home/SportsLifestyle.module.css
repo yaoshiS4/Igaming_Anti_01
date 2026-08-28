@@ -50,6 +50,8 @@
 }
 
 /* lifestyle entry cards — filled image SLOTS (user key-art, object-fit:cover) */
+/* Every lifestyle card is the same 16:9 grid cell and hovers to the SAME
+ * scale(1.02) — no card is enlarged by what it links to. */
 .lifeCard {
   position: relative;
   display: flex;
@@ -62,6 +64,17 @@
   color: var(--text-hi);
   overflow: hidden;
   background: var(--surface-3);
+  border: 1px solid var(--brand-accent-hairline);
+  transition: transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.lifeCard:hover {
+  transform: scale(1.02);
+  border-color: var(--brand-accent);
+}
+.lifeCard:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .lifeImg {
   position: absolute;
@@ -71,16 +84,16 @@
   object-fit: cover;
   z-index: 0;
 }
-/* legibility scrim so the kicker/title read over any key-art */
+/* legibility scrim so the kicker/title read over any key-art. Kept as a
+ * gradient on purpose: it is a full-bleed image overlay (the permitted
+ * "background decoration" class) and it is load-bearing for text contrast —
+ * a flat scrim would either hide the art or fail AA on the title. Raw rgba
+ * literals swapped for the locked --scrim token. */
 .lifeOverlay {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0) 30%,
-    rgba(0, 0, 0, 0.72) 100%
-  );
+  background: linear-gradient(180deg, transparent 30%, var(--scrim) 100%);
   pointer-events: none;
 }
 .lifeKicker,
@@ -99,4 +112,11 @@
   font-size: var(--t-h3);
   font-weight: var(--weight-bold);
   line-height: var(--lh-tight);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lifeCard,
+  .lifeCard:hover {
+    transform: none;
+  }
 }

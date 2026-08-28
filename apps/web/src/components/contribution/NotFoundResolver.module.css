@@ -1,0 +1,63 @@
+/* ============================================================================
+ * NotFoundResolver — a calm block above the table (prototype §2.2/§4.6). Chips
+ * WRAP (a completeness list is never a scroller). Title --text-hi/--t-h2; body
+ * --text/--t-body; tip + help --text-mid/--t-sm. Help link is a 44px target with
+ * ≥8px gaps between chips. No raw hex / px / ms; no percentage; no --text-dim.
+ * ==========================================================================*/
+
+.resolver {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.title {
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-h2);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+}
+
+.resolve {
+  color: var(--text);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+}
+
+/* the eight category chips — wrapped, never a scroller; ≥8px gaps */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tip {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+}
+
+.help {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  align-self: flex-start;
+  min-height: var(--tap-min);
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  text-decoration: none;
+}
+
+.help:hover {
+  color: var(--text-hi);
+}
+
+.help:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

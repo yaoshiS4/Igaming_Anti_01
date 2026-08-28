@@ -1,0 +1,20 @@
+/* ============================================================================
+ * ContributionTabs — the two-tab shell on /cuoc-hop-le (rate table + restricted
+ * list). The ui/Tabs primitive owns the strip; this module owns only the column
+ * rhythm between the strip and the active panel, and the panel's own inner
+ * rhythm (intro → island), matching the old two-child page gap. Tokens only.
+ * ==========================================================================*/
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+}

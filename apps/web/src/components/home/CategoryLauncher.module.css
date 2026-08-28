@@ -32,16 +32,28 @@
   display: grid;
   place-items: center;
   color: var(--brand-accent);
-  background:
-    radial-gradient(100% 100% at 50% 0%, var(--brand-accent-hairline), transparent 70%),
-    var(--surface-3);
+  /* flat: a solid raised disc drawn by the gold hairline (was a radial fill) */
+  background: var(--surface-3);
   border: 1px solid var(--brand-accent-hairline);
-  transition: box-shadow var(--dur-fast) var(--ease-standard),
-    transform var(--dur-fast) var(--ease-standard);
+  /* box-shadow removed from the transition list — nothing paints one now */
+  transition: transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+/* icon affordance = scale(1.10) */
+.item:hover .iconWrap {
+  transform: scale(1.1);
+  border-color: var(--brand-accent);
 }
 
 .item:active .iconWrap {
   transform: scale(0.96);
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-md);
 }
 
 .label {
@@ -60,6 +72,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .iconWrap,
+  .item:hover .iconWrap,
   .item:active .iconWrap {
     transition: none;
     transform: none;

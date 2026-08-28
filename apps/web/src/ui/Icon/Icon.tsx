@@ -4,6 +4,11 @@
  * with `currentColor` so it inherits the consuming component's color token.
  * Add an entry to ICON_PATHS to extend the set; the union `IconName` is derived
  * from it so callers are type-checked against the available glyphs.
+ *
+ * The <svg> carries a `data-icon="<name>"` attribute purely as a STABLE styling
+ * hook: CSS-Module class names are hashed, so a parent stylesheet (e.g. Card's
+ * "icons in cards scale 1.10 on hover" rule) has no other way to reach it.
+ * Presentational only — no public prop or behaviour changes.
  * ==========================================================================*/
 
 import styles from "./Icon.module.css";
@@ -73,6 +78,7 @@ export function Icon({ name, size = "1em", label, className }: IconProps) {
   return (
     <svg
       className={[styles.icon, className].filter(Boolean).join(" ")}
+      data-icon={name}
       viewBox="0 0 24 24"
       width={dim}
       height={dim}

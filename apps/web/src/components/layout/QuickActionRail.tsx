@@ -14,16 +14,26 @@
  *   2. Super-jackpot promo card  — a LUCKY-SAFE jackpot figure (6/8, no 4) + a
  *      gold "Quay ngay" CTA. The figure is DATA-BOUND (passed in / mock), never
  *      animated/extrapolated — Decree-174 truthful-only. Also DISMISSABLE.
- *   3. Icon stack: trophy (giải đấu), QR (tải app), CSKH headset (hỗ trợ),
- *      back-to-top (^).
+ *   3. Icon stack: cards (sưu tập), ticket (vé số), trophy (giải đấu), QR (tải
+ *      app), CSKH headset (hỗ trợ), back-to-top (^). The two activity surfaces
+ *      sit together at the top.
  *
  * UI-ONLY: no network, mock data. Opaque surfaces, reduced-motion safe,
  * z-index strictly below --z-modal so dialogs always cover it.
  * ==========================================================================*/
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { formatVnd, isLuckySafe } from "@/lib/format";
 import styles from "./QuickActionRail.module.css";
+
+/* Routes on which the floating promo rail is suppressed. Both are login-free
+ * reference/T&C surfaces, NOT inducements — no promo cards, no super-jackpot
+ * card, no icon stack there: `/cuoc-hop-le` (game-contribution rates) and
+ * `/game-han-che` (the published bonus-restricted games list). Scoped to these
+ * routes only; every other route is unaffected. */
+const RAIL_SUPPRESSED_PATHS = new Set<string>(["/cuoc-hop-le", "/game-han-che"]);
 
 /* ---- mock, truthful-shaped data (would arrive via §F Envelope in real BE) ---- */
 
@@ -34,8 +44,34 @@ const JACKPOT_POOL = 8_688_888_000;
 const SS_PROMO = "yb.rail.promo.dismissed";
 const SS_JACKPOT = "yb.rail.jackpot.dismissed";
 
+/* sessionStorage is an EXTERNAL STORE, so it is read through
+ * useSyncExternalStore rather than mirrored into state from an effect. The old
+ * shape (useState(true) + a useEffect that immediately setState(false)) is the
+ * cascading-render pattern react-hooks/set-state-in-effect flags: it renders
+ * the card, then throws it away one commit later. useSyncExternalStore gives
+ * the same hydration-safe behaviour — getServerSnapshot for SSR and the first
+ * client paint, the real snapshot immediately after hydration — with no
+ * setState in an effect and no hydration mismatch. */
+
+/** In-memory mirror: sessionStorage writes can throw (private mode / quota), and
+ *  a dismissal must still hold for the life of the tab when they do. */
+const memoryDismissed = new Set<string>();
+
+/** Same-tab subscribers — the `storage` event does NOT fire in the writing tab. */
+const dismissListeners = new Set<() => void>();
+
+function subscribeDismissed(onStoreChange: () => void): () => void {
+  dismissListeners.add(onStoreChange);
+  window.addEventListener("storage", onStoreChange);
+  return () => {
+    dismissListeners.delete(onStoreChange);
+    window.removeEventListener("storage", onStoreChange);
+  };
+}
+
 /** Read a session dismissal flag (SSR-safe; defaults to "not dismissed"). */
 function readDismissed(key: string): boolean {
+  if (memoryDismissed.has(key)) return true;
   if (typeof window === "undefined") return false;
   try {
     return window.sessionStorage.getItem(key) === "1";
@@ -46,34 +82,40 @@ function readDismissed(key: string): boolean {
 
 /** Persist a session dismissal flag (best-effort; storage may be unavailable). */
 function persistDismissed(key: string): void {
+  memoryDismissed.add(key);
   try {
     window.sessionStorage.setItem(key, "1");
   } catch {
-    /* ignore — private mode / quota; dismissal still holds for this mount */
+    /* ignore — private mode / quota; the memory mirror still holds it */
   }
+  for (const notify of dismissListeners) notify();
 }
 
+/** Server + first-paint snapshot: nothing is dismissed, so the card renders and
+ *  the client/server markup agree. Must be a stable constant fn. */
+const notDismissed = () => false;
+
 export function QuickActionRail() {
-  // Start shown on both server + first client paint (avoids hydration mismatch),
-  // then reconcile from sessionStorage after mount.
-  const [showPromo, setShowPromo] = useState(true);
-  const [showJackpot, setShowJackpot] = useState(true);
+  // usePathname is SSR-safe (deterministic on server + first client paint), so
+  // the guard introduces no hydration mismatch. All hooks below run every render
+  // (rules-of-hooks); only the final output is suppressed on the guarded route.
+  const pathname = usePathname();
+  // Shown on both server + first client paint (no hydration mismatch), then
+  // reconciled from sessionStorage on the post-hydration render.
+  const showPromo = !useSyncExternalStore(
+    subscribeDismissed,
+    () => readDismissed(SS_PROMO),
+    notDismissed,
+  );
+  const showJackpot = !useSyncExternalStore(
+    subscribeDismissed,
+    () => readDismissed(SS_JACKPOT),
+    notDismissed,
+  );
   const [openPanel, setOpenPanel] = useState<"qr" | "cskh" | null>(null);
 
-  useEffect(() => {
-    if (readDismissed(SS_PROMO)) setShowPromo(false);
-    if (readDismissed(SS_JACKPOT)) setShowJackpot(false);
-  }, []);
-
-  const dismissPromo = useCallback(() => {
-    setShowPromo(false);
-    persistDismissed(SS_PROMO);
-  }, []);
-
-  const dismissJackpot = useCallback(() => {
-    setShowJackpot(false);
-    persistDismissed(SS_JACKPOT);
-  }, []);
+  const dismissPromo = useCallback(() => persistDismissed(SS_PROMO), []);
+  const dismissJackpot = useCallback(() => persistDismissed(SS_JACKPOT), []);
 
   const backToTop = useCallback(() => {
     const reduce =
@@ -85,6 +127,10 @@ export function QuickActionRail() {
   // Jackpot figure is a marketing numeral → must be lucky-safe; fall back to a
   // safe constant rather than ever rendering a taboo (digit-4) display value.
   const jackpot = isLuckySafe(JACKPOT_POOL) ? JACKPOT_POOL : 8_888_888_000;
+
+  // Reference/T&C surfaces suppress the promo rail entirely (all hooks above
+  // still ran, so this early return is rules-of-hooks safe).
+  if (RAIL_SUPPRESSED_PATHS.has(pathname)) return null;
 
   return (
     <aside className={styles.rail} aria-label="Thao tác nhanh">
@@ -99,7 +145,8 @@ export function QuickActionRail() {
           >
             ×
           </button>
-          <a className={styles.promoLink} href="/khuyen-mai" aria-label="Khuyến mãi World Cup">
+          <Link className={styles.promoLink} href="/khuyen-mai" aria-label="Khuyến mãi World Cup">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/banners/pc-hero-banner-UCLfinal.jpg"
               alt="Khuyến mãi mùa giải lớn"
@@ -109,7 +156,7 @@ export function QuickActionRail() {
               loading="lazy"
             />
             <span className={styles.promoTag}>World Cup</span>
-          </a>
+          </Link>
         </div>
       )}
 
@@ -126,19 +173,33 @@ export function QuickActionRail() {
           </button>
           <p className={styles.jackpotKicker}>Hũ vàng</p>
           <p className={styles.jackpotFigure}>{formatVnd(jackpot)}</p>
-          <a className={styles.jackpotCta} href="/khuyen-mai">
+          <Link className={styles.jackpotCta} href="/khuyen-mai">
             Quay ngay
-          </a>
+          </Link>
         </section>
       )}
 
       {/* ---------- 3 · Icon stack ---------- */}
       <nav className={styles.iconStack} aria-label="Tiện ích nhanh">
+        {/* collection — the always-on surface */}
+        <Link className={styles.iconBtn} href="/bo-suu-tap" aria-label="Bộ sưu tập">
+          <CardsIcon />
+          <span className={styles.iconLabel}>Sưu tập</span>
+        </Link>
+
+        {/* vé số — the other always-on activity surface, next to its sibling.
+            "Vé số" (a ticket you hold and open), NOT the "Xổ số" lobby vertical
+            (provider lottery games) — the labels stay distinct on purpose. */}
+        <Link className={styles.iconBtn} href="/ve-so" aria-label="Vé số">
+          <TicketIcon />
+          <span className={styles.iconLabel}>Vé số</span>
+        </Link>
+
         {/* trophy / tournaments */}
-        <a className={styles.iconBtn} href="/tier" aria-label="Giải đấu">
+        <Link className={styles.iconBtn} href="/tier" aria-label="Giải đấu">
           <TrophyIcon />
           <span className={styles.iconLabel}>Giải đấu</span>
-        </a>
+        </Link>
 
         {/* QR / app download (popover) */}
         <div
@@ -206,6 +267,58 @@ export function QuickActionRail() {
 }
 
 /* ---- inline glyphs (no external requests; currentColor = gold/dim per state) ---- */
+
+function CardsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+      <rect
+        x="8.5"
+        y="4"
+        width="11"
+        height="15"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+      />
+      <path
+        d="M6 6.5 4.6 7a2 2 0 0 0-1.3 2.5l2.6 8a2 2 0 0 0 2.5 1.3l1-.3"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <path
+        d="M14 8.5v6M11 11.5h6"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function TicketIcon() {
+  // Scratch ticket: perforated tear-off edge + a lifted foil corner, so it
+  // reads as a ticket you open rather than as a card or a coupon.
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+      <path
+        d="M8 5h11a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H8"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8 5v2M8 9v2M8 13v2M8 19v-2"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
+      <path d="M11 9h6v6h-6z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M17 9l-3.4 3.4L17 13.2z" fill="currentColor" />
+    </svg>
+  );
+}
 
 function TrophyIcon() {
   return (

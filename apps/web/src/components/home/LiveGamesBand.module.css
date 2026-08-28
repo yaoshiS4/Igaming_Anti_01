@@ -17,9 +17,9 @@
   padding: var(--card-pad-sm);
   border-radius: var(--radius-card);
   border: 1px solid var(--brand-accent-hairline);
-  background:
-    radial-gradient(120% 120% at 90% 10%, var(--brand-accent-hairline), transparent 60%),
-    var(--surface);
+  /* flat: a card gets a solid fill + the load-bearing gold hairline, never a
+   * gradient (permitted only as large background decoration). */
+  background: var(--surface);
 }
 
 .matchCell {

@@ -1,0 +1,54 @@
+/* ============================================================================
+ * RateCell — a zero is a value, never a state (prototype §3.1). Every numeral
+ * renders in --text-hi at IDENTICAL colour/size/weight for 0% / 15% / 20% /
+ * 100%. The ONLY coloured element is --caution on the ordinal-group WORDS
+ * (which survive greyscale). No --loss / --error / --win / --text-dim /
+ * --brand-accent / --vip-* / --brand-font-display; no raw hex / px / ms.
+ * ==========================================================================*/
+
+/* single value — plain numeral, no container of any kind (also the 0% cell) */
+.value {
+  color: var(--text-hi);
+}
+
+/* per-tier cell — one <td> at every width */
+.groups {
+  color: var(--text-hi);
+}
+
+/* each ordinal group; stacks as its own line <768 */
+.group {
+  display: block;
+}
+
+/* the tier condition — the one coloured element, on WORDS, never the numeral */
+.groupLabel {
+  color: var(--caution);
+}
+
+/* the middot — hidden while the groups stack <768 */
+.sep {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .group {
+    display: inline;
+  }
+  .sep {
+    display: inline;
+  }
+}
+
+/* module-local visually-hidden helper (there is no global one) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

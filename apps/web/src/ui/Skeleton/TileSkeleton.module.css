@@ -22,19 +22,13 @@
   animation: tileSweep 1400ms linear infinite;
 }
 
-/* filler — a quiet, inert pad-tile (no sweep). A hairline + faint diagonal tint
- * reads as "empty slot" without pretending to be a game. */
+/* filler — a quiet, inert pad-tile (no sweep). FLAT: the diagonal hatch was a
+ * repeating-linear-gradient acting as this tile's fill, and a tile is a card.
+ * The gold hairline plus the reduced opacity carry the "empty slot" read on
+ * their own, without a texture. */
 .filler {
   border: 1px solid var(--brand-accent-hairline);
-  background:
-    repeating-linear-gradient(
-      135deg,
-      var(--tint) 0,
-      var(--tint) 1px,
-      transparent 1px,
-      transparent 12px
-    ),
-    var(--tile);
+  background: var(--tile);
   opacity: 0.5;
 }
 

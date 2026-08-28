@@ -1,0 +1,45 @@
+/* ============================================================================
+ * TableFoot — inside the table frame border (--surface-2, top hairline). All
+ * copy at the --text-mid AA floor / --t-sm. Stacks <768; notes-left + stamp-
+ * right ≥768. The stamp carries data-numeric (tabular numerals).
+ * ==========================================================================*/
+
+.foot {
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.line {
+  color: var(--text-mid);
+}
+
+.stamp {
+  color: var(--text-mid);
+}
+
+@media (min-width: 768px) {
+  .foot {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-5);
+  }
+  .stamp {
+    white-space: nowrap;
+    text-align: right;
+  }
+}

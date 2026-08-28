@@ -45,6 +45,31 @@ export { getReferral, getReferralKpi, getCommissions } from "./referral";
 // cashback (core 1%)
 export { getCashback } from "./cashback";
 
+// game-contribution rate table (/cuoc-hop-le)
+export {
+  getContributionRates,
+  getContributionCatalogue,
+  deriveProviders,
+  resolveTierRates,
+  coalesceAdjacentEqual,
+  rateBucket,
+  CONTRIB_TIERS,
+} from "./contribution";
+export type {
+  ContributionRates,
+  ContributionCategory,
+  ContributionTitle,
+  CategoryRate,
+  RateBucket,
+  TierRateLeg,
+  TierGroup,
+  ContribTier,
+} from "./contribution";
+
+// bonus-restricted games list (/game-han-che) — orthogonal to the rate above
+export { getRestrictedGames, BONUS_RESTRICTED_IDS } from "./contribution";
+export type { RestrictedGame, RestrictedList } from "./contribution";
+
 // records / messages / notifications
 export { getRecords } from "./records";
 export { getMessages } from "./messages";

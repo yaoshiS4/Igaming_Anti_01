@@ -14,9 +14,10 @@
   max-width: min(90vw, 360px);
   z-index: var(--z-dropdown);
   background: var(--surface-3);
+  /* FLAT: no --halo. A dropdown floats over arbitrary content, so the gold
+   * hairline is the only edge telling it apart from what is underneath. */
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  box-shadow: var(--halo);
   padding: var(--space-2);
   outline: none;
   animation: drop var(--dur-fast) var(--ease-entrance);

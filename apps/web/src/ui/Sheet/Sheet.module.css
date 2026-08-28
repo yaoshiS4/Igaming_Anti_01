@@ -24,8 +24,9 @@
   background: var(--surface);
   border-top-left-radius: var(--radius-card);
   border-top-right-radius: var(--radius-card);
+  /* FLAT: no --halo. The top gold hairline is the load-bearing edge (the other
+   * three sides are off-viewport on a bottom sheet). */
   border-top: 1px solid var(--brand-accent-hairline);
-  box-shadow: var(--halo);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   animation: slideUp var(--dur-slow) var(--ease-entrance);
   outline: none;
@@ -62,10 +63,16 @@
   border-radius: var(--radius-pill);
   color: var(--text-mid);
   cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
 }
+/* UNIFORM button hover: scale(1.05) + a colour shift — same as every Button. */
 .closeBtn:hover {
   color: var(--text-hi);
   background: var(--surface-hover);
+  transform: scale(1.05);
 }
 .closeBtn:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -103,5 +110,11 @@
   .panel,
   .scrim {
     animation: none;
+  }
+  .closeBtn {
+    transition: none;
+  }
+  .closeBtn:hover {
+    transform: none;
   }
 }

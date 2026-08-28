@@ -65,7 +65,7 @@ export function PrivilegeComparison({
     <div className={styles.wrap}>
       <article className={styles.card}>
         <header className={styles.head}>
-          <span className={styles.gem} style={{ background: left.grad }} aria-hidden />
+          <span className={styles.gem} style={{ background: left.acc }} aria-hidden />
           <h3 className={styles.cardTitle} style={{ color: left.acc }}>
             {copy[left.nameKey]}
           </h3>
@@ -79,7 +79,7 @@ export function PrivilegeComparison({
 
       <article className={`${styles.card} ${styles.cardTarget}`}>
         <header className={styles.head}>
-          <span className={styles.gem} style={{ background: right.grad }} aria-hidden />
+          <span className={styles.gem} style={{ background: right.acc }} aria-hidden />
           <h3 className={styles.cardTitle} style={{ color: right.acc }}>
             {copy[right.nameKey]}
           </h3>

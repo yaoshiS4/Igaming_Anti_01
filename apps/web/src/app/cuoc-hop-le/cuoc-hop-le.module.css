@@ -1,0 +1,27 @@
+/* ============================================================================
+ * /cuoc-hop-le — page shell only (gutter, rhythm, bottom inset). The shared
+ * content frame (ShellChrome) already supplies the horizontal --gutter, so this
+ * module deliberately does NOT re-add it (that would double the mobile gutter);
+ * it owns the --canvas bg, the --space-5 section rhythm, and the BottomTabBar
+ * inset so TableFoot + the last row clear the fixed bar. The BottomTabBar hides
+ * at ≥768px (BottomTabBar.module.css), so the inset drops there.
+ * ==========================================================================*/
+
+.page {
+  background: var(--canvas);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-width: 0;
+  /* reserve for the fixed BottomTabBar (56px + safe area) so nothing overlaps */
+  padding-bottom: calc(
+    var(--bottombar-h) + env(safe-area-inset-bottom) + var(--space-5)
+  );
+}
+
+/* tab bar hidden ≥768 → drop the reserve to a plain bottom rhythm */
+@media (min-width: 768px) {
+  .page {
+    padding-bottom: var(--space-6);
+  }
+}

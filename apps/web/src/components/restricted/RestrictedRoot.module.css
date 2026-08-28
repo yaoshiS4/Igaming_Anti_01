@@ -1,0 +1,33 @@
+/* ============================================================================
+ * RestrictedRoot — the island wrapper. Vertical rhythm only; it owns no chrome
+ * (the table, filters and notices carry their own surfaces). The aria-live
+ * status is one muted line at the --text-mid AA floor / --t-sm — no colour
+ * carries meaning, no percentage ever appears. Tokens only.
+ * ==========================================================================*/
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.status {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-tight);
+  min-height: var(--t-sm); /* reserve the line so a count landing shifts nothing */
+}
+
+/* module-local visually-hidden helper (there is no global one) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -14,18 +14,56 @@
   gap: var(--space-3);
 }
 
+/* Input contract (30-PM-DESIGN-SYSTEM, as CORRECTED 2026-08-17):
+ *   resting = filled --surface-3 PLUS a 1px --border hairline;
+ *   focus   = 2px SOLID accent border, no glow ring.
+ *
+ * The rule originally said "no resting border". Reversed by the PM: --surface-3
+ * on this page ground is ~1.1:1, so a border-less field has no boundary and
+ * fails WCAG 1.4.11's 3:1 floor for UI component edges. The flat system strips
+ * shadow, gradient and border at once — in a dark palette the border is the only
+ * survivor, for fields exactly as for cards. DO NOT remove it again.
+ *
+ * TWO separate bugs were fixed here, do not conflate them:
+ *   1. this rule painted --focus-ring as the :focus-WITHIN border — blue is
+ *      reserved for :focus-visible and nothing else, so it moved to the accent;
+ *   2. the resting border then went missing under the original rule 6, and is
+ *      restored above.
+ * Focus is a WEIGHT change in the same hue (1px 55%-alpha gold → 2px solid),
+ * with padding compensating so the box does not reflow. */
 .search {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: 0 var(--space-3);
+  padding: 1px calc(var(--space-3) + 1px);
   min-height: var(--tap-min);
   border-radius: var(--radius-md);
-  background: var(--surface-2);
+  background: var(--surface-3);
   border: 1px solid var(--border);
+  transition: border-color var(--dur-fast) var(--ease-standard);
 }
 .search:focus-within {
+  border-width: 2px;
+  /* FOCUS IS BLUE, EVERYWHERE — PM ruling, reconciling a split between two
+     sweep areas (one used --brand-accent here, one used --focus-ring).
+     Focus is ONE affordance and gets ONE colour: a user learns "blue = where I
+     am" once, or not at all. Two reinforcing reasons for blue over gold:
+       · --focus-ring is the PINNED, AA-guaranteed indicator (8.21:1 vs canvas),
+         locked identical across brands. Gold is not.
+       · On this product gold is REWARD chrome. Focus is not a reward, and the
+         trust surfaces (contribution/restricted) already forbid brand accent
+         for exactly that reason.
+     The design system's "border-2 solid Primary" was written for a light
+     palette where Primary WAS the focus blue and the two coincided. In dark
+     gold they diverge, and the accessibility token wins. */
   border-color: var(--focus-ring);
+  padding: 0 var(--space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search {
+    transition: none;
+  }
 }
 .searchIcon {
   color: var(--text-mid);

@@ -105,7 +105,10 @@
   color: var(--text);
 }
 
-/* ---- tier deck ---- */
+/* ---- tier deck ----
+ * RULING B1: every .tierCard is the SAME 140px box whatever the tier's rate.
+ * Rank is carried by ladder POSITION, never by size, and no card scales on
+ * hover (they are display cards, not links). */
 .deck {
   display: flex;
   gap: var(--space-3);
@@ -132,9 +135,8 @@
   display: grid;
   place-items: center;
   color: var(--brand-accent);
-  background:
-    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.2), transparent 70%),
-    var(--surface-3);
+  /* flat: solid raised disc + gold hairline (was a raw-rgba radial fill) */
+  background: var(--surface-3);
   border: 1px solid var(--brand-accent-hairline);
 }
 .tierName {

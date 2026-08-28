@@ -6,6 +6,9 @@
   flex-wrap: wrap;
 }
 
+/* Both cards share ONE flex basis and ONE padding, so the upgrade target is
+ * never physically larger than the current tier (ruling B1) — it is marked by
+ * BORDER COLOUR and by its position on the right of the arrow, nothing else. */
 .card {
   flex: 1 1 260px;
   display: flex;
@@ -16,17 +19,10 @@
   border: 1px solid var(--vip-hairline);
 }
 
-/* the right-hand (upgrade) card gets the gold treatment + glow */
+/* the right-hand (upgrade) card: a gold hairline. No gradient (banned on
+ * cards), no 1px shadow ring (banned outright). */
 .cardTarget {
-  background:
-    radial-gradient(
-      120% 100% at 100% 0%,
-      color-mix(in srgb, var(--vip-gold-mid) 12%, transparent) 0%,
-      transparent 60%
-    ),
-    var(--vip-panel-bg);
   border-color: color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--vip-gold-mid) 12%, transparent);
 }
 
 .head {
@@ -38,13 +34,15 @@
   border-bottom: 1px solid var(--vip-hairline);
 }
 
+/* the gem's inner bevel was an inset shadow — it is a real 1px border now
+ * (box-sizing: border-box globally, so the 20px footprint is unchanged). */
 .gem {
   width: 20px;
   height: 20px;
   flex: none;
   border-radius: var(--vip-radius-gem);
+  border: 1px solid color-mix(in srgb, var(--vip-page-bg) 40%, transparent);
   transform: rotate(45deg);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--vip-page-bg) 40%, transparent);
 }
 
 .cardTitle {
@@ -110,7 +108,7 @@
   margin-left: auto;
   padding: 2px var(--space-2);
   border-radius: var(--radius-pill);
-  background: var(--vip-gold-grad);
+  background: var(--vip-gold-mid);
   color: var(--vip-gold-ink);
   font-size: var(--t-micro);
   font-weight: var(--weight-bold);

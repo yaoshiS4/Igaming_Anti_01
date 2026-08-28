@@ -11,9 +11,13 @@
  * Desktop = J9 1:1; @375px the three columns stack and the partner band wraps.
  * ==========================================================================*/
 
+/* The J9 raw #14161c is gone (semantic tokens only, and it was a cool blue-grey
+ * that no longer matched the Flat warm palette). --surface on --canvas is only
+ * 1.07:1, so the band CANNOT define its own edge — the hairline does. */
 .footerWrap {
   width: 100%;
-  background: #14161c; /* J9 footer canvas — deeper than --shell, matched */
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
   padding: var(--space-6) var(--gutter) var(--space-4); /* 32 / 16 / 16 */
 }
 
@@ -73,7 +77,7 @@
 }
 .connect .social:hover {
   color: var(--brand-accent);
-  background: var(--tint);
+  background-color: var(--tint);
 }
 .connect .social:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -157,13 +161,36 @@
 }
 
 /* J9 .bottom — copyright line */
+/* AA: the copyright is functional copy (operator, licence, year), so it may not
+ * use --text-dim — tokens.css marks that step DECORATIVE-ONLY and it measures
+ * 3.67:1 on --surface, below the 4.5:1 floor. --text-mid is 5.20:1. */
 .copyright {
   max-width: var(--frame-w);
   margin: var(--space-6) auto 0;
-  color: var(--text-dim);
+  color: var(--text-mid);
   font-size: var(--t-micro);
   line-height: var(--lh-body);
   text-align: center;
+}
+
+/* ---------------------------------------------------------------------------
+ * RESERVE THE QuickActionRail COLUMN — the same treatment ShellChrome gives the
+ * content frame. The footer is full-bleed and rendered OUTSIDE that frame, so
+ * it does not inherit the reservation: at 1440 its right column runs to x=1416
+ * while the fixed rail occupies 1372→1432. Today the RG column's text happens
+ * to stop short of the rail, so nothing is stolen — but that is a property of
+ * the current copy, not of the layout, and one longer link would put a footer
+ * link under the rail. Reserved explicitly. Mirrors ShellChrome.module.css.
+ * ------------------------------------------------------------------------ */
+@media (min-width: 1024px) {
+  .footerWrap {
+    padding-right: calc(60px + var(--space-2) * 2);
+  }
+}
+@media (min-width: 1600px) {
+  .footerWrap {
+    padding-right: var(--gutter);
+  }
 }
 
 /* ---------- MOBILE (<768px) — stack the three columns ---------- */

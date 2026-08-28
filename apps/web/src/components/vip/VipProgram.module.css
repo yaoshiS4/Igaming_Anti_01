@@ -47,12 +47,36 @@
   color: var(--vip-text-muted);
   font: inherit;
   cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
 }
 
-.langBtnActive {
-  background: var(--vip-gold-grad);
+.langBtn:hover {
+  transform: scale(1.05);
+  color: var(--vip-gold-end);
+}
+
+.langBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* SELECTED, not focused — a solid brand fill. The 3-stop --vip-gold-grad is
+ * banned on a button, and --focus-ring blue would be banned here outright. */
+.langBtnActive,
+.langBtnActive:hover {
+  background: var(--vip-gold-mid);
   color: var(--vip-gold-ink);
   font-weight: var(--weight-semi);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .langBtn,
+  .langBtn:hover {
+    transform: none;
+  }
 }
 
 @media (max-width: 900px) {

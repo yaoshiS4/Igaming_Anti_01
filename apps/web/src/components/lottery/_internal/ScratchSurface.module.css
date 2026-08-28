@@ -1,0 +1,50 @@
+/* ScratchSurface — the coating layer. The WELL's chrome (border, radius,
+ * ground, padding) is supplied by the caller through `className`; this file
+ * only owns the stacking and the erase gesture.
+ * Semantic / --brand-* indirection tokens only (token-lint A2). */
+
+.host {
+  position: relative;
+}
+
+/* The coating. Absolutely positioned, so it covers the well's padding box and
+ * leaves the well's own gold edge visible around it. */
+.cover {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  /* the scratch gesture belongs to the card — NEVER to page scrolling */
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+  opacity: 1;
+  transition: opacity var(--dur-slow) var(--ease-standard);
+}
+
+.cover:active {
+  cursor: grabbing;
+}
+
+/* threshold reached — the remainder lifts away instead of demanding that every
+ * corner be scrubbed. Pointer events stop the moment it starts fading. */
+.cover[data-clearing] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* REDUCED MOTION — mandatory. The gesture stays (it is user-driven), but the
+ * coating disappears with NO fade: an instant state change, nothing self-
+ * animating. The component additionally skips the fade in JS. */
+@media (prefers-reduced-motion: reduce) {
+  .cover {
+    transition: none;
+  }
+}
+
+:global([data-motion="off"]) .cover {
+  transition: none;
+}

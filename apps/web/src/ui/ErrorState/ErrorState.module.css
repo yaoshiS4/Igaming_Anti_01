@@ -7,6 +7,9 @@
   padding: var(--space-7) var(--space-4);
   text-align: center;
   background: var(--surface-2);
+  /* Borders are load-bearing — see EmptyState. --surface-2 on --canvas is
+   * 1.20:1; without this hairline the panel has no edge under the flat ban. */
+  border: 1px solid var(--border);
   border-radius: var(--radius-card);
 }
 

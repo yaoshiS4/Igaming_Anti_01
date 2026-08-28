@@ -1,0 +1,11 @@
+/* ============================================================================
+ * ContributionRoot — the island wrapper. Vertical rhythm only; it owns no
+ * chrome (the table, filters and notices carry their own surfaces). Tokens only.
+ * ==========================================================================*/
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}

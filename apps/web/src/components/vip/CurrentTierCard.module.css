@@ -8,7 +8,10 @@
   padding: var(--space-5);
 }
 
-/* ---- shared badge SLOT (token-gradient disc, awaits licensed tier art) ---- */
+/* ---- shared badge SLOT (awaits licensed tier art) -------------------------
+ * FLAT: a solid raised surface drawn by the gold hairline. The old fill was a
+ * radial gradient on a 64px disc — that is not "large background decoration",
+ * and it carried a raw rgba() literal outside the token layer. */
 .badge {
   flex: 0 0 auto;
   width: 64px;
@@ -17,9 +20,7 @@
   display: grid;
   place-items: center;
   color: var(--brand-accent);
-  background:
-    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.22), transparent 70%),
-    var(--surface-3);
+  background: var(--surface-3);
   border: 1px solid var(--brand-accent-hairline);
 }
 

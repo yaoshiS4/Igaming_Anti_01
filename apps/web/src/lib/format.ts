@@ -47,6 +47,17 @@ export function formatCount(n: number): string {
   return groupVnd(n);
 }
 
+/**
+ * Whole-percent for a PUBLISHED CONTRIBUTION RATE (game-contribution table).
+ * A rate is a LEDGER value — routed OUTSIDE the lucky-digit path below: a `0`
+ * is never suppressed and a `4` is never massaged (100/20/15/0 → "100%"/"20%"/
+ * "15%"/"0%"). VN decimal comma is used ONLY when a `dp` is requested.
+ */
+export function formatPercent(value: number, dp = 0): string {
+  const fixed = value.toFixed(dp);
+  return `${dp > 0 ? fixed.replace(".", ",") : fixed}%`;
+}
+
 /* ----------------------------------------------------------------------------
  * LUCKY DISCIPLINE — MARKETING NUMERALS ONLY.
  * digit-4 taboo (避4) + 6/8 favoured (喜6喜8). Use for suggested-amount chips,

@@ -4,9 +4,14 @@
  * brand re-skins automatically). Mobile-first @375: full-width stacked cards;
  * desktop ≥992: fixed 304px sticky rail.
  *
+ * FLAT SWEEP: every box-shadow declaration is gone (--lift / --glow-gold /
+ * --progress-dot-glow all resolved to `none` at the token layer already, so
+ * these were dead declarations advertising depth this system does not have).
+ * Separation is the border hairline; lit/active is a border + colour change.
+ *
  * Surface stack:
  *   .hero          — PROFILE card: identity + membership progress on
- *                    --header-card-grad + --lift + a corner --card-sheen-grad.
+ *                    --header-card-grad + a corner --card-sheen-grad.
  *   .walletCard    — SEPARATE wallet card: title + balance + Nạp/Rút on a cool
  *                    --wallet-sheen-grad (distinct from the hero's gold halo).
  *   .actionCards   — 2-up J9-style action cards (--card-sheen-grad ::sheen).
@@ -59,7 +64,6 @@
   background: var(--header-card-grad);
   border: 1px solid var(--brand-accent-hairline);
   border-radius: var(--radius-card);
-  box-shadow: var(--lift);
 }
 /* the J9 signature: a soft ice-white glow bleeding from the upper-right corner */
 .heroSheen {
@@ -90,10 +94,13 @@
   white-space: nowrap;
   transition: background var(--dur-fast) var(--ease-standard);
 }
-.badgeLink:hover,
-.badgeLink:focus-visible {
+.badgeLink:hover {
   background: var(--brand-accent-hairline);
-  outline: none;
+}
+/* focus is BLUE and separate (it was `outline: none` + the hover colour) */
+.badgeLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 /* ---- identity: avatar (+ verified check overlay) · name·tier · plain ID --- */
@@ -115,7 +122,6 @@
   border-radius: var(--radius-pill);
   background: var(--brand-accent-grad);
   color: var(--brand-on-accent);
-  box-shadow: var(--glow-gold);
 }
 .avatarInitial {
   font-size: var(--t-h3);
@@ -123,6 +129,9 @@
   font-family: var(--brand-font-num);
 }
 /* verified → a small green CHECK on the avatar (bottom-right), NOT a chip */
+/* AA: the check glyph was --text-hi champagne on --green, ~1.9:1 — under the
+ * 3:1 non-text floor. --brand-on-accent is the dark ink used on every other
+ * light brand fill and clears it comfortably. */
 .verifiedBadge {
   position: absolute;
   right: -2px;
@@ -133,7 +142,7 @@
   height: 18px;
   border-radius: var(--radius-pill);
   background: var(--green);
-  color: var(--text-hi);
+  color: var(--brand-on-accent);
   border: 2px solid var(--surface);
 }
 .idMain {
@@ -237,13 +246,10 @@
   align-items: center;
   padding: 3px var(--space-2) 3px 11px;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 6px 50%);
-  /* a gold-tinted dark ribbon (bronze top → dark) so it POPS against the hero
-   *  and reads as a premium target — distinct from the solid-gold current tier. */
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--brand-accent) 20%, var(--surface-3)),
-    var(--surface-3)
-  );
+  /* FLAT: one solid gold-tinted dark fill. It still reads as a premium target
+   *  against the hero and stays distinct from the solid-gold current tier tag,
+   *  without the vertical gradient the system bans on chips/cards. */
+  background: color-mix(in srgb, var(--brand-accent) 14%, var(--surface-3));
   color: var(--progress-tag-text);
   font-size: var(--t-micro);
   font-weight: var(--weight-semi);
@@ -287,7 +293,6 @@
   height: 6px;
   border-radius: var(--radius-pill);
   background: var(--progress-dot);
-  box-shadow: var(--progress-dot-glow);
   transform: translate(-50%, -50%);
 }
 .caption {
@@ -344,7 +349,6 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  box-shadow: var(--lift);
 }
 /* faint diagonal cool sheen so the near-white balance sits on a crafted plane */
 .walletSheen {
@@ -383,16 +387,25 @@
   font-size: var(--t-sm);
   font-weight: var(--weight-semi);
   text-decoration: none;
-  transition: filter var(--dur-fast) var(--ease-standard),
+  /* uniform button motion: scale(1.05); hover is a COLOUR shift, not a filter */
+  transition: transform var(--dur-fast) var(--ease-standard),
     background var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
     color var(--dur-fast) var(--ease-standard);
+}
+.actBtn:hover {
+  transform: scale(1.05);
+}
+.actBtn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .actGold {
   background: var(--brand-accent-grad);
   color: var(--brand-on-accent);
 }
 .actGold:hover {
-  filter: brightness(1.05);
+  background: var(--brand-accent-2);
 }
 .actGhost {
   background: var(--surface-3);
@@ -402,11 +415,21 @@
 .actGhost:hover {
   background: var(--surface-hover);
   color: var(--brand-accent);
+  border-color: var(--brand-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .actBtn,
+  .actBtn:hover {
+    transform: none;
+  }
 }
 
 /* ============================================================================
  * 3. ACTION CARDS — Cửa hàng điểm · Trung tâm nhiệm vụ
  * ==========================================================================*/
+/* both action cards share one 1fr 1fr track and one hover — neither is sized
+ * by what it is worth (ruling B1) */
 .actionCards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -424,16 +447,22 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
-  box-shadow: var(--lift);
   text-decoration: none;
-  transition: border-color var(--dur-fast) var(--ease-standard),
+  transition: transform var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
     background var(--dur-fast) var(--ease-standard);
 }
-.actionCard:hover,
-.actionCard:focus-visible {
-  border-color: var(--brand-accent-hairline);
+/* uniform CARD hover = scale(1.02) + a colour shift */
+.actionCard:hover {
+  border-color: var(--brand-accent);
   background: var(--surface-hover);
-  outline: none;
+  transform: scale(1.02);
+}
+/* focus is BLUE and separate — the old rule killed the outline and reused the
+ * hover treatment, so keyboard focus was invisible on these two cards. */
+.actionCard:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 /* the J9 corner glow on each action card */
 .cardSheen {
@@ -511,27 +540,44 @@
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  transition: color var(--dur-fast) var(--ease-standard),
+  transition: transform var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard),
     background var(--dur-fast) var(--ease-standard),
     border-color var(--dur-fast) var(--ease-standard);
 }
-.tile:hover,
-.tile:focus-visible {
+/* every one of the 12 tiles is the same 86px cell and hovers identically */
+.tile:hover {
   color: var(--brand-accent);
   background: var(--surface-hover);
-  outline: none;
+  border-color: var(--brand-accent-hairline);
+  transform: scale(1.02);
+}
+/* focus is BLUE and separate — it used to be suppressed (`outline: none`) and
+ * substituted with the hover colours, which is not a focus indicator. */
+.tile:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 .tileActive {
   color: var(--brand-accent); /* J9 active gold #f3b867 */
   background: var(--surface-hover); /* J9 active bg #292c34 */
 }
-/* persistent gold-active tile (Bảo mật when verified): an 8% gold film + the
- * existing lit-edge inset glow, without restyling the base tile. */
+/* persistent gold-active tile (Bảo mật when verified): a SOLID lit surface +
+ * a gold hairline. --wash-accent is a two-stop gradient layered over --surface;
+ * flat design does not put gradients on tiles/cards. */
 .tileActiveGold {
   color: var(--brand-accent);
-  background: var(--wash-accent);
+  background: color-mix(in srgb, var(--brand-accent) 8%, var(--surface));
   border-color: var(--brand-accent-hairline);
-  box-shadow: var(--glow-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .tile:hover,
+  .actionCard,
+  .actionCard:hover {
+    transform: none;
+  }
 }
 .tileIconWrap {
   position: relative;

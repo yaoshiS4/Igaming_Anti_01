@@ -1,0 +1,33 @@
+/* ============================================================================
+ * RestrictedFoot — inside the table frame border (--surface-2, top hairline).
+ * The stamp reads at the --text-mid AA floor / --t-sm with tabular numerals.
+ * Stamp sits right ≥768. Tokens only — no raw hex / px / ms.
+ * ==========================================================================*/
+
+.foot {
+  border-top: 1px solid var(--border);
+  background: var(--surface-2);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.stamp {
+  color: var(--text-mid);
+}
+
+@media (min-width: 768px) {
+  .foot {
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+  .stamp {
+    white-space: nowrap;
+    text-align: right;
+  }
+}

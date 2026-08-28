@@ -1,0 +1,65 @@
+/* ============================================================================
+ * Yaobet — BỘ SƯU TẬP · terms. A document, not a panel: no border, no card
+ * background, no width of its own. Whoever mounts it owns the container.
+ * ==========================================================================*/
+
+.terms { display: grid; gap: var(--space-2); }
+
+.terms h3 {
+  margin: var(--space-3) 0 0;
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+
+.terms h3:first-child { margin-top: 0; }
+
+.terms ul { margin: 0; padding-left: 1.15em; display: grid; gap: 8px; }
+
+/* --t-micro was defensible while this was a footnote at the bottom of a page.
+   It is not defensible now that this is the only place the terms exist. */
+.terms li {
+  font-size: var(--t-sm);
+  color: var(--text);
+  line-height: var(--lh-body);
+}
+
+.terms strong {
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+}
+
+.provisional {
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--border);
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+  line-height: var(--lh-body);
+}
+
+/* Pinned by sticking to the bottom of whatever scrollport holds it — so it is
+   a pinned footer inside the sheet and an ordinary last line on a page. */
+.footer {
+  position: sticky;
+  bottom: 0;
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) 0 0;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.footerLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+  text-decoration: none;
+}
+
+.footerLink:hover { text-decoration: underline; }
+
+.footerLink:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }

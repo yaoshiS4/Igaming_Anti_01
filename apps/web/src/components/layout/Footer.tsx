@@ -35,11 +35,15 @@ const PARTNERS: { src: string; alt: string }[] = [
   { src: "/assets/casino/mg_baccarat_landscape.png", alt: "Microgaming" },
 ];
 
-/* J9 .footer-box col-3 link list (.bottom-box.text). UI-only placeholders. */
+/* J9 .footer-box col-3 link list (.bottom-box.text). UI-only placeholders. The
+ * game-contribution rate table (/cuoc-hop-le) is a standalone reference / T&C
+ * surface CS can link to — the freshness stamp is repeated there (ST-15). */
 const BRAND_LINKS: { href: string; label: string }[] = [
   { href: "/tai-app", label: vi.footer.appDownload },
   { href: "/phong-cach", label: vi.footer.glamor },
   { href: "/gioi-thieu", label: vi.footer.about },
+  { href: "/cuoc-hop-le", label: vi.contribution.footerLink },
+  { href: "/cuoc-hop-le?tab=han-che", label: vi.restricted.footerLink },
   { href: "/tro-giup", label: vi.footer.helpCenter },
 ];
 

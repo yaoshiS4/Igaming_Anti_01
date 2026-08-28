@@ -1,0 +1,48 @@
+/* ============================================================================
+ * FilterNotice — a neutral inline strip (prototype §2.2). --surface-2 panel on a
+ * --border hairline; body copy at the --text-mid floor. Icon is --text-mid for
+ * the informational variants and --caution for the error variant — NEVER --loss,
+ * NEVER --error, never red (a 0% category is not a loss and an index failure is
+ * not a validation error). No raw hex / px / ms; no percentage anywhere.
+ * ==========================================================================*/
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+}
+
+.icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  color: var(--text-mid);
+  font-size: var(--t-body);
+  line-height: 1;
+  margin-top: var(--space-1);
+}
+
+/* error variant — amber "attention", not a loss / not red */
+.error .icon {
+  color: var(--caution);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.message {
+  color: var(--text);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+}
+
+.action {
+  display: flex;
+}

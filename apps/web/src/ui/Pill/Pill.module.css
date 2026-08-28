@@ -15,9 +15,18 @@
   white-space: nowrap;
   cursor: pointer;
   transition:
+    transform var(--dur-fast) var(--ease-standard),
     background-color var(--dur-fast) var(--ease-standard),
     border-color var(--dur-fast) var(--ease-standard),
     color var(--dur-fast) var(--ease-standard);
+}
+
+/* Pill renders a <button>, so it takes the UNIFORM button hover: scale(1.05)
+ * plus a colour shift. Same values as Button — no per-component variation. */
+@media (hover: hover) and (pointer: fine) {
+  .pill:hover:not(:disabled) {
+    transform: scale(1.05);
+  }
 }
 
 .pill:hover:not(:disabled) {
@@ -30,8 +39,13 @@
   outline-offset: 2px;
 }
 
+/* Selected chip. WAS background:var(--brand-accent-hairline) under
+ * color:var(--brand-accent) — 55%-opaque gold under gold text, measured
+ * 2.54:1 (AA FAIL). An 8% accent film is a solid computed colour (color-mix,
+ * not a gradient) and lifts the pair to 7.10:1 while still reading as "lit".
+ * Accent gold, never --focus-ring: blue is focus and ONLY focus. */
 .active {
-  background: var(--brand-accent-hairline);
+  background: color-mix(in srgb, var(--brand-accent) 12%, var(--surface-2));
   border-color: var(--brand-accent);
   color: var(--brand-accent);
 }
@@ -48,5 +62,8 @@
 @media (prefers-reduced-motion: reduce) {
   .pill {
     transition: none;
+  }
+  .pill:hover:not(:disabled) {
+    transform: none;
   }
 }

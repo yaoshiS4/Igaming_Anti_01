@@ -24,15 +24,22 @@
    * GROUP A — LOCKED BASE  (forbidden inside [data-brand])
    * ==================================================================== */
 
-  /* §1 — Color: canvas & surfaces (verified, AA base) ------------------ */
-  --canvas:           #171a21; /* page background (the .app-main analog) — the ONE root bg */
-  --shell:            #15161b; /* deeper shell behind the canvas (J9 --deep) */
-  --surface:          #1f222e; /* dominant surface: card/panel/button-default base (J9) */
-  --surface-2:        #1c1f25; /* module card bg (J9 .list/.rule-wrap) — was #1f2229 */
-  --surface-3:        #25282f; /* raised panel / table head */
-  --tile:             #262833; /* J9 game-tile bg (.game-item/.game_bg) — fixed-tile surface */
-  --surface-hover:    #292c34; /* hover / active menu item */
-  --surface-disabled: #313440;
+  /* §1 — Color: canvas & surfaces — FLAT / DARK-LUXURY (PM ruling A1 "dark")
+   * ---------------------------------------------------------------------
+   * Obsidian ground #0a0a0a, card #141414. Ruling A2 measured that pair at
+   * 1.05:1 — surfaces CANNOT carry separation in this palette. The ladder
+   * below is therefore intentionally tight (each step ~1.06–1.22:1) and the
+   * gold hairline (--border / --gold-hairline) is the load-bearing edge.
+   * Ladder is monotone-ascending: canvas < tile < surface < 2 < 3 < hover
+   * < disabled, so "more elevated" is always "lighter" — no inversions. */
+  --canvas:           #0a0a0a; /* page background (the .app-main analog) — the ONE root bg */
+  --shell:            #050505; /* deeper shell behind the canvas (J9 --deep) */
+  --surface:          #141414; /* dominant surface: card/panel/button-default base */
+  --surface-2:        #1a1a1a; /* module card bg (J9 .list/.rule-wrap) */
+  --surface-3:        #212121; /* raised panel / table head */
+  --tile:             #171717; /* game-tile bg (.game-item/.game_bg) — fixed-tile surface */
+  --surface-hover:    #262626; /* hover / active menu item — 1.22:1 over --surface (perceptible) */
+  --surface-disabled: #303030;
   --scrim:            rgba(0, 0, 0, 0.7); /* modal scrim — SOLID, never backdrop-filter:blur */
 
   /* §3 — Semantic: J9-EXACT win/loss + focus (PINNED neutral) ---------- */
@@ -41,17 +48,28 @@
   --error:      #e42946; /* J9 red CTA/danger (validation, not outcomes). PINNED */
   --green:      #31bc69; /* J9 --Minor-Color-Green — flat positive accent. PINNED */
   --info:       #018fff; /* J9 blue solid */
-  --caution:    #f5a623; /* amber "allowed-but-costs-more" — NOT a reward (gold) nor a block (red/error). LOCKED neutral. PINNED; ≥4.5:1 vs canvas (8.59:1) */
+  --caution:    #f5a623; /* amber "allowed-but-costs-more" — NOT a reward (gold) nor a block (red/error). LOCKED neutral. PINNED; ≥4.5:1 vs canvas (9.77:1) */
   --on-caution: #2a1a00; /* dark text on a solid --caution fill (≥4.5:1 → 8.31:1) */
-  --focus-ring: #6ea8ff; /* AA focus indicator — LOCKED neutral blue. PINNED; ≥3:1 vs canvas */
+  --focus-ring: #6ea8ff; /* AA focus indicator — LOCKED neutral blue. PINNED; ≥3:1 vs canvas (8.21:1) */
 
-  /* §3 — Text ladder on dark (AA-lifted) ------------------------------- */
-  --text-hi:  hsla(0, 0%, 100%, 0.92); /* primary text */
-  --text:     hsla(0, 0%, 100%, 0.82); /* strong secondary */
-  --text-mid: hsla(0, 0%, 100%, 0.62); /* muted — AA floor on --canvas (LIFTED from J9 .4) */
-  --text-dim: hsla(0, 0%, 100%, 0.45); /* DECORATIVE-ONLY hint text — never functional copy */
-  --border:   hsla(0, 0%, 100%, 0.16); /* hairline divider */
-  --tint:     hsla(0, 0%, 100%, 0.05); /* subtle surface tint */
+  /* §3 — Text ladder on dark — champagne, not white (Flat / Dark-Luxury)
+   * ---------------------------------------------------------------------
+   * #f2f0e4 champagne replaces the white-alpha ladder: on #0a0a0a it measures
+   * 17.3:1. The muted step is the design system's #888888 (5.59:1 — clears AA
+   * for body copy). --text-dim stays BELOW it, decorative-only, at 3.94:1. */
+  --text-hi:  #f2f0e4; /* primary text — 17.31:1 on --canvas */
+  --text:     #d6d3c7; /* strong secondary — 13.20:1 on --canvas */
+  --text-mid: #888888; /* muted — the system's #888888; AA floor on --canvas (5.59:1) */
+  --text-dim: #6f6f6f; /* DECORATIVE-ONLY hint text (3.94:1) — never functional copy */
+
+  /* Ruling A2: shadows AND card gradients are banned, so on a 1.05:1
+   * surface/canvas pair the BORDER is the only thing that draws a card. This
+   * is a gold-tinted hairline at 3.46:1 vs --surface / 3.71:1 vs --canvas —
+   * i.e. it clears the WCAG 1.4.11 non-text 3:1 floor on its own. A literal
+   * (not var(--brand-accent)) so --border stays a locked constant and the
+   * emerald regression brand keeps a byte-identical edge contrast. */
+  --border:   rgba(212, 175, 55, 0.55); /* load-bearing gold hairline */
+  --tint:     rgba(242, 240, 228, 0.05); /* subtle warm surface tint */
 
   /* §4 — Typography: scale (px — J9's 12-dense rhythm) ----------------- */
   --t-micro:   12px; /* dense caption */
@@ -89,10 +107,19 @@
   --radius-card: 16px;
   --radius-pill: 9999px;
 
-  /* §6 — Elevation: glow-not-shadow ------------------------------------ */
-  --glow-gold: inset 0 0 16px rgba(243, 184, 103, 0.28); /* lit/active gold edge (J9 #f3b867 inset glow) */
-  --halo:      0 0 40px rgba(0, 0, 0, 0.35);            /* soft ambient for modals/hero only */
-  --lift:      0 2px 12px rgba(0, 0, 0, 0.18);          /* sparse card lift */
+  /* §6 — Elevation: NONE. "ABSOLUTELY NO BOX SHADOWS." ------------------
+   * Flat Design bans shadows outright. These three are GROUP-A and legal to
+   * redefine at :root (lint A1 only forbids them INSIDE [data-brand]), so the
+   * ban is enforced HERE, once — not policed across twelve component files.
+   * Every `box-shadow: var(--lift|--halo|--glow-gold)` in the app resolves to
+   * `none` from this line. Separation is now the --border hairline (A2). */
+  --glow-gold: none; /* was: inset gold edge — lit/active state is a border-color change */
+  --halo:      none; /* was: soft ambient for modals/hero */
+  --lift:      none; /* was: sparse card lift */
+  /* Orphan reference: QuickActionRail reads var(--shadow-2, <hardcoded fallback>)
+   * for a token that was never defined, so the fallback painted a shadow on
+   * every route. Defining it here neutralises it without a component edit. */
+  --shadow-2:  none;
 
   /* §6 — Z-index: named ladder ----------------------------------------- */
   --z-content:  1;
@@ -105,7 +132,7 @@
   --header-h:    72px;   /* tier-1 logo/identity (J9 120px = 72 + 48 nav) */
   --nav-h:       48px;   /* tier-2 category row (J9 .routers-list 48px) */
   --logo-h:      44px;   /* J9 main logo height inside a 170×60 lockup box */
-  --header-bg:   #171a21;/* sticky header — OPAQUE J9 canvas (per RULES §; NOT the .8 blur) */
+  --header-bg:   #0a0a0a;/* sticky header — OPAQUE canvas (per RULES §; NOT the .8 blur) */
   --rail-w:      304px;  /* member left rail */
   --frame-w:     1424px; /* J9 fixed content frame (.home_wrapper 1424px) */
   --frame-min:   1150px; /* J9 min-width clamp (.routers-list min-width) */
@@ -124,11 +151,14 @@
   --card-pad-sm: 16px;   /* standard card padding (J9 ×16) */
   --banner-mb:   22px;   /* hero/banner block bottom margin (J9 .banner_content) */
 
-  /* §7 — Motion (J9 timings — 02-J9-MEASUREMENTS §6) ------------------- */
-  --dur-fast:   200ms; /* .2s = J9 hover micro-interactions */
-  --dur-base:   250ms; /* .25s = J9 nav active-underline */
-  --dur-slow:   350ms; /* .35s = J9's default workhorse (×483) */
-  --dur-header: 500ms; /* .5s = J9 header height collapse/expand */
+  /* §7 — Motion: snappy & direct (Flat Design) --------------------------
+   * 200ms is the default for every colour/opacity/border micro-interaction;
+   * 300ms is reserved for the larger transforms (height collapse, sheets,
+   * route-level reveals). Nothing is slower than 300ms. */
+  --dur-fast:   200ms; /* micro-interactions — hover, focus, colour shift */
+  --dur-base:   200ms; /* THE default */
+  --dur-slow:   300ms; /* larger transforms — translate/scale/height */
+  --dur-header: 300ms; /* header height collapse/expand */
   --ease-standard: cubic-bezier(0.645, 0.045, 0.355, 1); /* J9 ease-in-out-quad */
   --ease-entrance: cubic-bezier(0.23, 1, 0.32, 1);       /* J9 ease-out-quint */
 
@@ -149,22 +179,23 @@
    * over the locked canvas. Layered OVER var(--canvas) so a browser without
    * color-mix degrades to the flat canvas, never to transparent/black. */
   --page-bloom:
-    radial-gradient(120% 80% at 50% -10%, color-mix(in srgb, var(--brand-accent) 6%, transparent) 0%, rgba(23, 26, 33, 0) 46%),
-    radial-gradient(140% 120% at 50% 120%, rgba(2, 143, 255, 0.05) 0%, rgba(23, 26, 33, 0) 55%),
+    radial-gradient(120% 80% at 50% -10%, color-mix(in srgb, var(--brand-accent) 6%, transparent) 0%, rgba(10, 10, 10, 0) 46%),
+    radial-gradient(140% 120% at 50% 120%, rgba(30, 61, 89, 0.25) 0%, rgba(10, 10, 10, 0) 55%),
     var(--canvas);
   /* Member content column stays flat matte so lifted cards read as raised. */
   --member-canvas: var(--canvas);
 
   /* Fused hero card — warm brand-accent halo behind the avatar into --surface. */
   --header-card-grad:
-    radial-gradient(120% 140% at 14% 30%, color-mix(in srgb, var(--brand-accent) 14%, transparent) 0%, rgba(31, 34, 46, 0) 52%),
+    radial-gradient(120% 140% at 14% 30%, color-mix(in srgb, var(--brand-accent) 14%, transparent) 0%, rgba(20, 20, 20, 0) 52%),
     var(--surface);
-  /* Faint diagonal cool sheen on the wallet block (re-expresses bg_wallet.png). */
+  /* Faint diagonal sheen on the wallet block — re-tinted champagne (was a cool
+   * ice-white that reads blue-grey against the warm Flat palette). */
   --wallet-sheen-grad:
-    linear-gradient(118deg, rgba(204, 220, 255, 0.06) -10%, rgba(204, 220, 255, 0.015) 60%, transparent 100%);
-  /* The signature J9 corner glow — soft ice-white bleed from the upper-right. */
+    linear-gradient(118deg, rgba(242, 240, 228, 0.05) -10%, rgba(242, 240, 228, 0.012) 60%, transparent 100%);
+  /* The signature corner glow — soft champagne bleed from the upper-right. */
   --card-sheen-grad:
-    radial-gradient(circle at 78% 26%, rgba(204, 220, 255, 0.05) 0%, rgba(204, 220, 255, 0.01) 57%, transparent 72%);
+    radial-gradient(circle at 78% 26%, rgba(242, 240, 228, 0.04) 0%, rgba(242, 240, 228, 0.01) 57%, transparent 72%);
 
   /* QR/scan tile — a genuine pure-white surface (a QR must be on white to be
    * scannable). The ONE intentional white block on a member surface; locked
@@ -180,11 +211,16 @@
    * dark rgba(0,0,0,.1) vanishes on our OLED #1f222e — re-expressed lighter). */
   --progress-track: hsla(0, 0%, 100%, 0.12);
   --progress-fill: var(--brand-accent); /* filled portion keyed to the brand */
-  --progress-fill-grad: var(--brand-accent-grad); /* optional richer lit fill */
+  /* The app's ONLY `background-image:` call-site, so this one MUST stay in
+   * <image> syntax — a bare <color> would make the declaration invalid and the
+   * progress bar would lose its fill entirely. Degenerate on purpose: two
+   * identical stops render dead flat, so the flat ban holds visually while the
+   * property stays valid. Do NOT collapse this to var(--brand-accent-grad). */
+  --progress-fill-grad: linear-gradient(90deg, var(--brand-accent), var(--brand-accent));
   --progress-dot: #ffffff; /* locked neutral white comet head */
-  --progress-dot-glow:
-    0 0 4px rgba(217, 230, 255, 0.9), 0 0 8px rgba(217, 230, 255, 0.7),
-    0 0 12px rgba(255, 255, 255, 0.6), 0 0 18px rgba(255, 255, 255, 0.35);
+  /* Also a box-shadow → also `none` under the flat ban. The comet head now
+   * reads by its own white fill against the track, not by a glow. */
+  --progress-dot-glow: none;
   --progress-tag-bg: var(--surface-3); /* right-pinned next-tier pill bg */
   --progress-tag-text: var(--brand-accent); /* next-tier pill label + chevron */
   --progress-tag-border: color-mix(in srgb, var(--brand-accent) 32%, transparent);
@@ -194,12 +230,6 @@
   --status-locked-bg: color-mix(in srgb, var(--green) 12%, transparent);
   --status-locked-text: var(--green);
 
-  /* An 8% brand-gold film laid over a surface to signal lit/active WITHOUT
-   * changing the base — the persistent background of the active Bảo mật tile. */
-  --wash-accent:
-    linear-gradient(0deg, color-mix(in srgb, var(--brand-accent) 8%, transparent), color-mix(in srgb, var(--brand-accent) 8%, transparent)),
-    var(--surface);
-
   /* ======================================================================
    * GROUP B — RAW RAMP (default-brand source literals)
    * Components must NOT read these directly — only the --brand-* aliases below.
@@ -207,23 +237,43 @@
    * the --brand-* aliases to its own hex.
    * ==================================================================== */
 
-  /* §2 — Gold accent (J9-EXACT extracted palette — per rebuild RULES §1) */
-  --gold-500:      #f3b867; /* J9 --Main-Color-Gold — primary accent (VIP, prices, active tabs) */
-  --gold-600:      #e2b271; /* J9 gradient warm stop — pressed/darker step */
-  --gold-grad:     linear-gradient(90deg, #e2b271, #f6d99d); /* J9 primary-button gradient */
-  --gold-hairline: rgba(243, 184, 103, 0.32); /* thin gold border on cards (J9 #f3b867 hairline) */
-  --text-on-gold:  #633100; /* J9 gold-button text (--font-text / --Minor-Color-Brown) */
+  /* §2 — Gold accent — Flat / Dark-Luxury #d4af37 ---------------------- */
+  --gold-500:      #d4af37; /* primary accent (VIP, prices, active tabs) — 9.42:1 on --canvas */
+  --gold-600:      #b4952f; /* pressed/darker step (−15% L) */
+  /* Flat Design bans gradients on buttons and cards, and this token IS the
+   * button/pill fill (20 call-sites, incl. Header .goPay and QuickActionRail
+   * .jackpotCta). Re-pointed to a SOLID COLOUR, not a degenerate two-stop
+   * gradient: a same-colour gradient still *computes* as a gradient on a
+   * button, which is the thing the system bans and the thing any future
+   * automated check trips on. A <color> is legal in every `background:`
+   * shorthand call-site (audited: all 20, incl. Odometer's
+   * background-clip:text). The ONE `background-image:` slot in the app reads
+   * --progress-fill-grad, which keeps gradient syntax below. */
+  --gold-grad:     #d4af37;
+  --gold-hairline: rgba(212, 175, 55, 0.55); /* card hairline — matches --border (3.46:1 vs --surface) */
+  --text-on-gold:  #0a0a0a; /* DARK ink on gold (ruling A3): 9.42:1. White would be 2.11:1 — AA fail */
 
-  /* §3 — CTA / blue (J9-EXACT — links / login / "font-linear") ---------- */
-  --cta:        #018fff; /* J9 blue solid (×180) — primary CTA / links */
-  --cta-grad:   linear-gradient(90deg, #02c2ff, #018fff); /* J9 blue gradient (.font-linear) */
-  --cta-accent: #f53f55; /* J9 --Minor-Color-Red — register/scarce accent */
-  --blue-soft:  #7cacff; /* J9 silver-blue — nav text / soft links */
+  /* §3 — Secondary / deep navy #1e3d59 (the system's "Secondary") ------
+   * Split by ROLE, because #1e3d59 is a FILL colour: as text on --canvas it
+   * measures 1.76:1 and --cta is read as link/border colour in the auth flow.
+   *   --cta      → a same-hue (208°) lightened step that clears AA as text.
+   *   --cta-grad → the literal #1e3d59, flat, as the secondary button fill
+   *                (--text-hi on it = 9.83:1). */
+  --cta:        #5e97c9; /* link / focus border — 6.36:1 on --canvas, 5.92:1 on --surface */
+  --cta-grad:   #1e3d59; /* flat secondary FILL (--text-hi on it = 9.83:1) — solid, not a gradient */
+  --cta-accent: #f53f55; /* register/scarce accent — matches the pinned --loss hue */
+  --blue-soft:  #8fb4d6; /* soft nav text / links — 9.11:1 on --canvas */
 
-  /* §4 — Font stack (Vietnamese-first — NOT PingFang) ------------------ */
-  /* Self-hosted/system fallback stack — builds offline. VN-diacritic complete. */
-  --font-body: "Be Vietnam Pro", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-num:  "Be Vietnam Pro", ui-monospace, "DIN Alternate", "Segoe UI", sans-serif;
+  /* §4 — Font stack (Vietnamese-first) ---------------------------------
+   * Both faces are loaded by next/font/google in app/layout.tsx and injected
+   * as --font-be-vietnam / --font-montserrat. Both serve the Google
+   * `vietnamese` subset (U+1EA0–1EF9), so the toned vowels in `BỘ SƯU TẬP`
+   * and `Đổi thưởng` resolve INSIDE the face — no mid-word fallback.
+   * Outfit is REJECTED (ruling A4): latin/latin-ext only, skips U+1EA0–1EF1. */
+  --font-body: var(--font-be-vietnam), system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-num:  var(--font-be-vietnam), ui-monospace, "DIN Alternate", "Segoe UI", sans-serif;
+  /* Display / headings / uppercase labels — Montserrat (ruling A4). */
+  --font-head: var(--font-montserrat), system-ui, "Segoe UI", Roboto, Arial, sans-serif;
 
   /* ======================================================================
    * GROUP B — BRAND INDIRECTION  (the ONLY vars a [data-brand] re-points;
@@ -239,6 +289,7 @@
   --brand-cta-accent:      var(--cta-accent);    /* → --cta-accent  scarce/register accent */
   --brand-font-body:       var(--font-body);     /* → --font-body   brand body face (VN-diacritic complete) */
   --brand-font-num:        var(--font-num);      /* → --font-num    brand tabular-numeral face */
+  --brand-font-head:       var(--font-head);     /* → --font-head   brand display/heading face (VN-complete) */
   --brand-logo:            url("/assets/brand/logo.svg"); /* logo lockup slot (literal URL, no raw-ramp source) */
 
   /* ======================================================================
@@ -293,6 +344,20 @@
   --vip-radius-control: 12px;
   --vip-radius-gem:     8px;
 
-  /* display face — Cinzel (serif) with graceful offline serif fallback */
-  --brand-font-display: var(--font-cinzel), Georgia, "Times New Roman", serif;
+  /* display face — Montserrat, the same geometric sans as --brand-font-head.
+   *
+   * WAS Cinzel, and Cinzel had to go for two independent reasons:
+   *   1. CORRECTNESS. Cinzel serves `latin` + `latin-ext` only — no `vietnamese`
+   *      subset — so U+1EA0–1EF1 falls out of the face. Measured on the running
+   *      app: `Đồng` lost `ồ`, `Bạc` and `Bạch Kim` lost `ạ`, mid-word, on /vip.
+   *      This is the identical defect that got Outfit rejected in ruling A4;
+   *      rejecting one and shipping the other would have been incoherent.
+   *   2. SYSTEM. Flat Design specifies a GEOMETRIC SANS for display. Cinzel is
+   *      an inscriptional serif — it was the previous luxury direction's voice
+   *      and is off-system regardless of the language failure.
+   *
+   * Kept as its own token rather than collapsed into --brand-font-head: display
+   * and heading are distinct roles and a future brand may want them to differ.
+   * The serif fallbacks are gone with the serif. */
+  --brand-font-display: var(--font-head);
 }

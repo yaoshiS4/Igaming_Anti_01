@@ -10,62 +10,84 @@
   white-space: nowrap;
 }
 
-/* ---- subtle (tinted) ---------------------------------------------------- */
+/* ---- subtle (tinted) ----------------------------------------------------
+ * The ground is ONE deterministic dark token for every tone, not --tint.
+ * Why: --tint is a 5% champagne film, i.e. a LIGHTENING film, and every subtle
+ * tone is light-on-dark — so --tint moved the ground the wrong way AND made the
+ * measured ratio depend on whichever surface the badge happened to land on.
+ * Measured drift on the old --tint ground (canvas → surface-hover):
+ *   info 5.50→4.01, loss 4.94→3.60, danger 4.06→2.96 — i.e. the same component
+ * passed or failed AA purely by placement. Pinning the ground makes contrast a
+ * property of the Badge instead of its parent. The ground is --shell (the
+ * darkest surface token), not --canvas: every subtle tone is light-on-dark, so
+ * the darkest legal ground maximises every ratio at once — and it is the
+ * difference between .subtle.danger at 4.44:1 (FAIL) and 4.57:1 (PASS), with
+ * no re-hueing of a PINNED token. A `currentColor` hairline (borders are
+ * load-bearing) keeps the chip's SHAPE legible on any parent surface.
+ * All seven tones measured in-browser; the worst is danger at 4.57:1. */
+.subtle {
+  background: var(--shell);
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
 .subtle.neutral {
-  background: var(--surface-3);
-  color: var(--text);
+  color: var(--text); /* 13.59:1 */
 }
 .subtle.gold {
-  background: var(--brand-accent-hairline);
-  color: var(--brand-accent);
+  /* WAS background:var(--brand-accent-hairline) — a 55%-opaque GOLD ground
+   * under GOLD text, measured 2.54:1. --brand-accent-hairline is a border
+   * token (tuned to 3.46:1 as an EDGE); it was never a legible text ground. */
+  color: var(--brand-accent); /* 9.69:1 */
 }
 .subtle.info {
-  background: var(--tint);
-  color: var(--info);
+  color: var(--info); /* 6.19:1 */
 }
 .subtle.win {
-  background: var(--tint);
-  color: var(--win);
+  color: var(--win); /* 9.85:1 */
 }
 .subtle.loss {
-  background: var(--tint);
-  color: var(--loss);
+  color: var(--loss); /* 5.56:1 */
 }
 .subtle.caution {
-  background: var(--tint);
-  color: var(--caution);
+  color: var(--caution); /* 10.06:1 */
 }
+/* The tightest pair in the component. --error (#e42946) has a hard ceiling of
+ * 4.70:1 against PURE BLACK, so it clears AA only on the darkest ground and
+ * only just: 4.44:1 on --canvas (fail) → 4.57:1 on --shell (pass). It has no
+ * headroom left — any future lightening of --shell or --error re-breaks it.
+ * --error is GROUP-A PINNED and owned by src/styles; flagged, not re-hued. */
 .subtle.danger {
-  background: var(--tint);
-  color: var(--error);
+  color: var(--error); /* 4.57:1 — passes with 0.07 of margin */
 }
 
-/* ---- solid -------------------------------------------------------------- */
+/* ---- solid --------------------------------------------------------------
+ * Every chromatic fill takes DARK ink. --text-hi on a saturated mid-tone fill
+ * is the same class of failure as white-on-gold (2.11:1): it measured 2.88:1 on
+ * --info. Dark ink is used uniformly so no tone is a special case. */
 .solid.neutral {
   background: var(--surface-3);
-  color: var(--text-hi);
+  color: var(--text-hi); /* 14.08:1 */
 }
 .solid.gold {
   background: var(--brand-accent);
-  color: var(--brand-on-accent);
+  color: var(--brand-on-accent); /* 9.42:1 — dark ink, never white (2.11:1) */
 }
 .solid.info {
   background: var(--info);
-  color: var(--text-hi);
+  color: var(--shell); /* WAS --text-hi @ 2.88:1 (AA FAIL) → 6.19:1 */
 }
 .solid.win {
   background: var(--win);
-  color: var(--canvas);
+  color: var(--shell); /* 9.85:1 */
 }
 .solid.loss {
   background: var(--loss);
-  color: var(--canvas);
+  color: var(--shell); /* 5.56:1 */
 }
 .solid.caution {
   background: var(--caution);
-  color: var(--on-caution);
+  color: var(--on-caution); /* 8.31:1 */
 }
 .solid.danger {
   background: var(--error);
-  color: var(--canvas);
+  color: var(--shell); /* WAS --canvas @ 4.44:1 (marginal AA FAIL) → 4.57:1 */
 }

@@ -1,4 +1,10 @@
-/* TierLadder — horizontal tier deck. Tokens only. */
+/* TierLadder — horizontal tier deck. Tokens only.
+ *
+ * RULING B1: every tier card is the SAME 168px box (and the same flex:1 1 0
+ * share on desktop) regardless of tier. Rank is carried by POSITION in the
+ * ladder and by the Card `active` border, never by size. There is deliberately
+ * NO :hover transform here — these are display cards, not links or buttons, so
+ * a hover scale would advertise an affordance that does not exist. */
 
 .deck {
   display: flex;
@@ -67,9 +73,8 @@
   display: grid;
   place-items: center;
   color: var(--brand-accent);
-  background:
-    radial-gradient(100% 100% at 50% 0%, rgba(244, 183, 64, 0.2), transparent 70%),
-    var(--surface-3);
+  /* flat: solid raised surface + gold hairline (was a raw-rgba radial fill) */
+  background: var(--surface-3);
   border: 1px solid var(--brand-accent-hairline);
 }
 

@@ -1,0 +1,122 @@
+/* ============================================================================
+ * RestrictedTable — frame + a11y table + frozen first column (mirrors RateTable
+ * §2.2/§5, now WITH the rate column as column 2). min-width:360px is the entire
+ * mechanism that forces the horizontal scroll on the narrowest breakpoint; the
+ * page body never
+ * scrolls (globals.css pins overflow-x:hidden) — the table scrolls inside its
+ * Scroller. No --lift / --halo / --glow-gold / gradient; no --loss / --error /
+ * --win / --text-dim / --brand-accent / --vip-*; no raw hex / px / ms (the
+ * media-query breakpoints are the sanctioned literals).
+ * ==========================================================================*/
+
+.frame {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--canvas);
+  overflow: hidden;
+}
+
+.table {
+  border-collapse: separate; /* REQUIRED — sticky cells break under `collapse` */
+  border-spacing: 0;
+  width: 100%;
+  min-width: 360px; /* forces the horizontal scroll inside the Scroller */
+  font-family: var(--brand-font-num);
+  font-variant-numeric: tabular-nums;
+}
+
+/* module-local visually-hidden helper (there is no global one) */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.th,
+.td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  background: var(--canvas); /* opaque — required for the sticky column */
+  font-size: var(--t-sm);
+  color: var(--text);
+  text-align: left;
+  vertical-align: top;
+}
+
+tbody tr:last-child .td,
+tbody tr:last-child .rowHead {
+  border-bottom: none;
+}
+
+/* THIS is what actually freezes the column (not Scroller.freeze). Every cell
+ * is opaque so the pinned column occludes the scrolling body. */
+.rowHead {
+  position: sticky;
+  left: 0;
+  z-index: var(--z-content);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-2); /* a different surface from canvas + head */
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-weight: var(--weight-semi);
+  font-size: var(--t-sm);
+  text-align: left;
+  vertical-align: top;
+  white-space: normal; /* the ONE cell licensed to wrap (large-font @360) */
+  overflow-wrap: anywhere;
+}
+
+/* the game name — the wrapping text line in the frozen column */
+.rowName {
+  overflow-wrap: anywhere;
+}
+
+.headRow .th {
+  background: var(--surface-3); /* licensed as "raised panel / table head" */
+  color: var(--text-mid);
+  font-weight: var(--weight-semi);
+}
+
+.corner {
+  position: sticky;
+  left: 0;
+  z-index: calc(var(--z-sticky) + 1);
+  background: var(--surface-3);
+}
+
+/* the descriptive (Loại / Nhà cung cấp) cells read muted */
+.meta {
+  color: var(--text-mid);
+}
+
+/* ≥1024 pointer reading aid (not a state) — the whole row lifts on hover */
+@media (min-width: 1024px) {
+  tbody tr:hover .td {
+    background: var(--surface-hover);
+  }
+  tbody tr:hover .rowHead {
+    background: var(--surface-hover);
+  }
+}
+
+/* denser padding on narrow / mid widths */
+@media (max-width: 900px) {
+  .th,
+  .td,
+  .rowHead {
+    padding: var(--space-2) var(--space-3);
+  }
+}

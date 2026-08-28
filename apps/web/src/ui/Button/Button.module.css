@@ -14,11 +14,22 @@
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
+  /* FLAT: no box-shadow / no filter in the transition list — depth and
+   * brightness filters are both banned, so hover is a TRANSFORM + a COLOUR
+   * SHIFT only (border-color carries the ghost variant). */
   transition:
     transform var(--dur-fast) var(--ease-standard),
-    box-shadow var(--dur-fast) var(--ease-standard),
-    filter var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
     background-color var(--dur-fast) var(--ease-standard);
+}
+
+/* UNIFORM hover — every button scales 1.05, regardless of variant, size or
+ * prominence. Declared ONCE on .btn so no variant can differentiate itself.
+ * Placed before the variant rules so their :active scale(.98) still wins. */
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover:not(:disabled) {
+    transform: scale(1.05);
+  }
 }
 
 .btn:focus-visible {
@@ -56,38 +67,46 @@
   width: 100%;
 }
 
-/* ---- variant: gold (premium / claim / VIP CTA) -------------------------- */
+/* ---- variant: gold (premium / claim / VIP CTA) --------------------------
+ * Reads --brand-accent (always a SOLID colour) rather than --brand-accent-grad
+ * (which an alternate [data-brand] may point at a real gradient — banned on a
+ * button). Identical pixels under the default brand; gradient-proof under any
+ * other. Hover = colour shift; :active = the darker pressed step. */
 .gold {
-  background: var(--brand-accent-grad);
+  background: var(--brand-accent);
   color: var(--brand-on-accent);
 }
 .gold:hover:not(:disabled) {
-  box-shadow: var(--glow-gold);
+  background: color-mix(in srgb, var(--brand-accent) 85%, var(--text-hi));
 }
 .gold:active:not(:disabled) {
   transform: scale(0.98);
   background: var(--brand-accent-2);
 }
 
-/* ---- variant: primary (CTA blue — login/submit) ------------------------- */
+/* ---- variant: primary (CTA deep-navy — login/submit) --------------------
+ * Hover lifts the fill toward --text-hi instead of filter:brightness(). */
 .primary {
   background: var(--brand-cta-grad);
   color: var(--text-hi);
 }
 .primary:hover:not(:disabled) {
-  filter: brightness(1.1);
+  background: color-mix(in srgb, var(--brand-cta-grad) 80%, var(--text-hi));
 }
 .primary:active:not(:disabled) {
   transform: scale(0.98);
 }
 
-/* ---- variant: danger (register/scarce accent; red = CTA only) ----------- */
+/* ---- variant: danger (register/scarce accent; red = CTA only) -----------
+ * --text-hi on --brand-cta-accent (#f53f55) measures 3.21:1 — an AA FAIL that
+ * predates this sweep. Dark ink on the scarce accent is 5.56:1 and matches the
+ * treatment Badge already uses for the same hue (.solid.loss → dark ink). */
 .danger {
   background: var(--brand-cta-accent);
-  color: var(--text-hi);
+  color: var(--shell);
 }
 .danger:hover:not(:disabled) {
-  filter: brightness(1.08);
+  background: color-mix(in srgb, var(--brand-cta-accent) 85%, var(--text-hi));
 }
 .danger:active:not(:disabled) {
   transform: scale(0.98);
@@ -108,13 +127,21 @@
 }
 
 /* ---- disabled ----------------------------------------------------------- */
+/* Disabled labels on this surface carry REAL information — "Tạm hết hàng",
+ * "Hết lượt đổi", "Thiếu 10.750 điểm" — so they are read, not skipped, and the
+ * WCAG 1.4.3 exemption for inactive controls is the wrong thing to lean on.
+ * Measured on --surface-disabled #303030:
+ *   --text-dim #6f6f6f  2.63:1  (was here — fail)
+ *   --text-mid #888888  3.72:1  (still a fail; a peer review proposed this as
+ *                                "4.62:1", which does not reproduce)
+ *   75% --text-mid + 25% --text-hi  5.17:1  ← used; still visibly muted
+ * Both inputs are semantic tokens, so this follows a re-brand/re-theme. */
 .btn:disabled {
   background: var(--surface-disabled);
-  color: var(--text-dim);
+  color: color-mix(in srgb, var(--text-mid) 75%, var(--text-hi));
   border-color: transparent;
   cursor: not-allowed;
-  filter: none;
-  box-shadow: none;
+  transform: none;
 }
 .btn[data-loading] {
   cursor: progress;
@@ -136,10 +163,13 @@
   }
 }
 
+/* Reduced-motion: EVERY transform added above is disabled; the colour shift
+ * (which is not motion) is all that remains as hover feedback. */
 @media (prefers-reduced-motion: reduce) {
   .btn {
     transition: none;
   }
+  .btn:hover:not(:disabled),
   .btn:active:not(:disabled) {
     transform: none;
   }

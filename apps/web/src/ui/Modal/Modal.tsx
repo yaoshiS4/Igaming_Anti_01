@@ -1,7 +1,8 @@
 /* ============================================================================
  * Modal (the Dialog primitive) — ONE reusable, LAZY-MOUNTED overlay (SPEC-03
  * A5). Replaces J9's pre-rendered el-dialog farm: NOT in DOM until `open`.
- * SOLID --scrim (no blur — lint) → dialog box (--radius-card, --halo) → header
+ * SOLID --scrim (no blur — lint) → FLAT dialog box (--radius-card + a
+ * load-bearing gold hairline; no --halo, no depth of any kind) → header
  * + content. Focus-trapped; Esc + scrim close; returns focus to trigger.
  * Centered on desktop; presents as a bottom Sheet <640 (responsive — the CSS
  * pins it to the bottom edge below the breakpoint, matching A5).

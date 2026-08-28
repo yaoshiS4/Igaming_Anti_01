@@ -307,6 +307,7 @@ export const vi = {
     store: "Cửa hàng",
     glamor: "Phong cách",
     club: "CLB",
+    collection: "Bộ sưu tập",
   },
 
   /* Header notification bell + dropdown panel. */
@@ -438,6 +439,187 @@ export const vi = {
     helpCenter: "Trung tâm trợ giúp",
     copyright: "Bản quyền © 2026 Tập đoàn Yaobet. Mọi quyền được bảo lưu.",
   },
+
+  /* Game-contribution rate table (/cuoc-hop-le). LEGALLY-GATED published-rate
+   * copy — every string here is a rate claim under the Vietnamese-counsel gate,
+   * so it lives in this one catalog the whole app reads (no component holds a
+   * hardcoded VN string). Copy fences (prototype §6 + fix-list): every rate
+   * NUMERAL in the table is produced by lib/format formatPercent() (a ledger
+   * value, never authored as copy), so the tier-label and zero-note keys below
+   * spell their meaning in words. A literal `%` appears ONLY in the plain-language
+   * EXPLAINER keys — `howToRead`, `settleNote`, `legendZero` (the mandated 0%-rate
+   * settlement + read-the-table reassurance) and the rate-bucket filter labels; no
+   * per-row rate cell is ever authored as copy. NO exclusion
+   * framing (loại trừ / bị loại / bị cấm); NO range dash between two rate values
+   * and NO `/` rate separator (the cell uses a middot `·`); `chưa` only where
+   * the subject is OUR list / OUR matching; NO glyphs embedded in a string
+   * (icons are aria-hidden <Icon> siblings). */
+  contribution: {
+    /* page furniture — the lifted lead + the "how to read" line (PageIntro).
+     * lead frames WHAT the % is FOR (the valid-turnover that funds daily cashback
+     * / VIP / weekly-monthly activity bonus); howToRead is the read-the-table key.
+     * Neither says "hoa hồng" (that word = the referral payout, a different thing). */
+    title: "Tỷ lệ tính cược theo trò chơi",
+    lead:
+      "Với những người chơi đang tham gia khuyến mãi hoàn trả hằng ngày: số tiền hoàn trả của bạn dựa trên phần cược được tính từ các game bạn chơi — mà mỗi game tính khác nhau. Ví dụ: game 100% tính toàn bộ tiền cược, game 20% chỉ tính 1/5, game 0% thì không tính. Xem bảng để biết game bạn chơi tính bao nhiêu.",
+    howToRead:
+      "0% nghĩa là không cộng cược, nhưng bạn vẫn chơi bình thường. Phần cược được tính còn dùng cho quyền lợi VIP và thưởng tuần/tháng. Dùng ô tìm kiếm hoặc bộ lọc để tra từng game.",
+
+    /* the plain-language caveats paragraph (owner override 2026-08-11: the old
+     * bordered "Cần biết" fence block is replaced by ONE muted paragraph). The
+     * promo clause ends with `fencePromoLinkText`, which PageIntro renders as an
+     * inline next/link to the Game-hạn-chế tab (/cuoc-hop-le?tab=han-che). */
+    caveats:
+      "Cấp VIP được xét theo cách riêng, không dựa trên tỷ lệ ở trang này. Khi tỷ lệ thay đổi, mức mới chỉ áp dụng cho cược đặt từ ngày hiệu lực. Mỗi khuyến mãi cũng có thể có điều kiện cược riêng — xem danh sách game hạn chế trong khuyến mãi.",
+    /* OD-5 caveat — a game can carry a rate yet a specific bet still not count.
+     * Read by TableFoot (single-sourced). */
+    sportCaveat:
+      "Một số cược không được tính dù trò chơi có tỷ lệ — ví dụ kèo thể thao dưới 1.50, cược bị huỷ hoặc rút sớm.",
+    /** the exact phrase inside `caveats` rendered as an inline link to the
+     * Game-hạn-chế tab (/cuoc-hop-le?tab=han-che) */
+    fencePromoLinkText: "danh sách game hạn chế trong khuyến mãi",
+    /* footer T&C / reference-surface link label (ST-15) */
+    footerLink: "Tỷ lệ tính cược theo trò chơi",
+
+    /* the two-tab strip on /cuoc-hop-le — the rate table + the restricted list
+     * now live on ONE page (ContributionTabs). Labels are the tab captions. */
+    tabsLabel: "Chọn bảng để xem",
+    tabRate: "Tỷ lệ tính cược",
+    tabRestricted: "Game hạn chế",
+
+    /* search (built in a later wave; labels present now for the seam) */
+    searchLabel: "Tìm tên trò chơi",
+    searchPlaceholder: "Tìm tên trò chơi…",
+    searchHint: "Gõ không dấu cũng được (vd: no hu)",
+    searchClear: "Xóa nội dung tìm kiếm",
+    searchOffline: "Tìm trò chơi cần có mạng.",
+
+    /* filters — search is the PRIMARY control; category + provider + rate-bucket
+     * are the three secondary filters that narrow the per-game table */
+    filterCategoryLabel: "Lọc theo loại trò chơi",
+    categoryFilterLabel: "Loại trò chơi",
+    filterAll: "Tất cả",
+    providerLabel: "Nhà cung cấp",
+    providerAll: "Tất cả nhà cung cấp",
+    /* contribution-% quick filter (segmented pills) */
+    bucketGroupLabel: "Lọc theo tỷ lệ được tính",
+    bucketAll: "Tất cả",
+    bucketFull: "100%",
+    bucketPartial: "Một phần",
+    bucketNone: "Không tính",
+    /* client-side numbered pager */
+    pagerLabel: "Phân trang danh sách trò chơi",
+    pagerPrev: "Trang trước",
+    pagerNext: "Trang sau",
+    pagerPage: "Trang {n}",
+    pagerStatus: "Trang {page} / {total}",
+
+    /* table columns */
+    colGame: "Tên trò chơi",
+    colRate: "Tỷ lệ được tính",
+    colCategory: "Loại trò chơi",
+    colProvider: "Nhà cung cấp",
+
+    /* rate cell — every numeral is formatted by lib/format formatPercent(); the
+     * copy below is the WORD scaffolding around it and carries no `%`. */
+    /* per-tier group ordinal labels (the one --caution element in the cell) */
+    tierOneLabel: "Hạng {n}",
+    tierRangeLabel: "Hạng {a}–{b}",
+    /* spoken enumeration of each tier group (srOnly; spells "phần trăm") */
+    srTierOne: "{p} phần trăm ở hạng {n}",
+    srTierRange: "{p} phần trăm từ hạng {a} đến hạng {b}",
+    /* the local tier vocabulary's display names (CONTRIB_TIERS nameKey) */
+    tierBronze: "Đồng",
+    tierSilver: "Bạc",
+    tierGold: "Vàng",
+    tierPlatinum: "Bạch Kim",
+    tierDiamond: "Kim Cương",
+
+    /* table foot + freshness. */
+    settleNote:
+      "Ở mọi trò chơi trong bảng (kể cả mức 0%), tiền thắng và tiền thua vẫn được thanh toán bình thường.",
+    updateStamp: "Cập nhật {date} · Phiên bản {version}",
+    changeNotice: "Tỷ lệ có thể thay đổi, chúng tôi báo trước 30 ngày.",
+
+    /* legend under the table — explains the one non-standard marker, a bare 0% */
+    legendZero: "0% — vẫn chơi bình thường, chỉ là cược không cộng vào cược hợp lệ.",
+
+    /* states */
+    resultCount: "{n} trò chơi",
+    notFoundTitle: "Chúng tôi chưa khớp được tên bạn gõ.",
+    notFoundResolve:
+      "Trò chơi nào cũng thuộc một loại, và loại nào cũng có tỷ lệ riêng. Chọn loại của bạn:",
+    notFoundTip: "Mẹo: gõ ngắn hơn, không dấu — ví dụ \"no hu\".",
+    notFoundHelp: "Vẫn chưa rõ? Xem Trợ giúp",
+    /* empty (filters yield nothing, no search) — neutral, never "excluded" */
+    emptyFilter: "Không có trò chơi nào khớp với bộ lọc đang chọn.",
+    emptyFilterReset: "Xóa bộ lọc",
+    errorTitle: "Không tải được danh sách trò chơi.",
+    errorBody: "Tỷ lệ theo loại vẫn xem được trong bảng bên dưới.",
+    retry: "Thử lại",
+
+    /* a11y */
+    loadingSr: "Đang tải bảng tỷ lệ",
+    tableCaption:
+      "Tỷ lệ cược được tính theo loại trò chơi và theo trò chơi. Cập nhật {date}, phiên bản {version}.",
+    scrollerLabel: "Bảng tỷ lệ được tính — vuốt ngang để xem thêm cột",
+
+    /* category names (also the chip labels, lobby order) */
+    catSports: "Thể thao",
+    catSlots: "Nổ hũ",
+    catCasino: "Casino / Bàn chơi",
+    catFishing: "Bắn cá",
+    catCard: "Game bài đối kháng",
+    catLottery: "Xổ số",
+    catCockfight: "Đá gà",
+    catArcade: "Game nhanh",
+  },
+
+  /* Bonus-restricted games list (/game-han-che). The ONE common, PUBLISHED list
+   * of games restricted WHILE a player is clearing a promotion / gift-code bonus
+   * (an anti-abuse rule). It is ORTHOGONAL to the game-contribution rate — a game
+   * can count 100% AND be bonus-restricted, or 0% and not restricted — so this
+   * page never shows a rate. Compliance: framed as "hạn chế trong khuyến mãi /
+   * không được tính cho khuyến mãi" — NEVER cấm / loại trừ / bị loại; no đồng.
+   * The `note` line is load-bearing: it prevents the "I can never play these"
+   * confusion. Search + column + pager + filter labels REUSE the generic
+   * contribution.* keys; only the page-specific copy lives in this namespace. */
+  restricted: {
+    metaTitle: "Game hạn chế trong khuyến mãi — Yaobet",
+    title: "Game hạn chế trong khuyến mãi",
+    lead:
+      "Với những người chơi đang tham gia một khuyến mãi, sự kiện hoặc dùng mã quà tặng: một số game sẽ bị giới hạn để tránh lạm dụng. Trong thời gian nhận ưu đãi, cược ở các game này không được tính cho điều kiện của ưu đãi (ví dụ điều kiện vòng cược). Xong ưu đãi, bạn chơi lại bình thường.",
+    noteLabel: "Lưu ý",
+    note: "Danh sách này dùng chung cho các ưu đãi có quy định đó.",
+    /* footer T&C / reference-surface link label (next to the rate-table link) */
+    footerLink: "Game hạn chế khuyến mãi",
+    /* a11y — table caption + scroller hint (names the rate column) */
+    tableCaption:
+      "Danh sách game hạn chế trong khuyến mãi, kèm tỷ lệ cược được tính theo từng trò chơi. Cập nhật {date}, phiên bản {version}.",
+    scrollerLabel: "Danh sách game hạn chế — vuốt ngang để xem thêm cột",
+    /* neutral states (never "excluded / banned") — the contribution notFound /
+     * error copy names the rate, so this page carries its own rate-free wording */
+    notFound:
+      "Chúng tôi chưa khớp được tên bạn gõ. Hãy thử gõ ngắn hơn, không dấu — ví dụ \"baccarat\".",
+    searchError:
+      "Không tải được tìm kiếm. Danh sách vẫn xem được đầy đủ trong bảng bên dưới.",
+  },
 } as const;
 
 export type Vi = typeof vi;
+
+/* ----------------------------------------------------------------------------
+ * t() — the tiny interpolation helper (GAP G6). This catalog is a frozen object
+ * with no interpolation; the contribution surface needs {n} {date} {version}
+ * {provider} {category} {a} {b} {p}. `t(template, vars)` substitutes every
+ * `{token}` present in `vars`; a token with NO matching var is left UNTOUCHED
+ * (never blanked, never a crash) so a missing value is visible, not silent.
+ * --------------------------------------------------------------------------*/
+export function t(
+  template: string,
+  vars: Record<string, string | number> = {},
+): string {
+  return template.replace(/\{(\w+)\}/g, (token, key: string) =>
+    key in vars ? String(vars[key]) : token,
+  );
+}

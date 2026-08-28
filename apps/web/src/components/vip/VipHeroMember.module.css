@@ -81,15 +81,14 @@
   letter-spacing: 0.1em;
 }
 
+/* flat: a SOLID gold figure. The clipped 3-stop gradient fill was the last
+ * "metallic" flourish on this hero and reads as depth on a flat surface. */
 .pointsValue {
   font-family: var(--brand-font-display);
   font-size: var(--t-hero);
   font-weight: var(--weight-bold);
   line-height: 1.1;
-  background: var(--vip-gold-grad);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--vip-gold-mid);
 }
 
 /* ---- progress row ---------------------------------------------------- */
@@ -137,10 +136,12 @@
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: var(--radius-pill);
-  background: var(--vip-gold-grad);
+  background: var(--vip-gold-mid);
   transition: width var(--dur-slow) var(--ease-entrance);
 }
 
+/* the knob reads by its own solid fill + dark ring border; the 4px halo it
+ * used to carry was a shadow. */
 .knob {
   position: absolute;
   top: 50%;
@@ -150,7 +151,6 @@
   background: var(--vip-gold-end);
   border: 2px solid var(--vip-gold-ink);
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--vip-gold-mid) 24%, transparent);
   transition: left var(--dur-slow) var(--ease-entrance);
 }
 

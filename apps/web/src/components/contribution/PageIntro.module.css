@@ -1,0 +1,67 @@
+/* ============================================================================
+ * PageIntro — sentence-case h1 on the BODY face (never the Cinzel display
+ * face); a lifted lead (--text / --t-body), a muted "how to read" line
+ * (--text-mid / --t-sm) and a single plain muted caveats paragraph (no box, no
+ * heading — owner override 2026-08-11). Trust-surface type floor: never below
+ * --text-mid, never --text-dim. Tokens only — no raw hex / px / ms.
+ * ==========================================================================*/
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.title {
+  color: var(--text-hi);
+  font-family: var(--brand-font-body);
+  font-size: var(--t-h1);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-tight);
+}
+
+/* the lifted lead — the one line that says what the number IS */
+.lead {
+  color: var(--text);
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+}
+
+/* the read-the-table line — secondary guidance, muted but above the AA floor */
+.howToRead {
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+}
+
+/* ---- the caveats paragraph ------------------------------------------------- *
+ * A single muted paragraph of plain sentences — no box, no border, no heading,
+ * no grid (owner override 2026-08-11). Muted but above the AA floor (--text-mid).
+ */
+.caveats {
+  margin-top: var(--space-2);
+  color: var(--text-mid);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  min-width: 0;
+}
+
+/* the ONE inline link — points at the Game-hạn-chế tab (/cuoc-hop-le?tab=han-che) */
+.caveatLink {
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  border-radius: var(--radius-sm);
+}
+
+.caveatLink:hover {
+  color: var(--text-hi);
+  text-decoration: none;
+}
+
+.caveatLink:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}

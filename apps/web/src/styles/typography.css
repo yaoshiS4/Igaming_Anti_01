@@ -1,37 +1,24 @@
 /* ============================================================================
  * Yaobet — typography layer (SPEC-04 styles/typography.css)
  * ----------------------------------------------------------------------------
- * Swaps J9's PingFang-SC CJK stack for a Vietnamese-diacritic-complete Latin
- * stack + a tabular-numeral face for VND/odds.
+ * TWO faces, both Vietnamese-complete (Flat / Dark-Luxury, PM ruling A4):
  *
- * FONT STRATEGY (SPEC-02 §4 + dev-fe brief): "Be Vietnam Pro" is the named
- * brand face. We do NOT @import it from a remote host (the build must succeed
- * offline and the app is self-contained). When a self-hosted ≤120KB VN subset
- * lands under public/assets/fonts/, drop the @font-face blocks below back in.
- * Until then --font-body/--font-num fall through to system-ui, which is
- * VN-diacritic complete on every target platform — so ế/ữ/ặ render uncut.
+ *   Be Vietnam Pro  → body / numerals   (--brand-font-body / --brand-font-num)
+ *   Montserrat      → display, headings, uppercase labels (--brand-font-head)
+ *
+ * Outfit is REJECTED and must not be reintroduced. Measured against the Google
+ * Fonts API: Outfit serves `latin` + `latin-ext` only, and latin-ext covers
+ * U+1E00–1E9F plus U+1EF2–1EFF while SKIPPING U+1EA0–1EF1 — precisely the
+ * block holding the toned Vietnamese vowels. `BỘ SƯU TẬP` (Ộ = U+1ED8) and
+ * `Đổi thưởng` (ổ = U+1ED5, ở = U+1EDF) both fall out of the face mid-word.
+ * Montserrat and Be Vietnam Pro BOTH serve the `vietnamese` subset
+ * (U+1EA0–1EF9), so every string in this product renders in one typeface.
+ *
+ * LOADING: next/font/google in app/layout.tsx, injected as --font-be-vietnam
+ * and --font-montserrat on <html>. tokens.css wraps them in the raw-ramp
+ * --font-body / --font-num / --font-head, and components read only the
+ * --brand-font-* aliases (lint A2). No @font-face and no @import here.
  * ==========================================================================*/
-
-/* When the licensed subset arrives, uncomment + point at the self-hosted files:
-@font-face {
-  font-family: "Be Vietnam Pro";
-  src: url("/assets/fonts/be-vietnam-pro-400.woff2") format("woff2");
-  font-weight: 400;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Be Vietnam Pro";
-  src: url("/assets/fonts/be-vietnam-pro-600.woff2") format("woff2");
-  font-weight: 600;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Be Vietnam Pro";
-  src: url("/assets/fonts/be-vietnam-pro-700.woff2") format("woff2");
-  font-weight: 700;
-  font-display: swap;
-}
-*/
 
 /* Base type ramp. Components read --t-* / --weight-* tokens; these are the
  * document-level defaults so unstyled VN copy is already on the AA ladder. */
@@ -41,6 +28,39 @@ body {
   line-height: var(--lh-body);
   font-weight: var(--weight-reg);
   color: var(--text-hi);
+}
+
+/* ---- Display / headings -------------------------------------------------
+ * Montserrat, tightened to -0.02em per the design system. Weight and
+ * line-height are set by globals.css (which loads after this sheet), so this
+ * rule deliberately declares family + tracking ONLY — no cascade fight.
+ * /vip headings opt out by class (.vipSectionHeading etc. carry
+ * --brand-font-display at class specificity, which wins over these element
+ * selectors), so the Cinzel luxury layer is untouched. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--brand-font-head);
+  letter-spacing: -0.02em;
+}
+
+/* ---- Uppercase labels ---------------------------------------------------
+ * The system's "tracking-wider" treatment: display face, heaviest weight,
+ * OPEN tracking (uppercase VN needs the extra sidebearing — stacked tone +
+ * vowel marks collide at negative tracking). A global opt-in hook, matching
+ * the [data-numeric] convention below: CSS Modules hash their own class names,
+ * so a module cannot reach this rule by accident. Apply with
+ * className="u-label" or data-label="upper". */
+.u-label,
+[data-label="upper"] {
+  font-family: var(--brand-font-head);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: var(--lh-tight);
 }
 
 /* Tabular numerals so money/odds don't reflow on tick (SPEC-02 §4 / A8). */

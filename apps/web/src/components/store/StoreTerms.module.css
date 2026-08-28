@@ -1,14 +1,16 @@
 /* StoreTerms — T&C accordion panel. Tokens only; gold-on-dark store surface. */
 
 .terms {
-  margin-top: var(--space-6, 32px);
-  padding: var(--space-5, 24px);
+  margin-top: var(--space-6);
+  padding: var(--space-5);
   border-radius: var(--radius-card);
   background: var(--surface-2);
   border: 1px solid var(--border);
 }
 
-/* ---- Header: sigil + title/subtitle + last-updated ---------------------- */
+/* ---- Header: sigil + title/subtitle + last-updated ----------------------
+ * .sigil reads --brand-accent-grad, which resolves to a SOLID #d4af37 under the
+ * flat re-skin (tokens.css); the token name is historical, not a live gradient. */
 .header {
   display: flex;
   align-items: center;
@@ -60,7 +62,8 @@
   border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: color-mix(in srgb, var(--surface-3) 60%, transparent);
-  color: var(--text-dim);
+  /* --text-mid: --text-dim on this ground is 4.29:1, under the AA floor. */
+  color: var(--text-mid);
   font-size: var(--t-micro);
   white-space: nowrap;
 }
@@ -79,10 +82,17 @@
   border-radius: var(--radius-md);
   background: var(--surface-3);
   border: 1px solid transparent;
-  transition: border-color 0.15s ease;
+  /* tokenised: was a raw `0.15s ease` */
+  transition: border-color var(--dur-fast) var(--ease-standard);
 }
 
 .item[data-open="true"] {
+  border-color: var(--brand-accent-hairline);
+}
+
+/* hover = a colour shift, not a lift. No scale: these are full-width accordion
+ * rows, and every row answers identically whether open or closed. */
+.item:hover {
   border-color: var(--brand-accent-hairline);
 }
 
@@ -131,7 +141,15 @@
 .chevron {
   flex: none;
   color: var(--text-mid);
-  transition: transform 0.2s ease;
+  /* tokenised: was a raw `0.2s ease` */
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+.trigger:hover .chevron {
+  transform: scale(1.1); /* the uniform icon step */
+}
+.item[data-open="true"] .trigger:hover .chevron {
+  transform: rotate(180deg) scale(1.1);
 }
 
 .item[data-open="true"] .chevron {
@@ -159,7 +177,9 @@
   border: 1px solid var(--border);
   font-size: var(--t-sm);
   line-height: var(--lh-body);
-  color: var(--text-dim);
+  /* --text-mid: --text-dim on this ground is ~4.2:1, under the AA floor, and
+   * the programme note is functional copy. */
+  color: var(--text-mid);
 }
 
 .noteIcon {
@@ -172,5 +192,13 @@
   .chevron,
   .item {
     transition: none;
+  }
+  /* absent, not instant — the open/closed rotation stays (it is state, not
+   * decoration); only the hover magnification goes. */
+  .trigger:hover .chevron {
+    transform: none;
+  }
+  .item[data-open="true"] .trigger:hover .chevron {
+    transform: rotate(180deg);
   }
 }

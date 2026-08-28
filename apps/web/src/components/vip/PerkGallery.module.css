@@ -30,9 +30,8 @@
   display: grid;
   place-items: center;
   color: var(--brand-accent);
-  background:
-    radial-gradient(120% 120% at 50% 0%, rgba(244, 183, 64, 0.18), transparent 70%),
-    var(--surface-3);
+  /* flat: solid raised surface + gold hairline (was a raw-rgba radial fill) */
+  background: var(--surface-3);
   border: 1px solid var(--brand-accent-hairline);
 }
 /* lock veil — honest locked status */

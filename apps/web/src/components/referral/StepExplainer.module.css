@@ -63,9 +63,23 @@
   }
 }
 
-/* the banner — a colorful per-step gradient (J9's illustrated .step_img stand-in)
- * + a white icon + a faded number watermark. Each step a distinct brand-palette
- * hue, saturated→dark so the white icon stays readable. */
+/* The banner — a flat colour BLOCK per step (J9's illustrated .step_img
+ * stand-in), carrying an icon and a faded number watermark.
+ *
+ * Was four `linear-gradient(135deg, …)` fills. This is a card face, and the flat
+ * system permits gradients only as large background decoration — so each tone is
+ * now a SOLID saturated fill. The step still reads as its own colour; it just
+ * stops pretending to have a light source.
+ *
+ * The ink flipped from --text-hi (champagne) to a dark ink, because champagne on
+ * these fills fails AA everywhere it matters:
+ *     #f2f0e4 on --brand-accent #d4af37 → 2.11:1   ✗
+ *     #f2f0e4 on --win        #45c9a5   → 1.81:1   ✗
+ *     #f2f0e4 on --info       #018fff   → 2.88:1   ✗
+ *     #f2f0e4 on --loss       #f53f55   → 3.21:1   ✗
+ * Dark ink #0a0a0a clears it on all four: 9.42 / 8.92 / 5.60 / 5.03:1.
+ * The three pinned-neutral fills take the LOCKED --canvas ink; the brand fill
+ * takes --brand-on-accent, so a re-branded accent carries its own ink with it. */
 .banner {
   position: relative;
   overflow: hidden;
@@ -75,24 +89,27 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
-  color: var(--text-hi);
+  color: var(--canvas);
 }
 .tone0 {
-  background: linear-gradient(135deg, var(--brand-accent), color-mix(in srgb, var(--brand-accent) 38%, var(--shell)));
+  background: var(--brand-accent);
+  color: var(--brand-on-accent);
 }
 .tone1 {
-  background: linear-gradient(135deg, var(--info), color-mix(in srgb, var(--info) 38%, var(--shell)));
+  background: var(--info);
 }
 .tone2 {
-  background: linear-gradient(135deg, var(--win), color-mix(in srgb, var(--win) 38%, var(--shell)));
+  background: var(--win);
 }
 .tone3 {
-  background: linear-gradient(135deg, var(--loss), color-mix(in srgb, var(--loss) 42%, var(--shell)));
+  background: var(--loss);
 }
+/* No drop-shadow. A glow is a shadow renamed and so is a text shadow; the icon
+ * now separates by its own contrast against the flat fill, which is what the
+ * ink flip above bought. */
 .bannerIcon {
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.32));
 }
 .bannerNum {
   position: absolute;
@@ -102,7 +119,7 @@
   font-size: 46px;
   font-weight: var(--weight-bold);
   line-height: 1;
-  color: var(--text-hi);
+  color: inherit; /* the tone's dark ink — a watermark, never a second hue */
   opacity: 0.22;
 }
 

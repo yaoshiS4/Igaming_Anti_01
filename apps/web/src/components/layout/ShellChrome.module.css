@@ -27,3 +27,31 @@
     padding-bottom: var(--space-6);
   }
 }
+
+/* ---------------------------------------------------------------------------
+ * RESERVE THE QuickActionRail COLUMN (≥1024, where the rail shows its promo
+ * cards at its full 60px width — see QuickActionRail.module.css).
+ *
+ * The rail is `position: fixed; right: var(--space-2)`, so it floats OVER this
+ * frame. At 1440 the frame's own right edge is x=1432 and the rail occupies
+ * 1372→1432: it covered the right 60px of every page, and a right-aligned
+ * link/card underneath took the tap instead of the content (measured: the home
+ * hero slide, the /khuyen-mai "Tải app" tile, the /tier scroller).
+ *
+ * Reserving 60px + the rail's 8px offset + an 8px gap keeps content clear of
+ * it at every width where the two would otherwise collide.
+ * ------------------------------------------------------------------------ */
+@media (min-width: 1024px) {
+  .frame {
+    padding-right: calc(60px + var(--space-2) * 2);
+  }
+}
+
+/* ≥1600 the viewport is wide enough that the centred 1424 frame ends before the
+ * rail starts, so the reservation is no longer needed and the frame goes back
+ * to a symmetric gutter. */
+@media (min-width: 1600px) {
+  .frame {
+    padding-right: var(--gutter);
+  }
+}

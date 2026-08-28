@@ -29,7 +29,7 @@
 }
 .bellBtn:hover {
   color: var(--brand-accent);
-  background: var(--tint);
+  background-color: var(--tint);
 }
 .bellBtn:focus-visible {
   outline: 2px solid var(--focus-ring);
@@ -64,10 +64,10 @@
   margin-top: var(--space-2);
   width: 360px;
   max-width: calc(100vw - 2 * var(--gutter));
-  background: var(--surface); /* OPAQUE — never a backdrop blur */
+  background-color: var(--surface); /* OPAQUE — never a backdrop blur */
+  /* Flat: no elevation — the hairline carries the edge. */
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--lift);
   z-index: var(--z-dropdown);
   overflow: hidden;
   animation: notif-in var(--dur-fast) var(--ease-entrance);
@@ -121,9 +121,12 @@
   position: relative;
   border-radius: var(--radius-md);
 }
-/* unread rows carry a faint gold wash + a left accent edge */
+/* unread rows carry a faint gold wash + a left accent edge. The wash was a raw
+ * rgba() of the OLD gold (#f3b867) — now derived from --brand-accent so it
+ * follows the brand and the Flat re-point. An UNREAD row is an accent state,
+ * never a focus-blue one. */
 .rowUnread {
-  background: rgba(243, 184, 103, 0.06);
+  background-color: color-mix(in srgb, var(--brand-accent) 6%, transparent);
 }
 .rowUnread::before {
   content: "";
@@ -133,7 +136,7 @@
   bottom: var(--space-2);
   width: 3px;
   border-radius: var(--radius-pill);
-  background: var(--brand-accent-grad);
+  background-color: var(--brand-accent);
 }
 
 .row {

@@ -11,21 +11,35 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* RULING B1 — `table-layout: fixed` so all TEN level columns get exactly the
+ * same width. Under auto layout the widths were content-driven and the current
+ * (bold, spotlit) level came out widest: measured 74px against 70–71px for its
+ * peers. A level that renders wider *because* it is the one you are on is a
+ * size cue tied to standing, which is the pattern B1 rejects. Fixed layout also
+ * makes CẤP 10 the same width as CẤP 1. min-width is raised so the equal share
+ * still fits the widest cell ("1,000,000") without wrapping. */
 .table {
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
   width: 100%;
-  min-width: 760px;
+  min-width: 900px;
   font-family: var(--brand-font-num);
   font-variant-numeric: tabular-nums;
 }
 
-/* ---- shared cell chrome --------------------------------------------------- */
+/* ---- shared cell chrome ---------------------------------------------------
+ * EVERY cell reserves the same 1px side rules and the header row the same 2px
+ * bottom rule, so the gold spotlight column is a pure COLOUR change with zero
+ * layout shift — and all ten level columns stay geometrically identical
+ * (ruling B1: never rank a level/tier by physical size). */
 .th,
 .td {
   padding: var(--space-3) var(--space-4);
   text-align: center;
   border-bottom: 1px solid var(--vip-hairline);
+  border-left: 1px solid transparent;
+  border-right: 1px solid transparent;
   white-space: nowrap;
   color: var(--vip-text-secondary);
   background: var(--vip-panel-bg);
@@ -41,6 +55,9 @@ tbody tr:last-child .td {
   position: sticky;
   left: 0;
   z-index: var(--z-content);
+  /* the ONE non-peer column; the remaining width is shared equally by the ten
+   * level columns under table-layout: fixed */
+  width: 200px;
   text-align: left;
   font-family: var(--brand-font-body);
   font-weight: var(--weight-semi);
@@ -56,6 +73,7 @@ tbody tr:last-child .td {
   z-index: var(--z-sticky);
   color: var(--vip-text-muted);
   background: var(--vip-inner-bg);
+  border-bottom: 2px solid var(--vip-hairline);
   padding-top: var(--space-3);
   padding-bottom: var(--space-3);
 }
@@ -86,30 +104,31 @@ tbody tr:last-child .td {
   line-height: 1.1;
 }
 
+/* the lock glyph recedes by OPACITY; the grayscale filter is gone */
 .lock {
   display: block;
   margin-top: 2px;
   font-size: var(--t-micro);
   line-height: 1;
-  filter: grayscale(1) opacity(0.7);
+  opacity: 0.7;
 }
 
-/* ---- gold spotlight column (member's current level) ----------------------- */
+/* ---- gold spotlight column (member's current level) -----------------------
+ * Side rails + the header underline are BORDERS on the pre-reserved 1px/2px
+ * tracks above — the three inset-shadow stacks that drew them are gone. */
 .spot {
   color: var(--vip-gold-mid);
   font-weight: var(--weight-bold);
   background: color-mix(in srgb, var(--vip-gold-mid) 12%, var(--vip-panel-bg));
-  box-shadow:
-    inset 1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 45%, transparent),
-    inset -1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
+  border-left-color: color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
+  border-right-color: color-mix(in srgb, var(--vip-gold-mid) 45%, transparent);
 }
 
 .headRow .th.spot {
   background: color-mix(in srgb, var(--vip-gold-mid) 16%, var(--vip-inner-bg));
-  box-shadow:
-    inset 1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 55%, transparent),
-    inset -1px 0 0 color-mix(in srgb, var(--vip-gold-mid) 55%, transparent),
-    inset 0 2px 0 var(--vip-gold-mid);
+  border-left-color: color-mix(in srgb, var(--vip-gold-mid) 55%, transparent);
+  border-right-color: color-mix(in srgb, var(--vip-gold-mid) 55%, transparent);
+  border-bottom-color: var(--vip-gold-mid);
 }
 
 .spot .levelWord {

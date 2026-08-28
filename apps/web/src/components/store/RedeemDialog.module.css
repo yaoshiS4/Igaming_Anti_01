@@ -14,7 +14,9 @@
   gap: var(--space-3);
 }
 
-/* Gold-P coin — rounded-square gold gradient with a dark on-accent "P". */
+/* Gold-P coin — rounded-square SOLID gold with a dark on-accent "P".
+ * --brand-accent-grad resolves to a flat #d4af37 under the flat re-skin; the
+ * token name is historical. Dark ink on gold = 9.42:1 (white would be 2.11:1). */
 .coin {
   display: inline-flex;
   align-items: center;
@@ -113,13 +115,16 @@
   color: var(--text-mid);
 }
 
-/* EARLY honest base-cost comparison, right-aligned under the escalated hero. */
+/* EARLY honest base-cost comparison, right-aligned under the escalated hero.
+ * --text-mid, not --text-dim: this line is the ONLY place the member sees what
+ * the reward would cost at the normal rate. Honest disclosure cannot sit at
+ * 3.6:1 on --surface-2 — it holds the 4.5:1 AA floor (--text-mid = 4.91:1). */
 .costCompare {
   display: block;
   margin-top: var(--space-1);
   text-align: right;
   font-size: var(--t-sm);
-  color: var(--text-dim);
+  color: var(--text-mid);
   font-variant-numeric: tabular-nums;
 }
 

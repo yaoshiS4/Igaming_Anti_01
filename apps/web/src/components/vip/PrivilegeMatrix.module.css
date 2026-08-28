@@ -12,11 +12,17 @@
   -webkit-overflow-scrolling: touch;
 }
 
+/* RULING B1 — `table-layout: fixed` so all FIVE tier columns are exactly the
+ * same width. Under auto layout the widths tracked the tier NAME length and
+ * came out 158/121/148/225/262px bronze→diamond, i.e. the top tier rendered
+ * widest and the ladder read as a size ranking. Fixed layout removes that
+ * entirely; rank is carried by column ORDER alone. */
 .table {
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
   width: 100%;
-  min-width: 620px;
+  min-width: 760px;
 }
 
 .srOnly {
@@ -40,11 +46,20 @@
   vertical-align: middle;
 }
 
+/* Every header cell reserves the SAME 2px bottom rule, so marking the selected
+ * column gold is a colour change with zero layout shift — and every tier column
+ * keeps identical geometry (ruling B1: rank by position, never by size). */
+thead .th {
+  border-bottom: 2px solid var(--vip-hairline);
+}
+
 /* sticky first column (metric labels) for horizontal scroll (criterion 9) */
 .rowHead {
   position: sticky;
   left: 0;
   z-index: 2;
+  /* the ONE non-peer column; the five tier columns share the rest equally */
+  width: 200px;
   text-align: left;
   color: var(--vip-text-primary);
   font-weight: var(--weight-semi);
@@ -69,15 +84,14 @@ thead .rowHead {
   margin-inline: auto;
 }
 
+/* inset bevel → a real border; the 8px drop shadow underneath is simply gone */
 .gem {
   width: 18px;
   height: 18px;
   border-radius: var(--vip-radius-gem);
+  border: 1px solid color-mix(in srgb, var(--vip-text-primary) 22%, transparent);
   transform: rotate(45deg);
   margin-bottom: var(--space-2);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--vip-text-primary) 22%, transparent),
-    0 2px 8px -2px color-mix(in srgb, var(--vip-page-bg) 80%, transparent);
 }
 
 .tierName {
@@ -95,7 +109,8 @@ thead .rowHead {
 
 thead .colSelected {
   background: color-mix(in srgb, var(--vip-gold-mid) 14%, var(--vip-inner-bg));
-  box-shadow: inset 0 -2px 0 0 var(--vip-gold-mid);
+  /* the gold underline is a BORDER now, not an inset shadow */
+  border-bottom-color: var(--vip-gold-mid);
 }
 
 .colSelected .tierName {

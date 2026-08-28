@@ -12,21 +12,46 @@
  * ==========================================================================*/
 
 import type { Metadata, Viewport } from "next";
-import { Cinzel } from "next/font/google";
+import { Be_Vietnam_Pro, Montserrat } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
-/* Luxury display serif for the /vip rebuild (headings / tier names / hero
- * numerals). Exposed as the CSS var --font-cinzel and consumed via the
- * --brand-font-display token (tokens.css), which carries a Georgia/serif
- * fallback so runtime degrades gracefully if the font can't load.
- * NOTE: next/font/google fetches at BUILD time — this reintroduces a network
- * dependency to fonts.googleapis.com and WILL break a truly-offline build.
- * Self-hosting via next/font/local is the fallback plan if CI must be offline. */
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-  variable: "--font-cinzel",
+/* CINZEL REMOVED. It was the display face for /vip headings and tier names,
+ * and it served `latin` + `latin-ext` only — no `vietnamese` subset — so
+ * U+1EA0–1EF1 fell out of the face mid-word. Measured on the running app:
+ * `Đồng` lost `ồ`; `Bạc` and `Bạch Kim` lost `ạ`. That is the identical defect
+ * that got Outfit rejected under ruling A4, so it could not be shipped.
+ *
+ * --brand-font-display now points at --font-head (Montserrat), which is both
+ * Vietnamese-complete AND the geometric sans the Flat system specifies for
+ * display — Cinzel was an inscriptional serif and off-system either way.
+ * Dropping the loader removes a webfont that had no remaining consumer. */
+
+/* ---- The two Vietnamese-complete app faces (PM ruling A4) ----------------
+ * Both declare subsets: ["latin", "vietnamese"], so Google serves the
+ * U+1EA0–1EF9 @font-face slice and every toned vowel (Ộ ổ ậ ư ợ …) resolves
+ * INSIDE the face — no mid-word fallback anywhere in the product. Outfit is
+ * rejected outright: it ships latin/latin-ext only and skips U+1EA0–1EF1.
+ * Consumed through tokens.css → --font-body / --font-head → --brand-font-*. */
+
+/* Body + tabular numerals. Named as the brand body face since SPEC-02 §4;
+ * this is the first time it is actually LOADED rather than named and left to
+ * fall through to system-ui (which varies per platform). */
+const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "600", "700"],
+  variable: "--font-be-vietnam",
+  display: "swap",
+});
+
+/* Display / headings / uppercase labels. The design system asks for "a
+ * geometric sans-serif that mirrors the shapes of the UI" — that is an intent
+ * about form, and Montserrat satisfies it while actually rendering the
+ * language. 700/800 only; the tracking treatment lives in typography.css. */
+const montserrat = Montserrat({
+  subsets: ["latin", "vietnamese"],
+  weight: ["700", "800"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 import { AppShell, Footer } from "@/components/layout";
@@ -40,8 +65,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  // mobile-first @375 base; dark UI surface for the browser chrome.
-  themeColor: "#171a21",
+  // mobile-first @375 base; obsidian canvas for the browser chrome (--canvas).
+  themeColor: "#0a0a0a",
 };
 
 export default function RootLayout({
@@ -52,7 +77,7 @@ export default function RootLayout({
       lang="vi"
       data-brand="yaobet"
       data-theme="obsidian"
-      className={cinzel.variable}
+      className={`${beVietnamPro.variable} ${montserrat.variable}`}
     >
       <body>
         <Providers>

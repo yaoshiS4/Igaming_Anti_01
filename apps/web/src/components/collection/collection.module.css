@@ -1,0 +1,524 @@
+/* ============================================================================
+ * Yaobet — BỘ SƯU TẬP · D2 "Tủ Kính".
+ * Zone 1 = chance, Zone 2 = contract. Semantic tokens only.
+ * ==========================================================================*/
+
+.page {
+  padding: var(--space-3) var(--gutter) calc(var(--bottombar-h) + var(--space-6));
+  max-width: 760px;
+  margin: 0 auto;
+  color: var(--text);
+}
+
+.muted { color: var(--text-mid); font-size: var(--t-body); }
+
+.scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ══ ZONE 2 · contract ═════════════════════════════════════════════════════ */
+
+.zone2 {
+  margin-top: var(--space-4);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.note {
+  margin: 0 0 var(--space-2);
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+  line-height: var(--lh-body);
+}
+
+/* ── section plate — marks where the collection begins ──────────────────── */
+
+.plate {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-2);
+  margin: var(--space-4) 0 var(--space-2);
+}
+
+/* The two wings STAY gradients, and that is the ruling rather than an oversight:
+   the system bans gradients on buttons and cards and explicitly permits "subtle
+   directional gradients for background decoration". A 2px rule that fades into
+   the page is decoration by definition — it is not a control, it has no hit
+   area, and a solid gold bar either side of the heading is heavier than the
+   plate it frames. Re-pointed to the brand hairline so it follows the palette. */
+.plateWing {
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, transparent, var(--brand-accent-hairline));
+}
+
+.plate .plateWing:last-child {
+  background: linear-gradient(90deg, var(--brand-accent-hairline), transparent);
+}
+
+/* THE GOLD PLATE — flat.
+   Was a 180° surface gradient behind a pill. Now a SOLID surface inside a gold
+   hairline: with shadows and card gradients both gone, the border is the only
+   thing separating this plate from the page, so it carries the accent. Square
+   corners — a pill here would read as a tag, and this is a section heading. */
+.plateText {
+  margin: 0;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--brand-accent-hairline);
+  background: var(--surface-2);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.14em;
+  color: var(--brand-accent);
+  white-space: nowrap;
+}
+
+/* ── the inventory entry row ────────────────────────────────────────────────
+   A ROW, not a floating button: it survives any number of rails and any
+   viewport, and it sits ABOVE the rails because the rails are a long
+   horizontal-scroll region and anything under them is under the fold. */
+
+/* The section header line. The note explains the rails; the pill is the way
+   into the inventory. They share a row so the entry stops interrupting the
+   scroll as a full-width block. */
+.zone2Head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+}
+
+.zone2Head .note { flex: 1 1 240px; margin: 0; }
+
+.entryPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-hi);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  text-decoration: none;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  margin-left: auto;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.entryPill svg { transition: transform var(--dur-fast) var(--ease-standard); }
+
+.entryPill:hover {
+  background: var(--surface-hover);
+  border-color: var(--brand-accent);
+  transform: scale(1.05);
+}
+
+.entryPill:hover svg { transform: scale(1.1); }
+
+/* The count reads as a value on a chip, not as part of the label. */
+.entryCount {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--tint);
+  color: var(--text-hi);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── the terms sheet's own chrome ───────────────────────────────────────────
+   Owned by CollectionApp, NOT by PackStage and NOT by CollectionTerms: the
+   stage gets a zero-argument callback and nothing else, and the terms body is
+   a plain document so it can be mounted anywhere. */
+
+.sheetHead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.sheetTitle {
+  margin: 0;
+  font-size: var(--t-body);
+  font-weight: var(--weight-bold);
+  color: var(--text-hi);
+}
+
+.sheetClose {
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-hi);
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.sheetClose svg { transition: transform var(--dur-fast) var(--ease-standard); }
+
+.sheetClose:hover {
+  background: var(--surface-hover);
+  border-color: var(--brand-accent);
+  transform: scale(1.05);
+}
+
+.sheetClose:hover svg { transform: scale(1.1); }
+
+/* ONE scroll container, not two. The house panel already caps itself at 92vh,
+   so the body is capped at whichever is smaller: the specified 85vh, or what
+   is left of the panel after the grab handle, the sticky header and the
+   safe-area padding (~108px). Nested scrollports on a sheet are the trap this
+   whole treatment exists to avoid. */
+.sheetBody {
+  max-height: min(85vh, calc(92vh - 108px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--space-3);
+}
+
+/* ── a rail ─────────────────────────────────────────────────────────────── */
+
+/* A RAIL IS A CARD, and the border is doing the work.
+   Card `--surface` on `--canvas` is a contrast step of roughly 1:1 in the flat
+   palette. With shadows banned and card gradients banned, the gold hairline is
+   the ONLY thing that makes this rectangle exist — it is load-bearing, not
+   decorative (ruling A2).
+
+   `--rail-pad` is the rail's one horizontal inset, declared once and inherited
+   by the head, the tile strip and the action row, so they can never drift out
+   of alignment when the padding grows on desktop. */
+.rail {
+  --rail-pad: var(--space-4);
+  min-width: 0;
+  border: 1px solid var(--brand-accent-hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  padding: var(--rail-pad) 0;
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+
+/* EVERY rail scales by the same 1.02. Ruling B1: sizing a set by what it pays
+   is a spend recommendation rendered in CSS, so there is no per-set scale, no
+   per-set starting size, and no "popular" rail. Uniform motion is the flat
+   idiom; differentiated motion is an inducement. */
+.rail:hover { transform: scale(1.02); }
+
+/* The just-hit rail. Was a 2px `box-shadow` ring; the ring is now the border
+   itself plus a surface lift, which is all a flat system has and all it needs.
+
+   The accent, NOT `--focus-ring`. Blue means focus and only focus — borrowing
+   it here would make a rail that just received a card indistinguishable from
+   the rail a keyboard user is standing on. Solid accent against the 55% hairline
+   every other rail carries is already a clear step, so the highlight reads
+   without a second colour entering the system. */
+.pulse {
+  border-color: var(--brand-accent);
+  background: var(--surface-hover);
+}
+
+.railHead {
+  padding: 0 var(--rail-pad);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+.railTop { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); }
+
+.railName {
+  margin: 0;
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  color: var(--text-hi);
+}
+
+.railCount {
+  font-size: var(--t-sm);
+  color: var(--text-mid);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bar {
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.bar span { display: block; height: 100%; background: var(--text-mid); }
+
+.railFacts {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.dist {
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-tight);
+  min-width: 0;
+}
+
+/* the reward: identical slot on every rail — prominence by repetition */
+.reward {
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.reward strong {
+  font-size: var(--t-sm);
+  color: var(--text-hi);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── tiles ──────────────────────────────────────────────────────────────── */
+
+.tiles {
+  display: flex;
+  gap: var(--space-2);
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0 var(--rail-pad);
+}
+
+.tile { flex: 0 0 104px; display: grid; gap: 4px; }
+
+.tileArt { position: relative; }
+
+.multi {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  padding: 2px 5px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  color: var(--text-mid);
+  border: 1px solid var(--border);
+}
+
+/* Copies held. TOP-LEFT, never sharing a corner with `.multi`: `3 bộ` and `×3`
+   adjacent at 9px are one number at arm's length, and one of them is a set
+   count. The `×` (U+00D7) is what makes the two unmistakable. Rendered only
+   at count ≥ 2 — a `×1` on every tile turns a catalogue into a spreadsheet. */
+.qty {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  padding: 2px 5px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  color: var(--text-hi);
+  border: 1px solid var(--border);
+}
+
+.railActions { padding: var(--space-3) var(--rail-pad) 0; }
+
+.railActions > * { width: 100%; }
+
+/* ── shared controls ────────────────────────────────────────────────────── */
+
+.btn,
+.primary {
+  min-height: var(--tap-min);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  transition:
+    transform var(--dur-fast) var(--ease-standard),
+    background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard),
+    color var(--dur-fast) var(--ease-standard);
+}
+
+.primary {
+  background: var(--tint);
+  color: var(--text-hi);
+  border-color: var(--brand-accent-hairline);
+}
+
+/* Hover is a COLOUR SHIFT plus the uniform 1.05. Same numbers on the demo
+   buttons and on `Đổi thưởng` — the exchange control is not given extra motion
+   for being the one attached to money. */
+.btn:hover:not(:disabled),
+.primary:hover:not(:disabled) {
+  background: var(--surface-hover);
+  transform: scale(1.05);
+}
+
+.primary:hover:not(:disabled) { border-color: var(--brand-accent); }
+
+.btn:disabled, .primary:disabled {
+  background: var(--surface-disabled);
+  color: var(--text-dim);
+  border-color: var(--border);
+  cursor: not-allowed;
+}
+
+.btn:focus-visible,
+.primary:focus-visible,
+.entryPill:focus-visible,
+.sheetClose:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ── dev + toast ────────────────────────────────────────────────────────── */
+
+.dev {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--border);
+}
+
+.devLabel {
+  font-size: var(--t-micro);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+}
+
+/* The live region is mounted ALWAYS, empty until there is a receipt: a region
+   inserted at the same moment as its text is not reliably announced, and this
+   toast carries the payout transaction id. */
+.toastLive {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--bottombar-h) + var(--space-3));
+  transform: translateX(-50%);
+  max-width: 90vw;
+  z-index: var(--z-toast);
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  max-width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-3);
+  color: var(--text);
+  font-size: var(--t-micro);
+  cursor: pointer;
+}
+
+/* ── desktop: the two sections STACK ─────────────────────────────────────
+   They are never placed side by side. The stage is full-bleed (100vw with a
+   negative margin), and a full-bleed element inside a grid column tears the
+   layout apart — the stage escapes its column while the collection keeps the
+   column's position, so the two overlap. Stacking is the only safe shape. */
+
+@media (min-width: 900px) {
+  .page { max-width: 980px; }
+  /* Generous padding where there is room for it. One declaration moves the
+     head, the tile strip and the action row together. */
+  .rail { --rail-pad: var(--space-5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rail,
+  .entryPill,
+  .entryPill svg,
+  .sheetClose,
+  .sheetClose svg,
+  .btn,
+  .primary { transition: none; }
+
+  /* Absent, not merely instant — see the note in pack.module.css. */
+  .rail:hover,
+  .entryPill:hover,
+  .entryPill:hover svg,
+  .sheetClose:hover,
+  .sheetClose:hover svg,
+  .btn:hover:not(:disabled),
+  .primary:hover:not(:disabled) { transform: none; }
+}
+
+/* How many times a repeatable set has already paid. A history line, never a
+   reason to disable the button — exchanging empties the set, so `complete`
+   turns the button off by itself. */
+.times {
+  font-size: var(--t-micro);
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  align-self: center;
+}
+
+/* The history sheet's own footer. History is a modal here AND a page at
+   /bo-suu-tap/cua-toi?tab=lich-su — the link keeps the URL reachable, because
+   "gửi cho tôi đường dẫn lịch sử" is a real support sentence and a modal has no
+   address of its own. */
+.sheetFooter {
+  margin: var(--space-3) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px dashed var(--border);
+  text-align: center;
+}
+
+.sheetLink {
+  color: var(--text-hi);
+  font-size: var(--t-sm);
+  font-weight: var(--weight-semi);
+  text-decoration: none;
+}
+
+.sheetLink:hover { text-decoration: underline; }
+.sheetLink:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+/* The global QuickActionRail is `position: fixed` ABOVE page content — 48px wide
+   plus an 8px offset on narrow viewports, bottom-anchored, so it sits over this
+   row. Overlapped text is ugly; an overlapped INTERACTIVE element is a defect,
+   because the tap lands on the rail instead of the link. The pill stops short of
+   that column. Desktop needs no reservation: the page is centred well inside the
+   rail's gutter there. */
+@media (max-width: 1023px) {
+  .zone2Head { padding-right: calc(48px + var(--space-2)); }
+}

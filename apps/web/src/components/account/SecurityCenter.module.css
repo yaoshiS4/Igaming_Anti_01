@@ -124,6 +124,25 @@
 .controlHead:hover {
   background: var(--tint);
 }
+.controlHead:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+/* icon affordance = scale(1.10). The trigger itself is a full-bleed row inside
+ * .control{overflow:hidden}, so a 1.05 row scale would clip; the icon carries it. */
+.controlHead:hover .controlIcon {
+  transform: scale(1.1);
+}
+.controlIcon {
+  transition: transform var(--dur-fast) var(--ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .controlIcon,
+  .controlHead:hover .controlIcon {
+    transform: none;
+  }
+}
 .controlIcon {
   display: grid;
   place-items: center;
@@ -257,9 +276,12 @@
 .input::placeholder {
   color: var(--text-dim);
 }
+/* focus is the locked neutral BLUE, not the brand gold — a gold focus ring on
+ * a gold-accented panel is indistinguishable from a selected/active state. */
 .input:focus-visible {
-  outline: none;
-  border-color: var(--brand-accent);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-color: var(--focus-ring);
 }
 .reveal {
   display: inline-flex;

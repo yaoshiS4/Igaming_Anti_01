@@ -22,11 +22,15 @@
   line-height: 1;
   cursor: pointer;
   transition: color var(--dur-fast) var(--ease-standard),
-    border-color var(--dur-fast) var(--ease-standard);
+    border-color var(--dur-fast) var(--ease-standard),
+    transform var(--dur-fast) var(--ease-standard);
 }
 
+/* uniform hover — every tab scales 1.05, including the active one. The active
+ * tab is marked by COLOUR (--brand-accent), never by size. */
 .tab:hover {
   color: var(--text-hi);
+  transform: scale(1.05);
 }
 
 .tabActive {
@@ -87,10 +91,14 @@
   display: block;
 }
 
-/* Sold-out treatment — desaturate + dim the thumbnail. */
+/* Sold-out treatment — dim the thumbnail. The `filter: grayscale(1)` that used
+ * to sit here is gone: the flat system's ban is on depth (shadow / drop-shadow /
+ * backdrop-blur), and the cheapest way to keep "computed filter is none" true
+ * everywhere is to not run a filter at all. Nothing is lost — sold-out is
+ * dual-encoded by the explicit "Tạm hết" tag in .categoryTag plus this dim, so
+ * the state never depended on desaturation to be read. */
 .mediaSoldOut .img {
-  filter: grayscale(1);
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 /* Points coin pill — top-RIGHT corner badge: the BASE (original) points price. */
@@ -103,8 +111,10 @@
   gap: var(--space-1);
   padding: 2px var(--space-2) 2px var(--space-1);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--canvas) 78%, transparent);
-  backdrop-filter: blur(4px);
+  /* OPAQUE. Was a 78% canvas wash over `backdrop-filter: blur(4px)`; the flat
+   * system bans backdrop-blur, and a translucent chip without the blur reads as
+   * a smear over the artwork. A solid canvas chip is the honest flat answer. */
+  background: var(--canvas);
   border: 1px solid var(--brand-accent-hairline);
   color: var(--brand-accent);
   font-weight: var(--weight-bold);
@@ -113,7 +123,10 @@
   line-height: 1;
 }
 
-/* The gold "P" coin mark inside the badge (gold gradient, dark on-accent glyph). */
+/* The gold "P" coin mark inside the badge. --brand-accent-grad resolves to a
+ * SOLID #d4af37 under the flat re-skin (tokens.css) — the name is historical.
+ * The glyph is --brand-on-accent dark ink: white on this gold is 2.11:1 (AA
+ * fail), dark ink is 9.42:1. */
 .pMark {
   display: inline-flex;
   align-items: center;
@@ -135,8 +148,7 @@
   left: var(--space-2);
   padding: 2px var(--space-2);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
-  backdrop-filter: blur(4px);
+  background: var(--surface); /* opaque — backdrop-blur removed (flat ban) */
   border: 1px solid var(--border);
   color: var(--text-mid);
   font-size: var(--t-micro);
@@ -243,9 +255,11 @@
   min-height: 1em;
 }
 
-/* Live cooldown — a dark-glass chip OVERLAID on the thumbnail (bottom-left) so
+/* Live cooldown — a solid dark chip OVERLAID on the thumbnail (bottom-left) so
    the card body stays identical across every card: equal heights, floored CTAs.
-   Amber-accented "waiting" affordance; present only while the cooldown runs. */
+   Amber-accented "waiting" affordance; present only while the cooldown runs.
+   Was "dark-glass": a 72% wash + backdrop-blur(6px). Flat bans backdrop-blur,
+   so the chip is now simply opaque. */
 .cooldownChip {
   position: absolute;
   left: var(--space-2);
@@ -256,8 +270,7 @@
   max-width: calc(100% - var(--space-4));
   padding: 3px var(--space-2);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--canvas) 72%, transparent);
-  backdrop-filter: blur(6px);
+  background: var(--canvas);
   border: 1px solid color-mix(in srgb, var(--caution) 45%, transparent);
   font-size: var(--t-micro);
   line-height: 1.3;
@@ -316,13 +329,26 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* --text-mid, not --text-dim: this is the helper sentence a capped member reads
+ * to understand the lock — functional copy. --text-dim is decorative-only and
+ * measures 3.67:1 on the card's --surface; --text-mid is 5.20:1. */
 .limitHelper {
   font-size: var(--t-micro);
   line-height: var(--lh-tight);
-  color: var(--text-dim);
+  color: var(--text-mid);
 }
 
 /* CTA pinned to the card floor — equalizes the button baseline across the row. */
 .cta {
   margin-top: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab {
+    transition: none;
+  }
+  /* absent, not instant */
+  .tab:hover {
+    transform: none;
+  }
 }

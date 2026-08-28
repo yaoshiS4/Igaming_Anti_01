@@ -1,0 +1,196 @@
+/* OutcomeFrame — three registers at three volumes.
+ * Semantic vars only: --win / --loss / --brand-accent / --dur-* (lint A2).
+ * Flat: no box-shadows; a border-colour + surface step carries every state. */
+
+.frame {
+  margin-top: var(--space-5);
+  padding: var(--space-5) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  background: var(--surface-2);
+  text-align: center;
+  animation: frame-in var(--dur-slow) var(--ease-entrance) backwards;
+}
+
+/* ---------- WIN — gold, restrained. No confetti, one ring, one count-up ---- */
+.frame[data-outcome="win"] {
+  border-color: var(--brand-accent);
+  background: color-mix(in srgb, var(--brand-accent) 8%, var(--surface-2));
+}
+
+.headWin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-size: var(--t-h3);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-body);
+  color: var(--text-hi);
+}
+
+.headIcon {
+  color: var(--win);
+}
+
+.totalLabel {
+  margin-top: var(--space-3);
+  font-size: var(--t-micro);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+.totalWin {
+  margin-top: var(--space-1);
+  font-family: var(--brand-font-num);
+  font-size: var(--t-num-lg);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-tight);
+  color: var(--win);
+  animation: total-settle var(--dur-slow) var(--ease-entrance) backwards;
+}
+
+/* ---------- PARTIAL — a real win, said quietly. Smaller type, no ring,
+ * no count-up, no pulse. It must not borrow the win frame's volume. -------- */
+.frame[data-outcome="partial"] {
+  border-color: color-mix(in srgb, var(--win) 40%, transparent);
+}
+
+.headPartial {
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-body);
+  color: var(--text-hi);
+}
+
+.totalPartial {
+  margin-top: var(--space-2);
+  font-family: var(--brand-font-num);
+  font-size: var(--t-h1); /* deliberately BELOW the win figure's --t-num-lg */
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-tight);
+  color: var(--win);
+}
+
+/* ---------- LOSE — near-miss + dust, one container, one animation --------- */
+.frame[data-outcome="lose"] {
+  border-color: color-mix(in srgb, var(--loss) 42%, transparent);
+}
+
+.loseBlock {
+  /* the SINGLE animation the near-miss and the dust share, so the two land
+   * in the same frame — never staggered, never sequenced. */
+  animation: frame-in var(--dur-slow) var(--ease-entrance) backwards;
+}
+
+.headLose {
+  font-size: var(--t-body);
+  font-weight: var(--weight-semi);
+  line-height: var(--lh-body);
+  color: var(--loss);
+}
+
+.loseSplit {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  text-align: left;
+}
+
+.loseCell {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.cellLabel {
+  font-size: var(--t-micro);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+/* the prize the card really held — stated plainly, in neutral text */
+.nearAmount {
+  margin-top: var(--space-1);
+  font-family: var(--brand-font-num);
+  font-size: var(--t-h2);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-hi);
+}
+
+/* DUST — neutral, NEVER --win. A return/compensation is not a win and is not
+ * typeset as one (the copy says so too). */
+.dustAmount {
+  margin-top: var(--space-1);
+  font-family: var(--brand-font-num);
+  font-size: var(--t-h2);
+  font-weight: var(--weight-semi);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-hi);
+}
+
+.cellNote {
+  margin-top: var(--space-2);
+  font-size: var(--t-micro);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+}
+
+/* ---------- shared notes ---------- */
+.note {
+  margin-top: var(--space-3);
+  font-size: var(--t-sm);
+  line-height: var(--lh-body);
+  color: var(--text-mid);
+}
+
+.noteQuiet {
+  margin-top: var(--space-2);
+  font-size: var(--t-micro);
+  line-height: var(--lh-body);
+  color: var(--text-dim);
+}
+
+@media (min-width: 480px) {
+  .loseSplit {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@keyframes frame-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+@keyframes total-settle {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* REDUCED MOTION — the frame appears in its final state, no movement at all.
+ * (The count-up is separately disabled in JS via usePrefersReducedMotion.) */
+@media (prefers-reduced-motion: reduce) {
+  .frame,
+  .loseBlock,
+  .totalWin {
+    animation: none;
+    transform: none;
+  }
+}
+
+:global([data-motion="off"]) .frame,
+:global([data-motion="off"]) .loseBlock,
+:global([data-motion="off"]) .totalWin {
+  animation: none;
+  transform: none;
+}

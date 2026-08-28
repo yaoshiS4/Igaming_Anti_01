@@ -27,6 +27,9 @@
   }
 }
 
+/* RULING B1: the grid track is repeat(N, 1fr) at every breakpoint, so every
+ * promo cell is exactly the same width regardless of the offer inside it — no
+ * "featured" promo is rendered larger, and none scales differently. */
 .cell {
   display: flex;
   flex-direction: column;
